@@ -1,0 +1,5276 @@
+/* ==UserStyle==
+@name AdGuard Home Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/adguard-home
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/adguard-home
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/adguard-home/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for the AdGuard Home web interface. Set your instances' addresses under URLs.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var text urls "URLs of your AdGuard Home instances" "localhost\:3000"
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * How it works: AdGuard Home keeps most of its colors in variables, light on
+ * :root and dark on [data-theme="dark"] (the body). This style sets them on
+ * html body, which beats both, so the flavor follows AdGuard's own theme
+ * setting (Auto, Light, Dark). The rules after the variables are generated
+ * from AdGuard Home's stylesheet (v0.107.79): they cover what the underlying
+ * Tabler and Bootstrap CSS writes as literal colors. Grays map by lightness
+ * and use, blues to the accent, the other hues to their palette color.
+ */
+
+@-moz-document regexp(replace(replace(%("https?://(%s)/.*", @urls), ",", "|", "g"), " ", "", "g")) {
+	html body {
+		#agh.vars(@lightFlavor);
+	}
+	html body[data-theme="dark"] {
+		#agh.vars(@darkFlavor);
+	}
+
+	::selection {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+
+	/* ---- Generated from AdGuard Home's stylesheet ------------------------
+		 Every rule that sets a color, in the original order, so the cascade
+		 stays as AdGuard built it. Literal colors are replaced by palette
+		 variables; rules that already read AdGuard's variables are kept. */
+
+	.ReactTable {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 10%, transparent);
+	}
+	.ReactTable .rt-thead.-headerGroups {
+		background: color-mix(in srgb, var(--ctp-text) 3%, transparent);
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.ReactTable .rt-thead.-filters {
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.ReactTable .rt-thead.-filters input,
+	.ReactTable .rt-thead.-filters select {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		background: var(--ctp-base);
+	}
+	.ReactTable .rt-thead.-filters .rt-th {
+		border-right: 1px solid color-mix(in srgb, var(--ctp-text) 2%, transparent);
+	}
+	.ReactTable .rt-thead.-header {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 15%, transparent) 0px 2px 15px 0px;
+	}
+	.ReactTable .rt-thead .rt-th,
+	.ReactTable .rt-thead .rt-td {
+		border-right: 1px solid color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.ReactTable .rt-thead .rt-th.-sort-asc,
+	.ReactTable .rt-thead .rt-td.-sort-asc {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 60%, transparent) 0px 3px 0px 0px inset;
+	}
+	.ReactTable .rt-thead .rt-th.-sort-desc,
+	.ReactTable .rt-thead .rt-td.-sort-desc {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 60%, transparent) 0px -3px 0px 0px inset;
+	}
+	.ReactTable .rt-thead .rt-header-pivot {
+		border-right-color: var(--ctp-mantle);
+	}
+	.ReactTable .rt-thead .rt-header-pivot::after {
+		border-color: color-mix(in srgb, var(--ctp-mantle) 0%, transparent) color-mix(in srgb, var(--ctp-mantle) 0%, transparent) color-mix(in srgb, var(--ctp-mantle) 0%, transparent) var(--ctp-mantle);
+	}
+	.ReactTable .rt-thead .rt-header-pivot::before {
+		border-color: color-mix(in srgb, var(--ctp-text) 0%, transparent) color-mix(in srgb, var(--ctp-text) 0%, transparent) color-mix(in srgb, var(--ctp-text) 0%, transparent) var(--ctp-mantle);
+	}
+	.ReactTable .rt-tbody .rt-tr-group {
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.ReactTable .rt-tbody .rt-td {
+		border-right: 1px solid color-mix(in srgb, var(--ctp-text) 2%, transparent);
+	}
+	.ReactTable .rt-expander::after {
+		border-top: 7px solid color-mix(in srgb, var(--ctp-text) 80%, transparent);
+	}
+	.ReactTable .rt-tfoot {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 15%, transparent) 0px 0px 15px 0px;
+	}
+	.ReactTable .rt-tfoot .rt-td {
+		border-right: 1px solid color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.ReactTable.-striped .rt-tr.-odd {
+		background: color-mix(in srgb, var(--ctp-text) 3%, transparent);
+	}
+	.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
+		background: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.ReactTable .-pagination {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 10%, transparent) 0px 0px 15px 0px;
+		border-top: 2px solid color-mix(in srgb, var(--ctp-text) 10%, transparent);
+	}
+	.ReactTable .-pagination input,
+	.ReactTable .-pagination select {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		background: var(--ctp-base);
+	}
+	.ReactTable .-pagination .-btn {
+		color: color-mix(in srgb, var(--ctp-text) 60%, transparent);
+		background: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+	}
+	.ReactTable .-pagination .-btn:not([disabled]):hover {
+		background: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		color: var(--ctp-on-accent);
+	}
+	.ReactTable .rt-noData {
+		background: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	.ReactTable .-loading {
+		background: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+	}
+	.ReactTable .-loading > div {
+		color: color-mix(in srgb, var(--ctp-text) 60%, transparent);
+	}
+	body {
+		color: var(--mcolor);
+		background-color: var(--bgcolor);
+	}
+	a {
+		color: var(--ctp-accent);
+	}
+	a:hover {
+		color: var(--ctp-accent);
+	}
+	caption {
+		color: var(--ctp-subtext0);
+	}
+	hr {
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent) currentcolor currentcolor;
+	}
+	[data-theme="dark"] hr {
+		border-color: var(--card-border-color);
+	}
+	mark,
+	.mark {
+		background-color: var(--ctp-mantle);
+	}
+	.blockquote-footer {
+		color: var(--ctp-subtext0);
+	}
+	.img-thumbnail {
+		background-color: var(--ctp-base);
+		border: 1px solid var(--ctp-surface1);
+	}
+	.figure-caption {
+		color: var(--ctp-subtext0);
+	}
+	kbd {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+	}
+	pre {
+		color: var(--ctp-text);
+	}
+	.table th,
+	.text-wrap table th,
+	.table td,
+	.text-wrap table td {
+		border-top: 1px solid var(--ctp-surface1);
+	}
+	.table thead th,
+	.text-wrap table thead th {
+		border-bottom: 2px solid var(--ctp-surface1);
+	}
+	.table tbody + tbody,
+	.text-wrap table tbody + tbody {
+		border-top: 2px solid var(--ctp-surface1);
+	}
+	.table .table,
+	.text-wrap table .table,
+	.table .text-wrap table,
+	.text-wrap .table table,
+	.text-wrap table table {
+		background-color: var(--ctp-mantle);
+	}
+	.table-bordered,
+	.text-wrap table {
+		border: 1px solid var(--ctp-surface1);
+	}
+	.table-bordered th,
+	.text-wrap table th,
+	.table-bordered td,
+	.text-wrap table td {
+		border: 1px solid var(--ctp-surface1);
+	}
+	.table-striped tbody tr:nth-of-type(2n+1) {
+		background-color: color-mix(in srgb, var(--ctp-text) 2%, transparent);
+	}
+	.table-hover tbody tr:hover {
+		background-color: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+	}
+	.table-primary,
+	.table-primary > th,
+	.table-primary > td {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.table-hover .table-primary:hover {
+		background-color: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base));
+	}
+	.table-hover .table-primary:hover > td,
+	.table-hover .table-primary:hover > th {
+		background-color: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base));
+	}
+	.table-secondary,
+	.table-secondary > th,
+	.table-secondary > td {
+		background-color: var(--ctp-surface1);
+	}
+	.table-hover .table-secondary:hover {
+		background-color: var(--ctp-surface2);
+	}
+	.table-hover .table-secondary:hover > td,
+	.table-hover .table-secondary:hover > th {
+		background-color: var(--ctp-surface2);
+	}
+	.table-success,
+	.table-success > th,
+	.table-success > td {
+		background-color: color-mix(in srgb, var(--ctp-green) 20%, var(--ctp-base));
+	}
+	.table-hover .table-success:hover {
+		background-color: var(--ctp-green);
+	}
+	.table-hover .table-success:hover > td,
+	.table-hover .table-success:hover > th {
+		background-color: var(--ctp-green);
+	}
+	.table-info,
+	.table-info > th,
+	.table-info > td {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 20%, var(--ctp-base));
+	}
+	.table-hover .table-info:hover {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 35%, var(--ctp-base));
+	}
+	.table-hover .table-info:hover > td,
+	.table-hover .table-info:hover > th {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 35%, var(--ctp-base));
+	}
+	.table-warning,
+	.table-warning > th,
+	.table-warning > td {
+		background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-base));
+	}
+	.table-hover .table-warning:hover {
+		background-color: var(--ctp-yellow);
+	}
+	.table-hover .table-warning:hover > td,
+	.table-hover .table-warning:hover > th {
+		background-color: var(--ctp-yellow);
+	}
+	.table-danger,
+	.table-danger > th,
+	.table-danger > td {
+		background-color: color-mix(in srgb, var(--ctp-red) 40%, var(--ctp-base));
+	}
+	.table-hover .table-danger:hover {
+		background-color: var(--ctp-red);
+	}
+	.table-hover .table-danger:hover > td,
+	.table-hover .table-danger:hover > th {
+		background-color: var(--ctp-red);
+	}
+	.table-light,
+	.table-light > th,
+	.table-light > td {
+		background-color: var(--ctp-base);
+	}
+	.table-hover .table-light:hover {
+		background-color: var(--ctp-surface0);
+	}
+	.table-hover .table-light:hover > td,
+	.table-hover .table-light:hover > th {
+		background-color: var(--ctp-surface0);
+	}
+	.table-dark,
+	.table-dark > th,
+	.table-dark > td {
+		background-color: var(--ctp-surface2);
+	}
+	.table-hover .table-dark:hover {
+		background-color: var(--ctp-overlay0);
+	}
+	.table-hover .table-dark:hover > td,
+	.table-hover .table-dark:hover > th {
+		background-color: var(--ctp-overlay0);
+	}
+	.table-active,
+	.table-active > th,
+	.table-active > td {
+		background-color: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+	}
+	.table-hover .table-active:hover {
+		background-color: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+	}
+	.table-hover .table-active:hover > td,
+	.table-hover .table-active:hover > th {
+		background-color: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+	}
+	.table .thead-dark th,
+	.text-wrap table .thead-dark th {
+		color: var(--ctp-overlay0);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.table .thead-light th,
+	.text-wrap table .thead-light th {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+	}
+	.table-dark {
+		color: var(--ctp-overlay0);
+		background-color: var(--ctp-text);
+	}
+	.table-dark th,
+	.table-dark td,
+	.table-dark thead th {
+		border-color: var(--ctp-overlay2);
+	}
+	.table-dark.table-striped tbody tr:nth-of-type(2n+1) {
+		background-color: color-mix(in srgb, var(--ctp-base) 5%, transparent);
+	}
+	.table-dark.table-hover tbody tr:hover {
+		background-color: color-mix(in srgb, var(--ctp-base) 8%, transparent);
+	}
+	.form-control {
+		color: var(--mcolor);
+		background-color: var(--card-bgcolor);
+		border: 1px solid var(--card-border-color);
+	}
+	.form-control:focus {
+		color: var(--mcolor);
+		background-color: var(--ctrl-bgcolor);
+		border-color: var(--ctp-sapphire);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.form-control::-webkit-input-placeholder {
+		color: var(--ctp-overlay2);
+	}
+	.form-control::placeholder {
+		color: var(--ctp-overlay2);
+	}
+	.form-control:disabled,
+	.form-control[readonly] {
+		background-color: var(--form-disabled-bgcolor);
+		color: var(--form-disabled-color);
+	}
+	.form-check-input:disabled ~ .form-check-label {
+		color: var(--ctp-subtext0);
+	}
+	.valid-feedback {
+		color: var(--ctp-green);
+	}
+	.valid-tooltip {
+		color: var(--ctp-on-accent);
+		background-color: color-mix(in srgb, var(--ctp-green) 80%, transparent);
+	}
+	.was-validated .form-control:valid,
+	.form-control.is-valid,
+	.was-validated .custom-select:valid,
+	.custom-select.is-valid {
+		border-color: var(--ctp-green);
+	}
+	.was-validated .form-control:valid:focus,
+	.form-control.is-valid:focus,
+	.was-validated .custom-select:valid:focus,
+	.custom-select.is-valid:focus {
+		border-color: var(--ctp-green);
+		box-shadow: color-mix(in srgb, var(--ctp-green) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.was-validated .form-check-input:valid ~ .form-check-label,
+	.form-check-input.is-valid ~ .form-check-label {
+		color: var(--ctp-green);
+	}
+	.was-validated .custom-control-input:valid ~ .custom-control-label,
+	.custom-control-input.is-valid ~ .custom-control-label {
+		color: var(--ctp-green);
+	}
+	.was-validated .custom-control-input:valid ~ .custom-control-label::before,
+	.custom-control-input.is-valid ~ .custom-control-label::before {
+		background-color: var(--ctp-green);
+	}
+	.was-validated .custom-control-input:valid:checked ~ .custom-control-label::before,
+	.custom-control-input.is-valid:checked ~ .custom-control-label::before {
+		background-color: var(--ctp-green);
+	}
+	.was-validated .custom-control-input:valid:focus ~ .custom-control-label::before,
+	.custom-control-input.is-valid:focus ~ .custom-control-label::before {
+		box-shadow: var(--ctp-mantle) 0px 0px 0px 1px, color-mix(in srgb, var(--ctp-green) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.was-validated .custom-file-input:valid ~ .custom-file-label,
+	.custom-file-input.is-valid ~ .custom-file-label {
+		border-color: var(--ctp-green);
+	}
+	.was-validated .custom-file-input:valid:focus ~ .custom-file-label,
+	.custom-file-input.is-valid:focus ~ .custom-file-label {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.invalid-feedback {
+		color: var(--ctp-red);
+	}
+	.invalid-tooltip {
+		color: var(--ctp-on-accent);
+		background-color: color-mix(in srgb, var(--ctp-red) 80%, transparent);
+	}
+	.was-validated .form-control:invalid,
+	.form-control.is-invalid,
+	.was-validated .custom-select:invalid,
+	.custom-select.is-invalid {
+		border-color: var(--ctp-red);
+	}
+	.was-validated .form-control:invalid:focus,
+	.form-control.is-invalid:focus,
+	.was-validated .custom-select:invalid:focus,
+	.custom-select.is-invalid:focus {
+		border-color: var(--ctp-red);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.was-validated .form-check-input:invalid ~ .form-check-label,
+	.form-check-input.is-invalid ~ .form-check-label {
+		color: var(--ctp-red);
+	}
+	.was-validated .custom-control-input:invalid ~ .custom-control-label,
+	.custom-control-input.is-invalid ~ .custom-control-label {
+		color: var(--ctp-red);
+	}
+	.was-validated .custom-control-input:invalid ~ .custom-control-label::before,
+	.custom-control-input.is-invalid ~ .custom-control-label::before {
+		background-color: var(--ctp-red);
+	}
+	.was-validated .custom-control-input:invalid:checked ~ .custom-control-label::before,
+	.custom-control-input.is-invalid:checked ~ .custom-control-label::before {
+		background-color: var(--ctp-red);
+	}
+	.was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before,
+	.custom-control-input.is-invalid:focus ~ .custom-control-label::before {
+		box-shadow: var(--ctp-mantle) 0px 0px 0px 1px, color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.was-validated .custom-file-input:invalid ~ .custom-file-label,
+	.custom-file-input.is-invalid ~ .custom-file-label {
+		border-color: var(--ctp-red);
+	}
+	.was-validated .custom-file-input:invalid:focus ~ .custom-file-label,
+	.custom-file-input.is-invalid:focus ~ .custom-file-label {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.btn:focus,
+	.btn.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-primary {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-primary:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-primary:focus,
+	.btn-primary.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-primary.disabled,
+	.btn-primary:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-primary:not(:disabled):not(.disabled):active,
+	.btn-primary:not(:disabled):not(.disabled).active,
+	.show > .btn-primary.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-primary:not(:disabled):not(.disabled):active:focus,
+	.btn-primary:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-primary.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-secondary {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-secondary:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-secondary:focus,
+	.btn-secondary.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-overlay0) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-secondary.disabled,
+	.btn-secondary:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-secondary:not(:disabled):not(.disabled):active,
+	.btn-secondary:not(:disabled):not(.disabled).active,
+	.show > .btn-secondary.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-subtext0);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-secondary:not(:disabled):not(.disabled):active:focus,
+	.btn-secondary:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-secondary.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-overlay0) 50%, transparent) 0px 0px 0px 2px;
+	}
+	[data-theme="dark"] .btn-secondary {
+		color: var(--ctp-overlay2);
+		border-color: var(--ctp-surface2);
+	}
+	[data-theme="dark"] .btn-secondary:hover {
+		color: var(--ctp-text);
+		background-color: var(--ctp-overlay0);
+		border-color: var(--ctp-surface2);
+	}
+	[data-theme="dark"] .btn-secondary:focus-visible,
+	[data-theme="dark"] .btn-secondary.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-surface2) 50%, transparent) 0px 0px 0px 2px;
+	}
+	[data-theme="dark"] .btn-secondary.disabled,
+	[data-theme="dark"] .btn-secondary:disabled {
+		color: var(--ctp-overlay2);
+	}
+	[data-theme="dark"] .btn-secondary:not(:disabled):not(.disabled):active,
+	[data-theme="dark"] .btn-secondary:not(:disabled):not(.disabled).active {
+		color: var(--ctp-text);
+		background-color: var(--ctp-overlay0);
+		border-color: var(--ctp-surface2);
+	}
+	[data-theme="dark"] .btn-secondary:not(:disabled):not(.disabled):active:focus,
+	[data-theme="dark"] .btn-secondary:not(:disabled):not(.disabled).active:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-surface2) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-success {
+		color: var(--ctp-on-accent);
+		background-color: var(--btn-success-bgcolor);
+		border-color: var(--btn-success-bgcolor);
+	}
+	.btn-success:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-success:focus,
+	.btn-success.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-success.disabled,
+	.btn-success:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-success:not(:disabled):not(.disabled):active,
+	.btn-success:not(:disabled):not(.disabled).active,
+	.show > .btn-success.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-success:not(:disabled):not(.disabled):active:focus,
+	.btn-success:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-success.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-info {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-info:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-info:focus,
+	.btn-info.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-info.disabled,
+	.btn-info:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-info:not(:disabled):not(.disabled):active,
+	.btn-info:not(:disabled):not(.disabled).active,
+	.show > .btn-info.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-info:not(:disabled):not(.disabled):active:focus,
+	.btn-info:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-info.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-warning {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-warning:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-warning:focus,
+	.btn-warning.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-yellow) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-warning.disabled,
+	.btn-warning:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-warning:not(:disabled):not(.disabled):active,
+	.btn-warning:not(:disabled):not(.disabled).active,
+	.show > .btn-warning.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-warning:not(:disabled):not(.disabled):active:focus,
+	.btn-warning:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-warning.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-yellow) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-danger {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-danger:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-danger:focus,
+	.btn-danger.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-danger.disabled,
+	.btn-danger:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-danger:not(:disabled):not(.disabled):active,
+	.btn-danger:not(:disabled):not(.disabled).active,
+	.show > .btn-danger.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-danger:not(:disabled):not(.disabled):active:focus,
+	.btn-danger:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-danger.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-light {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-light:hover {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface1);
+		border-color: var(--ctp-surface1);
+	}
+	.btn-light:focus,
+	.btn-light.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-light.disabled,
+	.btn-light:disabled {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-light:not(:disabled):not(.disabled):active,
+	.btn-light:not(:disabled):not(.disabled).active,
+	.show > .btn-light.dropdown-toggle {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface1);
+		border-color: var(--ctp-surface1);
+	}
+	.btn-light:not(:disabled):not(.disabled):active:focus,
+	.btn-light:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-light.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-dark {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-dark:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-dark:focus,
+	.btn-dark.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-dark.disabled,
+	.btn-dark:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-dark:not(:disabled):not(.disabled):active,
+	.btn-dark:not(:disabled):not(.disabled).active,
+	.show > .btn-dark.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-dark:not(:disabled):not(.disabled):active:focus,
+	.btn-dark:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-dark.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-primary {
+		color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-outline-primary:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-outline-primary:focus-visible,
+	.btn-outline-primary.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-primary.disabled,
+	.btn-outline-primary:disabled {
+		color: var(--ctp-accent);
+	}
+	.btn-outline-primary:not(:disabled):not(.disabled):active,
+	.btn-outline-primary:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-primary.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-primary.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-secondary {
+		color: var(--ctp-subtext0);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-outline-secondary:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-outline-secondary:focus-visible,
+	.btn-outline-secondary.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-overlay0) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-secondary.disabled,
+	.btn-outline-secondary:disabled {
+		color: var(--ctp-subtext0);
+	}
+	.btn-outline-secondary:not(:disabled):not(.disabled):active,
+	.btn-outline-secondary:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-secondary.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-outline-secondary:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-secondary.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-overlay0) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-success {
+		color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-outline-success:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-outline-success:focus,
+	.btn-outline-success.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-success.disabled,
+	.btn-outline-success:disabled {
+		color: var(--ctp-green);
+	}
+	.btn-outline-success:not(:disabled):not(.disabled):active,
+	.btn-outline-success:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-success.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-outline-success:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-success:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-success.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-info {
+		color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-outline-info:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-outline-info:focus,
+	.btn-outline-info.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-info.disabled,
+	.btn-outline-info:disabled {
+		color: var(--ctp-sapphire);
+	}
+	.btn-outline-info:not(:disabled):not(.disabled):active,
+	.btn-outline-info:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-info.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-outline-info:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-info:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-info.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-warning {
+		color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-outline-warning:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-outline-warning:focus,
+	.btn-outline-warning.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-yellow) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-warning.disabled,
+	.btn-outline-warning:disabled {
+		color: var(--ctp-yellow);
+	}
+	.btn-outline-warning:not(:disabled):not(.disabled):active,
+	.btn-outline-warning:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-warning.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-outline-warning:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-warning:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-warning.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-yellow) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-danger {
+		color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-outline-danger:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-outline-danger:focus,
+	.btn-outline-danger.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-danger.disabled,
+	.btn-outline-danger:disabled {
+		color: var(--ctp-red);
+	}
+	.btn-outline-danger:not(:disabled):not(.disabled):active,
+	.btn-outline-danger:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-danger.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-outline-danger:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-danger:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-danger.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-light {
+		color: var(--ctp-on-accent);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-outline-light:hover {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-outline-light:focus,
+	.btn-outline-light.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-light.disabled,
+	.btn-outline-light:disabled {
+		color: var(--ctp-on-accent);
+	}
+	.btn-outline-light:not(:disabled):not(.disabled):active,
+	.btn-outline-light:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-light.dropdown-toggle {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-outline-light:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-light:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-light.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-dark {
+		color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-outline-dark:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-outline-dark:focus,
+	.btn-outline-dark.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-outline-dark.disabled,
+	.btn-outline-dark:disabled {
+		color: var(--ctp-text);
+	}
+	.btn-outline-dark:not(:disabled):not(.disabled):active,
+	.btn-outline-dark:not(:disabled):not(.disabled).active,
+	.show > .btn-outline-dark.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-outline-dark:not(:disabled):not(.disabled):active:focus,
+	.btn-outline-dark:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-outline-dark.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-link {
+		color: var(--ctp-accent);
+	}
+	.btn-link:hover {
+		color: var(--ctp-accent);
+	}
+	.btn-link:disabled,
+	.btn-link.disabled {
+		color: var(--ctp-subtext0);
+	}
+	.dropdown-menu {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctrl-bgcolor);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	[data-theme="dark"] .dropdown-menu {
+		border: 1px solid var(--card-border-color);
+	}
+	.dropdown-divider {
+		border-top: 1px solid var(--ctp-surface0);
+	}
+	.dropdown-item {
+		color: var(--ctrl-dropdown-color);
+	}
+	.dropdown-item:hover,
+	.dropdown-item:focus {
+		color: var(--ctrl-dropdown-color-focus);
+		background-color: var(--ctrl-dropdown-bgcolor-focus);
+	}
+	.dropdown-item.active,
+	.dropdown-item:active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+	}
+	.dropdown-item.disabled,
+	.dropdown-item:disabled {
+		color: var(--ctp-subtext0);
+	}
+	.dropdown-header {
+		color: var(--ctp-subtext0);
+	}
+	.input-group-text {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.custom-control-input:checked ~ .custom-control-label::before {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+	}
+	.custom-control-input:focus ~ .custom-control-label::before {
+		box-shadow: var(--ctp-mantle) 0px 0px 0px 1px, color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.custom-control-input:active ~ .custom-control-label::before {
+		color: var(--ctp-on-accent);
+		background-color: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base));
+	}
+	.custom-control-input:disabled ~ .custom-control-label {
+		color: var(--ctp-subtext0);
+	}
+	.custom-control-input:disabled ~ .custom-control-label::before {
+		background-color: var(--ctp-surface0);
+	}
+	.custom-control-label::before {
+		background-color: var(--ctp-surface1);
+	}
+	.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+		background-color: var(--ctp-accent);
+	}
+	.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+		background-color: var(--ctp-accent);
+	}
+	.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+		background-color: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+	}
+	.custom-checkbox .custom-control-input:disabled:indeterminate ~ .custom-control-label::before {
+		background-color: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+	}
+	.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+		background-color: var(--ctp-accent);
+	}
+	.custom-radio .custom-control-input:disabled:checked ~ .custom-control-label::before {
+		background-color: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+	}
+	.custom-select {
+		color: var(--mcolor);
+		border: 1px solid var(--card-border-color);
+	}
+	.custom-select:focus {
+		border-color: var(--ctp-sapphire);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 8%, transparent) 0px 1px 2px inset, color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 5px;
+	}
+	.custom-select:disabled {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-surface0);
+	}
+	.custom-file-input:focus ~ .custom-file-control {
+		border-color: var(--ctp-sapphire);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.custom-file-input:focus ~ .custom-file-control::before {
+		border-color: var(--ctp-sapphire);
+	}
+	.custom-file-label {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-base);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.custom-file-label::after {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-left: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.nav-link.disabled {
+		color: var(--ctp-subtext0);
+	}
+	.nav-tabs {
+		border-bottom: 1px solid var(--ctp-surface1);
+	}
+	.nav-tabs .nav-link:hover,
+	.nav-tabs .nav-link:focus {
+		border-color: var(--ctp-surface0) var(--ctp-surface0) var(--ctp-surface1);
+	}
+	.nav-tabs .nav-link.disabled {
+		color: var(--ctp-subtext0);
+	}
+	.nav-tabs .nav-link.active,
+	.nav-tabs .nav-item.show .nav-link {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-color: var(--ctp-surface1) var(--ctp-surface1) var(--ctp-mantle);
+	}
+	.nav-pills .nav-link.active,
+	.nav-pills .show > .nav-link {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+	}
+	.navbar-light .navbar-brand {
+		color: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+	}
+	.navbar-light .navbar-brand:hover,
+	.navbar-light .navbar-brand:focus {
+		color: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+	}
+	.navbar-light .navbar-nav .nav-link {
+		color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	.navbar-light .navbar-nav .nav-link:hover,
+	.navbar-light .navbar-nav .nav-link:focus {
+		color: color-mix(in srgb, var(--ctp-text) 70%, transparent);
+	}
+	.navbar-light .navbar-nav .nav-link.disabled {
+		color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+	}
+	.navbar-light .navbar-nav .show > .nav-link,
+	.navbar-light .navbar-nav .active > .nav-link,
+	.navbar-light .navbar-nav .nav-link.show,
+	.navbar-light .navbar-nav .nav-link.active {
+		color: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+	}
+	.navbar-light .navbar-toggler {
+		color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+		border-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+	}
+	.navbar-light .navbar-text {
+		color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	.navbar-light .navbar-text a {
+		color: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+	}
+	.navbar-light .navbar-text a:hover,
+	.navbar-light .navbar-text a:focus {
+		color: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+	}
+	.navbar-dark .navbar-brand {
+		color: var(--ctp-on-accent);
+	}
+	.navbar-dark .navbar-brand:hover,
+	.navbar-dark .navbar-brand:focus {
+		color: var(--ctp-on-accent);
+	}
+	.navbar-dark .navbar-nav .nav-link {
+		color: color-mix(in srgb, var(--ctp-on-accent) 50%, transparent);
+	}
+	.navbar-dark .navbar-nav .nav-link:hover,
+	.navbar-dark .navbar-nav .nav-link:focus {
+		color: color-mix(in srgb, var(--ctp-on-accent) 75%, transparent);
+	}
+	.navbar-dark .navbar-nav .nav-link.disabled {
+		color: color-mix(in srgb, var(--ctp-on-accent) 25%, transparent);
+	}
+	.navbar-dark .navbar-nav .show > .nav-link,
+	.navbar-dark .navbar-nav .active > .nav-link,
+	.navbar-dark .navbar-nav .nav-link.show,
+	.navbar-dark .navbar-nav .nav-link.active {
+		color: var(--ctp-on-accent);
+	}
+	.navbar-dark .navbar-toggler {
+		color: color-mix(in srgb, var(--ctp-on-accent) 50%, transparent);
+		border-color: color-mix(in srgb, var(--ctp-mantle) 10%, transparent);
+	}
+	.navbar-dark .navbar-text {
+		color: color-mix(in srgb, var(--ctp-on-accent) 50%, transparent);
+	}
+	.navbar-dark .navbar-text a {
+		color: var(--ctp-on-accent);
+	}
+	.navbar-dark .navbar-text a:hover,
+	.navbar-dark .navbar-text a:focus {
+		color: var(--ctp-on-accent);
+	}
+	.card {
+		background-color: var(--card-bgcolor);
+		border: 1px solid var(--card-border-color);
+	}
+	.card-header {
+		background-color: color-mix(in srgb, var(--ctp-text) 3%, transparent);
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.card-footer {
+		background-color: color-mix(in srgb, var(--ctp-text) 3%, transparent);
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.breadcrumb {
+		background-color: var(--ctp-surface0);
+	}
+	.breadcrumb-item + .breadcrumb-item::before {
+		color: var(--ctp-subtext0);
+	}
+	.breadcrumb-item.active {
+		color: var(--ctp-subtext0);
+	}
+	.page-link {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-base);
+		border: 1px solid var(--ctp-surface1);
+	}
+	.page-link:hover {
+		color: var(--ctp-accent);
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+	}
+	.page-link:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.page-item.active .page-link {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.page-item.disabled .page-link {
+		color: var(--ctp-overlay0);
+		background-color: var(--ctp-base);
+		border-color: var(--ctp-surface1);
+	}
+	.badge-primary {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+	}
+	.badge-primary[href]:hover,
+	.badge-primary[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+	}
+	.badge-secondary {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+	}
+	.badge-secondary[href]:hover,
+	.badge-secondary[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-subtext0);
+	}
+	.badge-success {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+	}
+	.badge-success[href]:hover,
+	.badge-success[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+	}
+	.badge-info {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+	}
+	.badge-info[href]:hover,
+	.badge-info[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+	}
+	.badge-warning {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+	}
+	.badge-warning[href]:hover,
+	.badge-warning[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+	}
+	.badge-danger {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+	}
+	.badge-danger[href]:hover,
+	.badge-danger[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+	}
+	.badge-light {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+	}
+	.badge-light[href]:hover,
+	.badge-light[href]:focus {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface1);
+	}
+	.badge-dark {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+	}
+	.badge-dark[href]:hover,
+	.badge-dark[href]:focus {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+	}
+	.jumbotron {
+		background-color: var(--ctp-surface0);
+	}
+	.alert-primary {
+		color: var(--alert-message-color);
+		background-color: var(--alert-message-bg);
+		border-color: var(--alert-message-border);
+	}
+	.alert-primary hr {
+		border-top-color: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base));
+	}
+	.alert-primary .alert-link {
+		color: var(--ctp-accent);
+	}
+	.alert-secondary {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+	}
+	.alert-secondary hr {
+		border-top-color: var(--ctp-surface1);
+	}
+	.alert-secondary .alert-link {
+		color: var(--ctp-text);
+	}
+	.alert-success {
+		color: var(--ctp-green);
+		background-color: color-mix(in srgb, var(--ctp-green) 15%, var(--ctp-base));
+		border-color: color-mix(in srgb, var(--ctp-green) 20%, var(--ctp-base));
+	}
+	.alert-success hr {
+		border-top-color: var(--ctp-green);
+	}
+	.alert-success .alert-link {
+		color: var(--ctp-green);
+	}
+	.alert-info {
+		color: var(--alert-message-color);
+		background-color: var(--alert-message-bg);
+		border-color: var(--alert-message-border);
+	}
+	.alert-info hr {
+		border-top-color: color-mix(in srgb, var(--ctp-sapphire) 35%, var(--ctp-base));
+	}
+	.alert-info .alert-link {
+		color: var(--ctp-sapphire);
+	}
+	.alert-warning {
+		color: var(--ctp-yellow);
+		background-color: color-mix(in srgb, var(--ctp-yellow) 10%, var(--ctp-base));
+		border-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-base));
+	}
+	.alert-warning hr {
+		border-top-color: var(--ctp-yellow);
+	}
+	.alert-warning .alert-link {
+		color: var(--ctp-yellow);
+	}
+	.alert-danger {
+		color: var(--ctp-red);
+		background-color: color-mix(in srgb, var(--ctp-red) 30%, var(--ctp-base));
+		border-color: color-mix(in srgb, var(--ctp-red) 40%, var(--ctp-base));
+	}
+	.alert-danger hr {
+		border-top-color: var(--ctp-red);
+	}
+	.alert-danger .alert-link {
+		color: var(--ctp-red);
+	}
+	.alert-light {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-base);
+		border-color: var(--ctp-mantle);
+	}
+	.alert-light hr {
+		border-top-color: var(--ctp-surface0);
+	}
+	.alert-light .alert-link {
+		color: var(--ctp-subtext0);
+	}
+	.alert-dark {
+		color: var(--ctp-text);
+		background-color: var(--ctp-surface2);
+		border-color: var(--ctp-surface1);
+	}
+	.alert-dark hr {
+		border-top-color: var(--ctp-surface2);
+	}
+	.alert-dark .alert-link {
+		color: var(--ctp-text);
+	}
+	.progress {
+		background-color: var(--ctp-surface0);
+	}
+	.progress-bar {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+	}
+	.progress-bar-striped {
+		background-image: linear-gradient(45deg, color-mix(in srgb, var(--ctp-base) 15%, transparent) 25%, transparent 25%, transparent 50%, color-mix(in srgb, var(--ctp-base) 15%, transparent) 50%, color-mix(in srgb, var(--ctp-base) 15%, transparent) 75%, transparent 75%, transparent);
+	}
+	.list-group-item-action {
+		color: var(--ctp-subtext1);
+	}
+	.list-group-item-action:hover,
+	.list-group-item-action:focus {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+	}
+	.list-group-item-action:active {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface0);
+	}
+	.list-group-item {
+		background-color: var(--ctp-base);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.list-group-item.disabled,
+	.list-group-item:disabled {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-base);
+	}
+	.list-group-item.active {
+		color: var(--ctp-accent);
+		background-color: var(--ctp-mantle);
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.list-group-item-primary {
+		color: var(--ctp-accent);
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.list-group-item-primary.list-group-item-action:hover,
+	.list-group-item-primary.list-group-item-action:focus {
+		color: var(--ctp-accent);
+		background-color: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base));
+	}
+	.list-group-item-primary.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.list-group-item-secondary {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface1);
+	}
+	.list-group-item-secondary.list-group-item-action:hover,
+	.list-group-item-secondary.list-group-item-action:focus {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface2);
+	}
+	.list-group-item-secondary.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-subtext1);
+		border-color: var(--ctp-overlay2);
+	}
+	.list-group-item-success {
+		color: var(--ctp-green);
+		background-color: color-mix(in srgb, var(--ctp-green) 20%, var(--ctp-base));
+	}
+	.list-group-item-success.list-group-item-action:hover,
+	.list-group-item-success.list-group-item-action:focus {
+		color: var(--ctp-green);
+		background-color: var(--ctp-green);
+	}
+	.list-group-item-success.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.list-group-item-info {
+		color: var(--ctp-sapphire);
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 20%, var(--ctp-base));
+	}
+	.list-group-item-info.list-group-item-action:hover,
+	.list-group-item-info.list-group-item-action:focus {
+		color: var(--ctp-sapphire);
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 35%, var(--ctp-base));
+	}
+	.list-group-item-info.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.list-group-item-warning {
+		color: var(--ctp-yellow);
+		background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-base));
+	}
+	.list-group-item-warning.list-group-item-action:hover,
+	.list-group-item-warning.list-group-item-action:focus {
+		color: var(--ctp-yellow);
+		background-color: var(--ctp-yellow);
+	}
+	.list-group-item-warning.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.list-group-item-danger {
+		color: var(--ctp-red);
+		background-color: color-mix(in srgb, var(--ctp-red) 40%, var(--ctp-base));
+	}
+	.list-group-item-danger.list-group-item-action:hover,
+	.list-group-item-danger.list-group-item-action:focus {
+		color: var(--ctp-red);
+		background-color: var(--ctp-red);
+	}
+	.list-group-item-danger.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.list-group-item-light {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-base);
+	}
+	.list-group-item-light.list-group-item-action:hover,
+	.list-group-item-light.list-group-item-action:focus {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-surface0);
+	}
+	.list-group-item-light.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.list-group-item-dark {
+		color: var(--ctp-text);
+		background-color: var(--ctp-surface2);
+	}
+	.list-group-item-dark.list-group-item-action:hover,
+	.list-group-item-dark.list-group-item-action:focus {
+		color: var(--ctp-text);
+		background-color: var(--ctp-overlay0);
+	}
+	.list-group-item-dark.list-group-item-action.active {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.close {
+		color: var(--ctp-text);
+		text-shadow: var(--ctp-on-accent) 0px 1px 0px;
+	}
+	.close:hover,
+	.close:focus {
+		color: var(--ctp-text);
+	}
+	.modal-content {
+		background-color: var(--card-bgcolor);
+		border: 1px solid var(--card-border-color);
+	}
+	.modal-backdrop {
+		background-color: var(--ctp-text);
+	}
+	.modal-header {
+		border-bottom: 1px solid var(--card-border-color);
+	}
+	.modal-footer {
+		border-top: 1px solid var(--card-border-color);
+	}
+	.bs-tooltip-top .arrow::before,
+	.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+		border-top-color: var(--ctp-overlay2);
+	}
+	.bs-tooltip-right .arrow::before,
+	.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+		border-right-color: var(--ctp-overlay2);
+	}
+	.bs-tooltip-bottom .arrow::before,
+	.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+		border-bottom-color: var(--ctp-overlay2);
+	}
+	.bs-tooltip-left .arrow::before,
+	.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+		border-left-color: var(--ctp-overlay2);
+	}
+	.tooltip-inner {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+	}
+	.popover {
+		background-color: var(--ctp-base);
+		border: 1px solid var(--ctp-surface1);
+	}
+	.bs-popover-top .arrow::before,
+	.bs-popover-auto[x-placement^="top"] .arrow::before {
+		border-top-color: var(--ctp-surface1);
+	}
+	.bs-popover-top .arrow::after,
+	.bs-popover-auto[x-placement^="top"] .arrow::after {
+		border-top-color: var(--ctp-mantle);
+	}
+	.bs-popover-right .arrow::before,
+	.bs-popover-auto[x-placement^="right"] .arrow::before {
+		border-right-color: var(--ctp-surface1);
+	}
+	.bs-popover-right .arrow::after,
+	.bs-popover-auto[x-placement^="right"] .arrow::after {
+		border-right-color: var(--ctp-mantle);
+	}
+	.bs-popover-bottom .arrow::before,
+	.bs-popover-auto[x-placement^="bottom"] .arrow::before {
+		border-bottom-color: var(--ctp-surface1);
+	}
+	.bs-popover-bottom .arrow::after,
+	.bs-popover-auto[x-placement^="bottom"] .arrow::after {
+		border-bottom-color: var(--ctp-mantle);
+	}
+	.bs-popover-bottom .popover-header::before,
+	.bs-popover-auto[x-placement^="bottom"] .popover-header::before {
+		border-bottom: 1px solid var(--ctp-mantle);
+	}
+	.bs-popover-left .arrow::before,
+	.bs-popover-auto[x-placement^="left"] .arrow::before {
+		border-left-color: var(--ctp-surface1);
+	}
+	.bs-popover-left .arrow::after,
+	.bs-popover-auto[x-placement^="left"] .arrow::after {
+		border-left-color: var(--ctp-mantle);
+	}
+	.popover-header {
+		background-color: var(--ctp-mantle);
+		border-bottom: 1px solid var(--ctp-surface0);
+	}
+	.popover-body {
+		color: var(--ctp-subtext0);
+	}
+	.carousel-control-prev,
+	.carousel-control-next {
+		color: var(--ctp-on-accent);
+	}
+	.carousel-control-prev:hover,
+	.carousel-control-prev:focus,
+	.carousel-control-next:hover,
+	.carousel-control-next:focus {
+		color: var(--ctp-on-accent);
+	}
+	.carousel-indicators li {
+		background-color: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+	}
+	.carousel-indicators .active {
+		background-color: var(--ctp-base);
+	}
+	.carousel-caption {
+		color: var(--ctp-on-accent);
+	}
+	.bg-primary {
+		background-color: var(--ctp-accent) !important;
+	}
+	a.bg-primary:hover,
+	a.bg-primary:focus,
+	button.bg-primary:hover,
+	button.bg-primary:focus {
+		background-color: var(--ctp-accent-hover) !important;
+	}
+	.bg-secondary {
+		background-color: var(--ctp-overlay2) !important;
+	}
+	a.bg-secondary:hover,
+	a.bg-secondary:focus,
+	button.bg-secondary:hover,
+	button.bg-secondary:focus {
+		background-color: var(--ctp-subtext0) !important;
+	}
+	.bg-success {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-success:hover,
+	a.bg-success:focus,
+	button.bg-success:hover,
+	button.bg-success:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-info {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	a.bg-info:hover,
+	a.bg-info:focus,
+	button.bg-info:hover,
+	button.bg-info:focus {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.bg-warning {
+		background-color: var(--ctp-yellow) !important;
+	}
+	a.bg-warning:hover,
+	a.bg-warning:focus,
+	button.bg-warning:hover,
+	button.bg-warning:focus {
+		background-color: var(--ctp-yellow) !important;
+	}
+	.bg-danger {
+		background-color: var(--ctp-red) !important;
+	}
+	a.bg-danger:hover,
+	a.bg-danger:focus,
+	button.bg-danger:hover,
+	button.bg-danger:focus {
+		background-color: var(--ctp-red) !important;
+	}
+	.bg-light {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-light:hover,
+	a.bg-light:focus,
+	button.bg-light:hover,
+	button.bg-light:focus {
+		background-color: var(--ctp-surface1) !important;
+	}
+	.bg-dark {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-dark:hover,
+	a.bg-dark:focus,
+	button.bg-dark:hover,
+	button.bg-dark:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-white {
+		background-color: var(--ctp-base) !important;
+	}
+	.border {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent) !important;
+	}
+	.border-top {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent) !important;
+	}
+	.border-right {
+		border-right: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent) !important;
+	}
+	.border-bottom {
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent) !important;
+	}
+	.border-left {
+		border-left: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent) !important;
+	}
+	.border-primary {
+		border-color: var(--ctp-accent) !important;
+	}
+	.border-secondary {
+		border-color: var(--ctp-overlay0) !important;
+	}
+	.border-success {
+		border-color: var(--ctp-green) !important;
+	}
+	.border-info {
+		border-color: var(--ctp-sapphire) !important;
+	}
+	.border-warning {
+		border-color: var(--ctp-yellow) !important;
+	}
+	.border-danger {
+		border-color: var(--ctp-red) !important;
+	}
+	.border-light {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.border-dark {
+		border-color: var(--ctp-overlay2) !important;
+	}
+	.border-white {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.text-white {
+		color: var(--ctp-on-accent) !important;
+	}
+	.text-primary {
+		color: var(--ctp-accent) !important;
+	}
+	a.text-primary:hover,
+	a.text-primary:focus {
+		color: var(--ctp-accent) !important;
+	}
+	.text-secondary {
+		color: var(--ctp-subtext0) !important;
+	}
+	a.text-secondary:hover,
+	a.text-secondary:focus {
+		color: var(--ctp-subtext0) !important;
+	}
+	.text-success {
+		color: var(--ctp-green) !important;
+	}
+	a.text-success:hover,
+	a.text-success:focus {
+		color: var(--ctp-green) !important;
+	}
+	.text-info {
+		color: var(--ctp-sapphire) !important;
+	}
+	a.text-info:hover,
+	a.text-info:focus {
+		color: var(--ctp-sapphire) !important;
+	}
+	.text-warning {
+		color: var(--ctp-yellow) !important;
+	}
+	a.text-warning:hover,
+	a.text-warning:focus {
+		color: var(--ctp-yellow) !important;
+	}
+	.text-danger {
+		color: var(--ctp-red) !important;
+	}
+	a.text-danger:hover,
+	a.text-danger:focus {
+		color: var(--ctp-red) !important;
+	}
+	.text-light {
+		color: var(--ctp-on-accent) !important;
+	}
+	a.text-light:hover,
+	a.text-light:focus {
+		color: var(--ctp-overlay0) !important;
+	}
+	.text-dark {
+		color: var(--ctp-text) !important;
+	}
+	a.text-dark:hover,
+	a.text-dark:focus {
+		color: var(--ctp-text) !important;
+	}
+	.text-muted {
+		color: var(--ctp-subtext0) !important;
+	}
+	body ::-webkit-scrollbar-thumb {
+		background: var(--ctp-surface2);
+	}
+	body :hover::-webkit-scrollbar-thumb {
+		background: var(--ctp-overlay0);
+	}
+	blockquote {
+		color: var(--ctp-subtext0);
+		border-left: 2px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	code {
+		background: color-mix(in srgb, var(--ctp-text) 2%, transparent);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	pre {
+		color: var(--ctp-text);
+		background-color: var(--ctp-mantle);
+		text-shadow: var(--ctp-on-accent) 0px 1px;
+	}
+	.section-nav {
+		background-color: var(--ctp-mantle);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.page-title-icon {
+		color: var(--ctp-subtext0);
+	}
+	.page-subtitle {
+		color: var(--ctp-subtext0);
+	}
+	.page-description {
+		color: var(--ctp-subtext0);
+	}
+	.aside {
+		background: var(--ctp-base);
+		border-left: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 0px 5px 2px;
+	}
+	.aside-footer {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.aside-header {
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.header {
+		background: var(--header-bgcolor);
+		border-bottom: 1px solid var(--border-color);
+	}
+	.nav-unread {
+		background: var(--ctp-red);
+	}
+	.header-btn.has-new::before {
+		background: var(--ctp-red);
+	}
+	.header-toggler {
+		color: var(--ctp-subtext0);
+	}
+	.header-toggler:hover {
+		color: var(--ctp-subtext0);
+	}
+	.footer {
+		background: var(--card-bgcolor);
+		border-top: 1px solid var(--card-border-color);
+		color: var(--ctp-subtext0);
+	}
+	.footer a:not(.btn) {
+		color: var(--ctp-subtext0);
+	}
+	.bg-blue-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-blue-lightest:hover,
+	a.bg-blue-lightest:focus,
+	button.bg-blue-lightest:hover,
+	button.bg-blue-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-accent) 35%, var(--ctp-base)) !important;
+	}
+	.bg-blue-lighter {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base)) !important;
+	}
+	a.bg-blue-lighter:hover,
+	a.bg-blue-lighter:focus,
+	button.bg-blue-lighter:hover,
+	button.bg-blue-lighter:focus {
+		background-color: var(--ctp-accent) !important;
+	}
+	.bg-blue-light {
+		background-color: var(--ctp-accent) !important;
+	}
+	a.bg-blue-light:hover,
+	a.bg-blue-light:focus,
+	button.bg-blue-light:hover,
+	button.bg-blue-light:focus {
+		background-color: var(--ctp-accent) !important;
+	}
+	.bg-blue-dark {
+		background-color: var(--ctp-accent-hover) !important;
+	}
+	a.bg-blue-dark:hover,
+	a.bg-blue-dark:focus,
+	button.bg-blue-dark:hover,
+	button.bg-blue-dark:focus {
+		background-color: var(--ctp-accent-pressed) !important;
+	}
+	.bg-blue-darker {
+		background-color: var(--ctp-accent-pressed) !important;
+	}
+	a.bg-blue-darker:hover,
+	a.bg-blue-darker:focus,
+	button.bg-blue-darker:hover,
+	button.bg-blue-darker:focus {
+		background-color: var(--ctp-accent-pressed) !important;
+	}
+	.bg-blue-darkest {
+		background-color: var(--ctp-accent-pressed) !important;
+	}
+	a.bg-blue-darkest:hover,
+	a.bg-blue-darkest:focus,
+	button.bg-blue-darkest:hover,
+	button.bg-blue-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-indigo-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-indigo-lightest:hover,
+	a.bg-indigo-lightest:focus,
+	button.bg-indigo-lightest:hover,
+	button.bg-indigo-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base)) !important;
+	}
+	.bg-indigo-lighter {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base)) !important;
+	}
+	a.bg-indigo-lighter:hover,
+	a.bg-indigo-lighter:focus,
+	button.bg-indigo-lighter:hover,
+	button.bg-indigo-lighter:focus {
+		background-color: var(--ctp-accent) !important;
+	}
+	.bg-indigo-light {
+		background-color: var(--ctp-accent) !important;
+	}
+	a.bg-indigo-light:hover,
+	a.bg-indigo-light:focus,
+	button.bg-indigo-light:hover,
+	button.bg-indigo-light:focus {
+		background-color: var(--ctp-accent) !important;
+	}
+	.bg-indigo-dark {
+		background-color: var(--ctp-accent-hover) !important;
+	}
+	a.bg-indigo-dark:hover,
+	a.bg-indigo-dark:focus,
+	button.bg-indigo-dark:hover,
+	button.bg-indigo-dark:focus {
+		background-color: var(--ctp-accent-pressed) !important;
+	}
+	.bg-indigo-darker {
+		background-color: var(--ctp-accent-pressed) !important;
+	}
+	a.bg-indigo-darker:hover,
+	a.bg-indigo-darker:focus,
+	button.bg-indigo-darker:hover,
+	button.bg-indigo-darker:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-indigo-darkest {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-indigo-darkest:hover,
+	a.bg-indigo-darkest:focus,
+	button.bg-indigo-darkest:hover,
+	button.bg-indigo-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-purple-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-purple-lightest:hover,
+	a.bg-purple-lightest:focus,
+	button.bg-purple-lightest:hover,
+	button.bg-purple-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-mauve) 40%, var(--ctp-base)) !important;
+	}
+	.bg-purple-lighter {
+		background-color: color-mix(in srgb, var(--ctp-mauve) 30%, var(--ctp-base)) !important;
+	}
+	a.bg-purple-lighter:hover,
+	a.bg-purple-lighter:focus,
+	button.bg-purple-lighter:hover,
+	button.bg-purple-lighter:focus {
+		background-color: var(--ctp-mauve) !important;
+	}
+	.bg-purple-light {
+		background-color: var(--ctp-mauve) !important;
+	}
+	a.bg-purple-light:hover,
+	a.bg-purple-light:focus,
+	button.bg-purple-light:hover,
+	button.bg-purple-light:focus {
+		background-color: var(--ctp-mauve) !important;
+	}
+	.bg-purple-dark {
+		background-color: var(--ctp-mauve) !important;
+	}
+	a.bg-purple-dark:hover,
+	a.bg-purple-dark:focus,
+	button.bg-purple-dark:hover,
+	button.bg-purple-dark:focus {
+		background-color: var(--ctp-mauve) !important;
+	}
+	.bg-purple-darker {
+		background-color: var(--ctp-mauve) !important;
+	}
+	a.bg-purple-darker:hover,
+	a.bg-purple-darker:focus,
+	button.bg-purple-darker:hover,
+	button.bg-purple-darker:focus {
+		background-color: var(--ctp-mauve) !important;
+	}
+	.bg-purple-darkest {
+		background-color: var(--ctp-mauve) !important;
+	}
+	a.bg-purple-darkest:hover,
+	a.bg-purple-darkest:focus,
+	button.bg-purple-darkest:hover,
+	button.bg-purple-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-pink-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-pink-lightest:hover,
+	a.bg-pink-lightest:focus,
+	button.bg-pink-lightest:hover,
+	button.bg-pink-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-pink) 40%, var(--ctp-base)) !important;
+	}
+	.bg-pink-lighter {
+		background-color: color-mix(in srgb, var(--ctp-pink) 25%, var(--ctp-base)) !important;
+	}
+	a.bg-pink-lighter:hover,
+	a.bg-pink-lighter:focus,
+	button.bg-pink-lighter:hover,
+	button.bg-pink-lighter:focus {
+		background-color: var(--ctp-pink) !important;
+	}
+	.bg-pink-light {
+		background-color: var(--ctp-pink) !important;
+	}
+	a.bg-pink-light:hover,
+	a.bg-pink-light:focus,
+	button.bg-pink-light:hover,
+	button.bg-pink-light:focus {
+		background-color: var(--ctp-pink) !important;
+	}
+	.bg-pink-dark {
+		background-color: var(--ctp-pink) !important;
+	}
+	a.bg-pink-dark:hover,
+	a.bg-pink-dark:focus,
+	button.bg-pink-dark:hover,
+	button.bg-pink-dark:focus {
+		background-color: var(--ctp-pink) !important;
+	}
+	.bg-pink-darker {
+		background-color: var(--ctp-pink) !important;
+	}
+	a.bg-pink-darker:hover,
+	a.bg-pink-darker:focus,
+	button.bg-pink-darker:hover,
+	button.bg-pink-darker:focus {
+		background-color: var(--ctp-pink) !important;
+	}
+	.bg-pink-darkest {
+		background-color: var(--ctp-pink) !important;
+	}
+	a.bg-pink-darkest:hover,
+	a.bg-pink-darkest:focus,
+	button.bg-pink-darkest:hover,
+	button.bg-pink-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-red-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-red-lightest:hover,
+	a.bg-red-lightest:focus,
+	button.bg-red-lightest:hover,
+	button.bg-red-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-red) 40%, var(--ctp-base)) !important;
+	}
+	.bg-red-lighter {
+		background-color: color-mix(in srgb, var(--ctp-red) 45%, var(--ctp-base)) !important;
+	}
+	a.bg-red-lighter:hover,
+	a.bg-red-lighter:focus,
+	button.bg-red-lighter:hover,
+	button.bg-red-lighter:focus {
+		background-color: var(--ctp-red) !important;
+	}
+	.bg-red-light {
+		background-color: var(--ctp-red) !important;
+	}
+	a.bg-red-light:hover,
+	a.bg-red-light:focus,
+	button.bg-red-light:hover,
+	button.bg-red-light:focus {
+		background-color: var(--ctp-red) !important;
+	}
+	.bg-red-dark {
+		background-color: var(--ctp-red) !important;
+	}
+	a.bg-red-dark:hover,
+	a.bg-red-dark:focus,
+	button.bg-red-dark:hover,
+	button.bg-red-dark:focus {
+		background-color: var(--ctp-red) !important;
+	}
+	.bg-red-darker {
+		background-color: var(--ctp-red) !important;
+	}
+	a.bg-red-darker:hover,
+	a.bg-red-darker:focus,
+	button.bg-red-darker:hover,
+	button.bg-red-darker:focus {
+		background-color: var(--ctp-red) !important;
+	}
+	.bg-red-darkest {
+		background-color: var(--ctp-red) !important;
+	}
+	a.bg-red-darkest:hover,
+	a.bg-red-darkest:focus,
+	button.bg-red-darkest:hover,
+	button.bg-red-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-orange-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	.bg-orange-lighter {
+		background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base)) !important;
+	}
+	a.bg-orange-lighter:hover,
+	a.bg-orange-lighter:focus,
+	button.bg-orange-lighter:hover,
+	button.bg-orange-lighter:focus {
+		background-color: var(--ctp-peach) !important;
+	}
+	.bg-orange-light {
+		background-color: var(--ctp-peach) !important;
+	}
+	a.bg-orange-light:hover,
+	a.bg-orange-light:focus,
+	button.bg-orange-light:hover,
+	button.bg-orange-light:focus {
+		background-color: var(--ctp-peach) !important;
+	}
+	.bg-orange-dark {
+		background-color: var(--ctp-peach) !important;
+	}
+	a.bg-orange-dark:hover,
+	a.bg-orange-dark:focus,
+	button.bg-orange-dark:hover,
+	button.bg-orange-dark:focus {
+		background-color: var(--ctp-peach) !important;
+	}
+	.bg-orange-darker {
+		background-color: var(--ctp-peach) !important;
+	}
+	a.bg-orange-darker:hover,
+	a.bg-orange-darker:focus,
+	button.bg-orange-darker:hover,
+	button.bg-orange-darker:focus {
+		background-color: var(--ctp-peach) !important;
+	}
+	.bg-orange-darkest {
+		background-color: var(--ctp-peach) !important;
+	}
+	a.bg-orange-darkest:hover,
+	a.bg-orange-darkest:focus,
+	button.bg-orange-darkest:hover,
+	button.bg-orange-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-yellow-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-yellow-lightest:hover,
+	a.bg-yellow-lightest:focus,
+	button.bg-yellow-lightest:hover,
+	button.bg-yellow-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-base)) !important;
+	}
+	.bg-yellow-lighter {
+		background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-base)) !important;
+	}
+	a.bg-yellow-lighter:hover,
+	a.bg-yellow-lighter:focus,
+	button.bg-yellow-lighter:hover,
+	button.bg-yellow-lighter:focus {
+		background-color: var(--ctp-yellow) !important;
+	}
+	.bg-yellow-light {
+		background-color: var(--ctp-yellow) !important;
+	}
+	a.bg-yellow-light:hover,
+	a.bg-yellow-light:focus,
+	button.bg-yellow-light:hover,
+	button.bg-yellow-light:focus {
+		background-color: var(--ctp-yellow) !important;
+	}
+	.bg-yellow-dark {
+		background-color: var(--ctp-yellow) !important;
+	}
+	a.bg-yellow-dark:hover,
+	a.bg-yellow-dark:focus,
+	button.bg-yellow-dark:hover,
+	button.bg-yellow-dark:focus {
+		background-color: var(--ctp-yellow) !important;
+	}
+	.bg-yellow-darker {
+		background-color: var(--ctp-yellow) !important;
+	}
+	a.bg-yellow-darker:hover,
+	a.bg-yellow-darker:focus,
+	button.bg-yellow-darker:hover,
+	button.bg-yellow-darker:focus {
+		background-color: var(--ctp-yellow) !important;
+	}
+	.bg-yellow-darkest {
+		background-color: var(--ctp-yellow) !important;
+	}
+	a.bg-yellow-darkest:hover,
+	a.bg-yellow-darkest:focus,
+	button.bg-yellow-darkest:hover,
+	button.bg-yellow-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-green-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-green-lightest:hover,
+	a.bg-green-lightest:focus,
+	button.bg-green-lightest:hover,
+	button.bg-green-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-green) 20%, var(--ctp-base)) !important;
+	}
+	.bg-green-lighter {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-green-lighter:hover,
+	a.bg-green-lighter:focus,
+	button.bg-green-lighter:hover,
+	button.bg-green-lighter:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-green-light {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-green-light:hover,
+	a.bg-green-light:focus,
+	button.bg-green-light:hover,
+	button.bg-green-light:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-green-dark {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-green-dark:hover,
+	a.bg-green-dark:focus,
+	button.bg-green-dark:hover,
+	button.bg-green-dark:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-green-darker {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-green-darker:hover,
+	a.bg-green-darker:focus,
+	button.bg-green-darker:hover,
+	button.bg-green-darker:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-green-darkest {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-green-darkest:hover,
+	a.bg-green-darkest:focus,
+	button.bg-green-darkest:hover,
+	button.bg-green-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-teal-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-teal-lightest:hover,
+	a.bg-teal-lightest:focus,
+	button.bg-teal-lightest:hover,
+	button.bg-teal-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-teal) 20%, var(--ctp-base)) !important;
+	}
+	.bg-teal-lighter {
+		background-color: color-mix(in srgb, var(--ctp-teal) 20%, var(--ctp-base)) !important;
+	}
+	a.bg-teal-lighter:hover,
+	a.bg-teal-lighter:focus,
+	button.bg-teal-lighter:hover,
+	button.bg-teal-lighter:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-teal-light {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-teal-light:hover,
+	a.bg-teal-light:focus,
+	button.bg-teal-light:hover,
+	button.bg-teal-light:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-teal-dark {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-teal-dark:hover,
+	a.bg-teal-dark:focus,
+	button.bg-teal-dark:hover,
+	button.bg-teal-dark:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-teal-darker {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-teal-darker:hover,
+	a.bg-teal-darker:focus,
+	button.bg-teal-darker:hover,
+	button.bg-teal-darker:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-teal-darkest {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-teal-darkest:hover,
+	a.bg-teal-darkest:focus,
+	button.bg-teal-darkest:hover,
+	button.bg-teal-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-cyan-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-cyan-lightest:hover,
+	a.bg-cyan-lightest:focus,
+	button.bg-cyan-lightest:hover,
+	button.bg-cyan-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-teal) 25%, var(--ctp-base)) !important;
+	}
+	.bg-cyan-lighter {
+		background-color: color-mix(in srgb, var(--ctp-teal) 30%, var(--ctp-base)) !important;
+	}
+	a.bg-cyan-lighter:hover,
+	a.bg-cyan-lighter:focus,
+	button.bg-cyan-lighter:hover,
+	button.bg-cyan-lighter:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-cyan-light {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-cyan-light:hover,
+	a.bg-cyan-light:focus,
+	button.bg-cyan-light:hover,
+	button.bg-cyan-light:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-cyan-dark {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-cyan-dark:hover,
+	a.bg-cyan-dark:focus,
+	button.bg-cyan-dark:hover,
+	button.bg-cyan-dark:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-cyan-darker {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-cyan-darker:hover,
+	a.bg-cyan-darker:focus,
+	button.bg-cyan-darker:hover,
+	button.bg-cyan-darker:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.bg-cyan-darkest {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-cyan-darkest:hover,
+	a.bg-cyan-darkest:focus,
+	button.bg-cyan-darkest:hover,
+	button.bg-cyan-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-white-lightest {
+		background-color: var(--ctp-base) !important;
+	}
+	a.bg-white-lightest:hover,
+	a.bg-white-lightest:focus,
+	button.bg-white-lightest:hover,
+	button.bg-white-lightest:focus {
+		background-color: var(--ctp-surface1) !important;
+	}
+	.bg-white-lighter {
+		background-color: var(--ctp-base) !important;
+	}
+	a.bg-white-lighter:hover,
+	a.bg-white-lighter:focus,
+	button.bg-white-lighter:hover,
+	button.bg-white-lighter:focus {
+		background-color: var(--ctp-surface1) !important;
+	}
+	.bg-white-light {
+		background-color: var(--ctp-base) !important;
+	}
+	a.bg-white-light:hover,
+	a.bg-white-light:focus,
+	button.bg-white-light:hover,
+	button.bg-white-light:focus {
+		background-color: var(--ctp-surface1) !important;
+	}
+	.bg-white-dark {
+		background-color: var(--ctp-surface2) !important;
+	}
+	a.bg-white-dark:hover,
+	a.bg-white-dark:focus,
+	button.bg-white-dark:hover,
+	button.bg-white-dark:focus {
+		background-color: var(--ctp-overlay0) !important;
+	}
+	.bg-white-darker {
+		background-color: var(--ctp-subtext0) !important;
+	}
+	a.bg-white-darker:hover,
+	a.bg-white-darker:focus,
+	button.bg-white-darker:hover,
+	button.bg-white-darker:focus {
+		background-color: var(--ctp-subtext1) !important;
+	}
+	.bg-white-darkest {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-white-darkest:hover,
+	a.bg-white-darkest:focus,
+	button.bg-white-darkest:hover,
+	button.bg-white-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-gray-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-gray-lightest:hover,
+	a.bg-gray-lightest:focus,
+	button.bg-gray-lightest:hover,
+	button.bg-gray-lightest:focus {
+		background-color: var(--ctp-surface2) !important;
+	}
+	.bg-gray-lighter {
+		background-color: var(--ctp-surface1) !important;
+	}
+	a.bg-gray-lighter:hover,
+	a.bg-gray-lighter:focus,
+	button.bg-gray-lighter:hover,
+	button.bg-gray-lighter:focus {
+		background-color: var(--ctp-surface2) !important;
+	}
+	.bg-gray-light {
+		background-color: var(--ctp-overlay0) !important;
+	}
+	a.bg-gray-light:hover,
+	a.bg-gray-light:focus,
+	button.bg-gray-light:hover,
+	button.bg-gray-light:focus {
+		background-color: var(--ctp-overlay1) !important;
+	}
+	.bg-gray-dark {
+		background-color: var(--ctp-subtext0) !important;
+	}
+	a.bg-gray-dark:hover,
+	a.bg-gray-dark:focus,
+	button.bg-gray-dark:hover,
+	button.bg-gray-dark:focus {
+		background-color: var(--ctp-subtext1) !important;
+	}
+	.bg-gray-darker {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-gray-darker:hover,
+	a.bg-gray-darker:focus,
+	button.bg-gray-darker:hover,
+	button.bg-gray-darker:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-gray-darkest {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-gray-darkest:hover,
+	a.bg-gray-darkest:focus,
+	button.bg-gray-darkest:hover,
+	button.bg-gray-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-gray-dark-lightest {
+		background-color: var(--ctp-surface0) !important;
+	}
+	a.bg-gray-dark-lightest:hover,
+	a.bg-gray-dark-lightest:focus,
+	button.bg-gray-dark-lightest:hover,
+	button.bg-gray-dark-lightest:focus {
+		background-color: var(--ctp-surface2) !important;
+	}
+	.bg-gray-dark-lighter {
+		background-color: var(--ctp-surface2) !important;
+	}
+	a.bg-gray-dark-lighter:hover,
+	a.bg-gray-dark-lighter:focus,
+	button.bg-gray-dark-lighter:hover,
+	button.bg-gray-dark-lighter:focus {
+		background-color: var(--ctp-overlay0) !important;
+	}
+	.bg-gray-dark-light {
+		background-color: var(--ctp-subtext0) !important;
+	}
+	a.bg-gray-dark-light:hover,
+	a.bg-gray-dark-light:focus,
+	button.bg-gray-dark-light:hover,
+	button.bg-gray-dark-light:focus {
+		background-color: var(--ctp-subtext1) !important;
+	}
+	.bg-gray-dark-dark {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-gray-dark-dark:hover,
+	a.bg-gray-dark-dark:focus,
+	button.bg-gray-dark-dark:hover,
+	button.bg-gray-dark-dark:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-gray-dark-darker {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-gray-dark-darker:hover,
+	a.bg-gray-dark-darker:focus,
+	button.bg-gray-dark-darker:hover,
+	button.bg-gray-dark-darker:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-gray-dark-darkest {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-gray-dark-darkest:hover,
+	a.bg-gray-dark-darkest:focus,
+	button.bg-gray-dark-darkest:hover,
+	button.bg-gray-dark-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-azure-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-azure-lightest:hover,
+	a.bg-azure-lightest:focus,
+	button.bg-azure-lightest:hover,
+	button.bg-azure-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 25%, var(--ctp-base)) !important;
+	}
+	.bg-azure-lighter {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 25%, var(--ctp-base)) !important;
+	}
+	a.bg-azure-lighter:hover,
+	a.bg-azure-lighter:focus,
+	button.bg-azure-lighter:hover,
+	button.bg-azure-lighter:focus {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.bg-azure-light {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	a.bg-azure-light:hover,
+	a.bg-azure-light:focus,
+	button.bg-azure-light:hover,
+	button.bg-azure-light:focus {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.bg-azure-dark {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	a.bg-azure-dark:hover,
+	a.bg-azure-dark:focus,
+	button.bg-azure-dark:hover,
+	button.bg-azure-dark:focus {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.bg-azure-darker {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	a.bg-azure-darker:hover,
+	a.bg-azure-darker:focus,
+	button.bg-azure-darker:hover,
+	button.bg-azure-darker:focus {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.bg-azure-darkest {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	a.bg-azure-darkest:hover,
+	a.bg-azure-darkest:focus,
+	button.bg-azure-darkest:hover,
+	button.bg-azure-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.bg-lime-lightest {
+		background-color: var(--ctp-mantle) !important;
+	}
+	a.bg-lime-lightest:hover,
+	a.bg-lime-lightest:focus,
+	button.bg-lime-lightest:hover,
+	button.bg-lime-lightest:focus {
+		background-color: color-mix(in srgb, var(--ctp-green) 15%, var(--ctp-base)) !important;
+	}
+	.bg-lime-lighter {
+		background-color: color-mix(in srgb, var(--ctp-green) 15%, var(--ctp-base)) !important;
+	}
+	a.bg-lime-lighter:hover,
+	a.bg-lime-lighter:focus,
+	button.bg-lime-lighter:hover,
+	button.bg-lime-lighter:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-lime-light {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-lime-light:hover,
+	a.bg-lime-light:focus,
+	button.bg-lime-light:hover,
+	button.bg-lime-light:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-lime-dark {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-lime-dark:hover,
+	a.bg-lime-dark:focus,
+	button.bg-lime-dark:hover,
+	button.bg-lime-dark:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-lime-darker {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-lime-darker:hover,
+	a.bg-lime-darker:focus,
+	button.bg-lime-darker:hover,
+	button.bg-lime-darker:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.bg-lime-darkest {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-lime-darkest:hover,
+	a.bg-lime-darkest:focus,
+	button.bg-lime-darkest:hover,
+	button.bg-lime-darkest:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.text-default {
+		color: var(--ctp-subtext1) !important;
+	}
+	.text-muted-dark {
+		color: var(--ctp-subtext0) !important;
+	}
+	.bg-blue {
+		background-color: var(--ctp-accent) !important;
+	}
+	a.bg-blue:hover,
+	a.bg-blue:focus,
+	button.bg-blue:hover,
+	button.bg-blue:focus {
+		background-color: var(--ctp-accent-hover) !important;
+	}
+	.text-blue {
+		color: var(--ctp-accent) !important;
+	}
+	.bg-indigo {
+		background-color: var(--ctp-accent) !important;
+	}
+	a.bg-indigo:hover,
+	a.bg-indigo:focus,
+	button.bg-indigo:hover,
+	button.bg-indigo:focus {
+		background-color: var(--ctp-accent-hover) !important;
+	}
+	.text-indigo {
+		color: var(--ctp-accent) !important;
+	}
+	.bg-purple {
+		background-color: var(--ctp-mauve) !important;
+	}
+	a.bg-purple:hover,
+	a.bg-purple:focus,
+	button.bg-purple:hover,
+	button.bg-purple:focus {
+		background-color: var(--ctp-mauve) !important;
+	}
+	.text-purple {
+		color: var(--ctp-mauve) !important;
+	}
+	.bg-pink {
+		background-color: var(--ctp-pink) !important;
+	}
+	a.bg-pink:hover,
+	a.bg-pink:focus,
+	button.bg-pink:hover,
+	button.bg-pink:focus {
+		background-color: var(--ctp-pink) !important;
+	}
+	.text-pink {
+		color: var(--ctp-pink) !important;
+	}
+	.bg-red {
+		background-color: var(--ctp-red) !important;
+	}
+	a.bg-red:hover,
+	a.bg-red:focus,
+	button.bg-red:hover,
+	button.bg-red:focus {
+		background-color: var(--ctp-red) !important;
+	}
+	.text-red {
+		color: var(--ctp-red) !important;
+	}
+	.bg-orange {
+		background-color: var(--ctp-peach) !important;
+	}
+	a.bg-orange:hover,
+	a.bg-orange:focus,
+	button.bg-orange:hover,
+	button.bg-orange:focus {
+		background-color: var(--ctp-peach) !important;
+	}
+	.text-orange {
+		color: var(--ctp-peach) !important;
+	}
+	.bg-yellow {
+		background-color: var(--ctp-yellow) !important;
+	}
+	a.bg-yellow:hover,
+	a.bg-yellow:focus,
+	button.bg-yellow:hover,
+	button.bg-yellow:focus {
+		background-color: var(--ctp-yellow) !important;
+	}
+	.text-yellow {
+		color: var(--ctp-yellow) !important;
+	}
+	.bg-green {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-green:hover,
+	a.bg-green:focus,
+	button.bg-green:hover,
+	button.bg-green:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.text-green {
+		color: var(--ctp-green) !important;
+	}
+	.bg-teal {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-teal:hover,
+	a.bg-teal:focus,
+	button.bg-teal:hover,
+	button.bg-teal:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.text-teal {
+		color: var(--ctp-teal) !important;
+	}
+	.bg-cyan {
+		background-color: var(--ctp-teal) !important;
+	}
+	a.bg-cyan:hover,
+	a.bg-cyan:focus,
+	button.bg-cyan:hover,
+	button.bg-cyan:focus {
+		background-color: var(--ctp-teal) !important;
+	}
+	.text-cyan {
+		color: var(--ctp-teal) !important;
+	}
+	.bg-white {
+		background-color: var(--ctp-base) !important;
+	}
+	a.bg-white:hover,
+	a.bg-white:focus,
+	button.bg-white:hover,
+	button.bg-white:focus {
+		background-color: var(--ctp-surface1) !important;
+	}
+	.text-white {
+		color: var(--ctp-on-accent) !important;
+	}
+	.bg-gray {
+		background-color: var(--ctp-overlay2) !important;
+	}
+	a.bg-gray:hover,
+	a.bg-gray:focus,
+	button.bg-gray:hover,
+	button.bg-gray:focus {
+		background-color: var(--ctp-subtext0) !important;
+	}
+	.text-gray {
+		color: var(--ctp-subtext0) !important;
+	}
+	.bg-gray-dark {
+		background-color: var(--ctp-text) !important;
+	}
+	a.bg-gray-dark:hover,
+	a.bg-gray-dark:focus,
+	button.bg-gray-dark:hover,
+	button.bg-gray-dark:focus {
+		background-color: var(--ctp-text) !important;
+	}
+	.text-gray-dark {
+		color: var(--ctp-text) !important;
+	}
+	.bg-azure {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	a.bg-azure:hover,
+	a.bg-azure:focus,
+	button.bg-azure:hover,
+	button.bg-azure:focus {
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.text-azure {
+		color: var(--ctp-sapphire) !important;
+	}
+	.bg-lime {
+		background-color: var(--ctp-green) !important;
+	}
+	a.bg-lime:hover,
+	a.bg-lime:focus,
+	button.bg-lime:hover,
+	button.bg-lime:focus {
+		background-color: var(--ctp-green) !important;
+	}
+	.text-lime {
+		color: var(--ctp-green) !important;
+	}
+	.icon {
+		color: var(--ctp-subtext0) !important;
+	}
+	a.icon:hover {
+		color: var(--ctp-subtext1) !important;
+	}
+	.shadow {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 1px 2px 0px !important;
+	}
+	.nav-tabs {
+		color: var(--ctp-subtext0);
+	}
+	.nav-tabs .nav-link:hover:not(.disabled) {
+		border-color: var(--ctp-overlay0);
+		color: var(--ctp-subtext0);
+	}
+	.nav-tabs .nav-link.active {
+		border-color: var(--ctp-accent);
+		color: var(--ctp-accent);
+	}
+	.nav-tabs .nav-submenu {
+		background: var(--ctp-base);
+		border-color: currentcolor color-mix(in srgb, var(--ctp-text) 12%, transparent) color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 1px 2px 0px;
+	}
+	.nav-tabs .nav-submenu .nav-item {
+		color: var(--ctp-subtext0);
+	}
+	.nav-tabs .nav-submenu .nav-item.active {
+		color: var(--ctp-accent);
+	}
+	.nav-tabs .nav-submenu .nav-item:hover {
+		color: var(--ctp-subtext0);
+		background: color-mix(in srgb, var(--ctp-text) 2%, transparent);
+	}
+	.btn-secondary {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-base);
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 1px 1px 0px;
+	}
+	.btn-secondary:hover {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-mantle);
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.btn-secondary:focus,
+	.btn-secondary.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-pressed) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-secondary.disabled,
+	.btn-secondary:disabled {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-base);
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.btn-secondary:not(:disabled):not(.disabled):active,
+	.btn-secondary:not(:disabled):not(.disabled).active,
+	.show > .btn-secondary.dropdown-toggle {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface1);
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.btn-secondary:not(:disabled):not(.disabled):active:focus,
+	.btn-secondary:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-secondary.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-pressed) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-facebook {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-facebook:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-facebook:focus,
+	.btn-facebook.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-hover) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-facebook.disabled,
+	.btn-facebook:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-facebook:not(:disabled):not(.disabled):active,
+	.btn-facebook:not(:disabled):not(.disabled).active,
+	.show > .btn-facebook.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-facebook:not(:disabled):not(.disabled):active:focus,
+	.btn-facebook:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-facebook.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-hover) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-twitter {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-twitter:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-twitter:focus,
+	.btn-twitter.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-twitter.disabled,
+	.btn-twitter:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-twitter:not(:disabled):not(.disabled):active,
+	.btn-twitter:not(:disabled):not(.disabled).active,
+	.show > .btn-twitter.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-twitter:not(:disabled):not(.disabled):active:focus,
+	.btn-twitter:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-twitter.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-google {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-google:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-google:focus,
+	.btn-google.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-google.disabled,
+	.btn-google:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-google:not(:disabled):not(.disabled):active,
+	.btn-google:not(:disabled):not(.disabled).active,
+	.show > .btn-google.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-google:not(:disabled):not(.disabled):active:focus,
+	.btn-google:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-google.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-youtube {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-youtube:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-youtube:focus,
+	.btn-youtube.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-youtube.disabled,
+	.btn-youtube:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-youtube:not(:disabled):not(.disabled):active,
+	.btn-youtube:not(:disabled):not(.disabled).active,
+	.show > .btn-youtube.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-youtube:not(:disabled):not(.disabled):active:focus,
+	.btn-youtube:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-youtube.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-vimeo {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-vimeo:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-vimeo:focus,
+	.btn-vimeo.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-teal) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-vimeo.disabled,
+	.btn-vimeo:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-vimeo:not(:disabled):not(.disabled):active,
+	.btn-vimeo:not(:disabled):not(.disabled).active,
+	.show > .btn-vimeo.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-vimeo:not(:disabled):not(.disabled):active:focus,
+	.btn-vimeo:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-vimeo.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-teal) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-dribbble {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-dribbble:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-dribbble:focus,
+	.btn-dribbble.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-pink) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-dribbble.disabled,
+	.btn-dribbble:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-dribbble:not(:disabled):not(.disabled):active,
+	.btn-dribbble:not(:disabled):not(.disabled).active,
+	.show > .btn-dribbble.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-dribbble:not(:disabled):not(.disabled):active:focus,
+	.btn-dribbble:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-dribbble.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-pink) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-github {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-github:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-github:focus,
+	.btn-github.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-github.disabled,
+	.btn-github:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-github:not(:disabled):not(.disabled):active,
+	.btn-github:not(:disabled):not(.disabled).active,
+	.show > .btn-github.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-github:not(:disabled):not(.disabled):active:focus,
+	.btn-github:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-github.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-instagram {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-instagram:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-instagram:focus,
+	.btn-instagram.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-instagram.disabled,
+	.btn-instagram:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-instagram:not(:disabled):not(.disabled):active,
+	.btn-instagram:not(:disabled):not(.disabled).active,
+	.show > .btn-instagram.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-instagram:not(:disabled):not(.disabled):active:focus,
+	.btn-instagram:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-instagram.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-pinterest {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-pinterest:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-pinterest:focus,
+	.btn-pinterest.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-pinterest.disabled,
+	.btn-pinterest:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-pinterest:not(:disabled):not(.disabled):active,
+	.btn-pinterest:not(:disabled):not(.disabled).active,
+	.show > .btn-pinterest.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-pinterest:not(:disabled):not(.disabled):active:focus,
+	.btn-pinterest:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-pinterest.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-vk {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-vk:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-vk:focus,
+	.btn-vk.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-vk.disabled,
+	.btn-vk:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-vk:not(:disabled):not(.disabled):active,
+	.btn-vk:not(:disabled):not(.disabled).active,
+	.show > .btn-vk.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-vk:not(:disabled):not(.disabled):active:focus,
+	.btn-vk:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-vk.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-rss {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-rss:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-rss:focus,
+	.btn-rss.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-peach) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-rss.disabled,
+	.btn-rss:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-rss:not(:disabled):not(.disabled):active,
+	.btn-rss:not(:disabled):not(.disabled).active,
+	.show > .btn-rss.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-rss:not(:disabled):not(.disabled):active:focus,
+	.btn-rss:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-rss.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-peach) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-flickr {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-flickr:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-flickr:focus,
+	.btn-flickr.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-hover) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-flickr.disabled,
+	.btn-flickr:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-flickr:not(:disabled):not(.disabled):active,
+	.btn-flickr:not(:disabled):not(.disabled).active,
+	.show > .btn-flickr.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-flickr:not(:disabled):not(.disabled):active:focus,
+	.btn-flickr:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-flickr.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-hover) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-bitbucket {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-bitbucket:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-bitbucket:focus,
+	.btn-bitbucket.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-pressed) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-bitbucket.disabled,
+	.btn-bitbucket:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-bitbucket:not(:disabled):not(.disabled):active,
+	.btn-bitbucket:not(:disabled):not(.disabled).active,
+	.show > .btn-bitbucket.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-pressed);
+		border-color: var(--ctp-accent-pressed);
+	}
+	.btn-bitbucket:not(:disabled):not(.disabled):active:focus,
+	.btn-bitbucket:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-bitbucket.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent-pressed) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-blue {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-blue:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-blue:focus,
+	.btn-blue.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-blue.disabled,
+	.btn-blue:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-blue:not(:disabled):not(.disabled):active,
+	.btn-blue:not(:disabled):not(.disabled).active,
+	.show > .btn-blue.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-blue:not(:disabled):not(.disabled):active:focus,
+	.btn-blue:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-blue.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-indigo {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-indigo:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-indigo:focus,
+	.btn-indigo.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-indigo.disabled,
+	.btn-indigo:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+		border-color: var(--ctp-accent);
+	}
+	.btn-indigo:not(:disabled):not(.disabled):active,
+	.btn-indigo:not(:disabled):not(.disabled).active,
+	.show > .btn-indigo.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent-hover);
+		border-color: var(--ctp-accent-hover);
+	}
+	.btn-indigo:not(:disabled):not(.disabled):active:focus,
+	.btn-indigo:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-indigo.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-purple {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-mauve);
+		border-color: var(--ctp-mauve);
+	}
+	.btn-purple:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-mauve);
+		border-color: var(--ctp-mauve);
+	}
+	.btn-purple:focus,
+	.btn-purple.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mauve) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-purple.disabled,
+	.btn-purple:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-mauve);
+		border-color: var(--ctp-mauve);
+	}
+	.btn-purple:not(:disabled):not(.disabled):active,
+	.btn-purple:not(:disabled):not(.disabled).active,
+	.show > .btn-purple.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-mauve);
+		border-color: var(--ctp-mauve);
+	}
+	.btn-purple:not(:disabled):not(.disabled):active:focus,
+	.btn-purple:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-purple.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mauve) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-pink {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-pink:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-pink:focus,
+	.btn-pink.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-pink) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-pink.disabled,
+	.btn-pink:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-pink:not(:disabled):not(.disabled):active,
+	.btn-pink:not(:disabled):not(.disabled).active,
+	.show > .btn-pink.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-pink);
+		border-color: var(--ctp-pink);
+	}
+	.btn-pink:not(:disabled):not(.disabled):active:focus,
+	.btn-pink:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-pink.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-pink) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-red {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-red:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-red:focus,
+	.btn-red.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-red.disabled,
+	.btn-red:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-red:not(:disabled):not(.disabled):active,
+	.btn-red:not(:disabled):not(.disabled).active,
+	.show > .btn-red.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-red);
+		border-color: var(--ctp-red);
+	}
+	.btn-red:not(:disabled):not(.disabled):active:focus,
+	.btn-red:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-red.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-red) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-orange {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-orange:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-orange:focus,
+	.btn-orange.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-peach) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-orange.disabled,
+	.btn-orange:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-orange:not(:disabled):not(.disabled):active,
+	.btn-orange:not(:disabled):not(.disabled).active,
+	.show > .btn-orange.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-peach);
+		border-color: var(--ctp-peach);
+	}
+	.btn-orange:not(:disabled):not(.disabled):active:focus,
+	.btn-orange:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-orange.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-peach) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-yellow {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-yellow:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-yellow:focus,
+	.btn-yellow.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-yellow) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-yellow.disabled,
+	.btn-yellow:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-yellow:not(:disabled):not(.disabled):active,
+	.btn-yellow:not(:disabled):not(.disabled).active,
+	.show > .btn-yellow.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-yellow);
+		border-color: var(--ctp-yellow);
+	}
+	.btn-yellow:not(:disabled):not(.disabled):active:focus,
+	.btn-yellow:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-yellow.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-yellow) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-green {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-green:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-green:focus,
+	.btn-green.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-green.disabled,
+	.btn-green:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-green:not(:disabled):not(.disabled):active,
+	.btn-green:not(:disabled):not(.disabled).active,
+	.show > .btn-green.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-green:not(:disabled):not(.disabled):active:focus,
+	.btn-green:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-green.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-teal {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-teal:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-teal:focus,
+	.btn-teal.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-teal) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-teal.disabled,
+	.btn-teal:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-teal:not(:disabled):not(.disabled):active,
+	.btn-teal:not(:disabled):not(.disabled).active,
+	.show > .btn-teal.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-teal:not(:disabled):not(.disabled):active:focus,
+	.btn-teal:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-teal.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-teal) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-cyan {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-cyan:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-cyan:focus,
+	.btn-cyan.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-teal) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-cyan.disabled,
+	.btn-cyan:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-cyan:not(:disabled):not(.disabled):active,
+	.btn-cyan:not(:disabled):not(.disabled).active,
+	.show > .btn-cyan.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-teal);
+		border-color: var(--ctp-teal);
+	}
+	.btn-cyan:not(:disabled):not(.disabled):active:focus,
+	.btn-cyan:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-cyan.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-teal) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-white {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-base);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-white:hover {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+	}
+	.btn-white:focus,
+	.btn-white.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-white.disabled,
+	.btn-white:disabled {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-base);
+		border-color: var(--ctp-mantle);
+	}
+	.btn-white:not(:disabled):not(.disabled):active,
+	.btn-white:not(:disabled):not(.disabled).active,
+	.show > .btn-white.dropdown-toggle {
+		color: var(--ctp-subtext1);
+		background-color: var(--ctp-surface1);
+		border-color: var(--ctp-surface1);
+	}
+	.btn-white:not(:disabled):not(.disabled):active:focus,
+	.btn-white:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-white.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-gray {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-gray:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-gray:focus,
+	.btn-gray.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-overlay0) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-gray.disabled,
+	.btn-gray:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-overlay2);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-gray:not(:disabled):not(.disabled):active,
+	.btn-gray:not(:disabled):not(.disabled).active,
+	.show > .btn-gray.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-subtext0);
+		border-color: var(--ctp-overlay0);
+	}
+	.btn-gray:not(:disabled):not(.disabled):active:focus,
+	.btn-gray:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-gray.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-overlay0) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-gray-dark {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-gray-dark:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-gray-dark:focus,
+	.btn-gray-dark.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-gray-dark.disabled,
+	.btn-gray-dark:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-gray-dark:not(:disabled):not(.disabled):active,
+	.btn-gray-dark:not(:disabled):not(.disabled).active,
+	.show > .btn-gray-dark.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+		border-color: var(--ctp-overlay2);
+	}
+	.btn-gray-dark:not(:disabled):not(.disabled):active:focus,
+	.btn-gray-dark:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-gray-dark.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-azure {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-azure:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-azure:focus,
+	.btn-azure.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-azure.disabled,
+	.btn-azure:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-azure:not(:disabled):not(.disabled):active,
+	.btn-azure:not(:disabled):not(.disabled).active,
+	.show > .btn-azure.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-sapphire);
+		border-color: var(--ctp-sapphire);
+	}
+	.btn-azure:not(:disabled):not(.disabled):active:focus,
+	.btn-azure:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-azure.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-sapphire) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-lime {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-lime:hover {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-lime:focus,
+	.btn-lime.focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-lime.disabled,
+	.btn-lime:disabled {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-lime:not(:disabled):not(.disabled):active,
+	.btn-lime:not(:disabled):not(.disabled).active,
+	.show > .btn-lime.dropdown-toggle {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-green);
+		border-color: var(--ctp-green);
+	}
+	.btn-lime:not(:disabled):not(.disabled):active:focus,
+	.btn-lime:not(:disabled):not(.disabled).active:focus,
+	.show > .btn-lime.dropdown-toggle:focus {
+		box-shadow: color-mix(in srgb, var(--ctp-green) 50%, transparent) 0px 0px 0px 2px;
+	}
+	.btn-option {
+		color: var(--ctp-subtext0);
+	}
+	.btn-option:hover {
+		color: var(--ctp-subtext0);
+	}
+	.btn-option:focus {
+		color: var(--ctp-subtext0);
+	}
+	.btn-loading::after {
+		border-bottom-color: var(--ctp-mantle);
+		border-left-color: var(--ctp-mantle);
+	}
+	.btn-loading.btn-secondary::after {
+		border-color: var(--ctp-overlay2);
+	}
+	.badge {
+		color: var(--ctp-on-accent);
+	}
+	.badge-default {
+		background: var(--ctp-surface0);
+		color: var(--ctp-subtext0);
+	}
+	.table th,
+	.text-wrap table th {
+		color: var(--ctp-subtext0);
+	}
+	.table-striped tbody tr:nth-of-type(2n) {
+		background-color: color-mix(in srgb, var(--ctp-text) 2%, transparent);
+	}
+	.table-calendar-link {
+		background: var(--ctp-mantle);
+		color: var(--ctp-subtext1);
+	}
+	.table-calendar-link::before {
+		background: var(--ctp-accent);
+	}
+	.table-calendar-link:hover {
+		color: var(--ctp-on-accent);
+		background: var(--ctp-accent);
+	}
+	.table-calendar-link:hover::before {
+		background: var(--ctp-base);
+	}
+	.table-header:hover {
+		color: var(--ctp-subtext1) !important;
+	}
+	.table-header-asc {
+		color: var(--ctp-subtext1) !important;
+	}
+	.table-header-desc {
+		color: var(--ctp-subtext1) !important;
+	}
+	.page-breadcrumb .breadcrumb-item {
+		color: var(--ctp-subtext0);
+	}
+	.page-breadcrumb .breadcrumb-item.active {
+		color: var(--ctp-subtext0);
+	}
+	.pagination-simple .page-item.active .page-link {
+		color: var(--ctp-subtext1);
+	}
+	.page-total-text {
+		color: var(--ctp-subtext0);
+	}
+	.card {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 1px 2px 0px;
+	}
+	.card-body + .card-body {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.card-footer {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		color: var(--ctp-subtext0);
+	}
+	.card-img-overlay {
+		background-color: color-mix(in srgb, var(--ctp-text) 40%, transparent);
+	}
+	.card-title small,
+	.card-subtitle {
+		color: var(--ctp-subtext0);
+	}
+	.card-body + .card-table {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.card-profile-img {
+		border: 3px solid var(--ctp-mantle);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 10%, transparent) 0px 1px 1px;
+	}
+	.card-body + .card-list-group {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.card-options {
+		color: var(--ctp-subtext0);
+	}
+	.card-options a {
+		color: var(--ctp-subtext0);
+	}
+	.card-options a:hover {
+		color: var(--ctp-subtext0);
+	}
+	.card-map {
+		background: var(--ctp-surface0);
+	}
+	.card-tabs-bottom .card-tabs-item {
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent) currentcolor currentcolor;
+	}
+	.card-tabs-bottom .card-tabs-item.active {
+		border-top-color: var(--ctp-mantle);
+	}
+	.card-tabs-item {
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	a.card-tabs-item {
+		background: var(--ctp-mantle);
+	}
+	a.card-tabs-item.active {
+		background: var(--ctp-base);
+		border-bottom-color: var(--ctp-mantle);
+	}
+	.card-tabs-item + .card-tabs-item {
+		border-left: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.card-status {
+		background: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.dropdown-menu {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 1px 2px 0px;
+	}
+	.dropdown-item {
+		color: var(--ctp-subtext0);
+	}
+	[data-theme="dark"] .dropdown-item {
+		color: var(--ctp-text);
+	}
+	.dropdown-menu-arrow::before {
+		border-bottom: 5px solid color-mix(in srgb, var(--ctp-text) 20%, transparent);
+	}
+	[data-theme="dark"] .dropdown-menu-arrow::before {
+		border-bottom-color: var(--ctrl-bgcolor);
+	}
+	.dropdown-menu-arrow::after {
+		border-bottom: 5px solid var(--ctrl-bgcolor);
+	}
+	[data-theme="dark"] .dropdown-menu-arrow::after {
+		border-bottom: 5px solid var(--card-border-color);
+	}
+	.dropdown-icon {
+		color: var(--ctp-subtext0);
+	}
+	.list-separated-item + .list-separated-item {
+		border-top: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.list-group-transparent .list-group-item.active {
+		background: color-mix(in srgb, var(--ctp-accent) 6%, transparent);
+	}
+	.avatar {
+		background: center center / cover no-repeat var(--ctp-surface2);
+		color: var(--ctp-subtext0);
+	}
+	.avatar-status {
+		border: 2px solid var(--ctp-mantle);
+		background: var(--ctp-overlay2);
+	}
+	.avatar-placeholder {
+		background-color: var(--ctp-overlay2);
+	}
+	.avatar-list-stacked .avatar {
+		box-shadow: var(--ctp-mantle) 0px 0px 0px 2px;
+	}
+	.avatar-blue {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		color: var(--ctp-accent);
+	}
+	.avatar-indigo {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		color: var(--ctp-accent);
+	}
+	.avatar-purple {
+		background-color: color-mix(in srgb, var(--ctp-mauve) 30%, var(--ctp-base));
+		color: var(--ctp-mauve);
+	}
+	.avatar-pink {
+		background-color: color-mix(in srgb, var(--ctp-pink) 25%, var(--ctp-base));
+		color: var(--ctp-pink);
+	}
+	.avatar-red {
+		background-color: color-mix(in srgb, var(--ctp-red) 45%, var(--ctp-base));
+		color: var(--ctp-red);
+	}
+	.avatar-orange {
+		background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base));
+		color: var(--ctp-peach);
+	}
+	.avatar-yellow {
+		background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-base));
+		color: var(--ctp-yellow);
+	}
+	.avatar-green {
+		background-color: var(--ctp-green);
+		color: var(--ctp-green);
+	}
+	.avatar-teal {
+		background-color: color-mix(in srgb, var(--ctp-teal) 20%, var(--ctp-base));
+		color: var(--ctp-teal);
+	}
+	.avatar-cyan {
+		background-color: color-mix(in srgb, var(--ctp-teal) 30%, var(--ctp-base));
+		color: var(--ctp-teal);
+	}
+	.avatar-white {
+		background-color: var(--ctp-base);
+		color: var(--ctp-on-accent);
+	}
+	.avatar-gray {
+		background-color: var(--ctp-surface1);
+		color: var(--ctp-subtext0);
+	}
+	.avatar-gray-dark {
+		background-color: var(--ctp-surface2);
+		color: var(--ctp-text);
+	}
+	.avatar-azure {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 25%, var(--ctp-base));
+		color: var(--ctp-sapphire);
+	}
+	.avatar-lime {
+		background-color: color-mix(in srgb, var(--ctp-green) 15%, var(--ctp-base));
+		color: var(--ctp-green);
+	}
+	.loader {
+		color: var(--ctp-accent);
+	}
+	.icons-list-item {
+		border-right: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		border-bottom: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.link-overlay-bg {
+		background: color-mix(in srgb, var(--ctp-accent) 80%, transparent);
+		color: var(--ctp-on-accent);
+	}
+	.custom-control-label::before {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		background-color: var(--radio-bg);
+	}
+	.input-group-prepend > .btn,
+	.input-group-append > .btn,
+	.input-group-btn > .btn {
+		border-color: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.input-icon-addon {
+		color: var(--ctp-subtext0);
+	}
+	.form-fieldset {
+		background: var(--ctp-mantle);
+		border: 1px solid var(--ctp-surface0);
+	}
+	.form-required {
+		color: var(--ctp-red);
+	}
+	.form-help {
+		color: var(--ctp-subtext0);
+		background: var(--ctp-mantle);
+	}
+	.form-help:hover,
+	.form-help[aria-describedby] {
+		background: var(--ctp-accent);
+		color: var(--ctp-on-accent);
+	}
+	.jqstooltip {
+		background: var(--ctp-text) !important;
+	}
+	.social-links li a {
+		background: var(--ctp-mantle);
+		color: var(--ctp-subtext0);
+	}
+	.map-header::before {
+		background: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 0%, transparent) 5%, var(--ctp-mantle) 95%);
+	}
+	.chart-circle-value small {
+		color: var(--ctp-subtext0);
+	}
+	.chip {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-mantle);
+	}
+	a.chip:hover {
+		background-color: var(--ctp-surface0);
+	}
+	.stamp {
+		color: var(--ctp-on-accent);
+		background: var(--ctp-overlay2);
+	}
+	.chat-message {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-on-accent);
+	}
+	.chat-message::after {
+		border-left: 6px solid var(--ctp-accent);
+	}
+	.chat-line-friend .chat-message {
+		background-color: var(--ctp-surface0);
+		color: var(--ctp-subtext1);
+	}
+	.chat-line-friend .chat-message::after {
+		border-right: 5px solid var(--ctp-surface0);
+	}
+	.example {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.example-bg {
+		background: var(--ctp-mantle);
+	}
+	.highlight {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		background: var(--ctp-base);
+	}
+	.tag {
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-surface0);
+	}
+	a.tag:hover {
+		background-color: color-mix(in srgb, var(--ctp-subtext0) 20%, transparent);
+	}
+	.tag-addon {
+		background: color-mix(in srgb, var(--ctp-text) 6%, transparent);
+	}
+	a.tag-addon:hover {
+		background: color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	.tag-blue {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-on-accent);
+	}
+	.tag-indigo {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-on-accent);
+	}
+	.tag-purple {
+		background-color: var(--ctp-mauve);
+		color: var(--ctp-on-accent);
+	}
+	.tag-pink {
+		background-color: var(--ctp-pink);
+		color: var(--ctp-on-accent);
+	}
+	.tag-red {
+		background-color: var(--ctp-red);
+		color: var(--ctp-on-accent);
+	}
+	.tag-orange {
+		background-color: var(--ctp-peach);
+		color: var(--ctp-on-accent);
+	}
+	.tag-yellow {
+		background-color: var(--ctp-yellow);
+		color: var(--ctp-on-accent);
+	}
+	.tag-green {
+		background-color: var(--ctp-green);
+		color: var(--ctp-on-accent);
+	}
+	.tag-teal {
+		background-color: var(--ctp-teal);
+		color: var(--ctp-on-accent);
+	}
+	.tag-cyan {
+		background-color: var(--ctp-teal);
+		color: var(--ctp-on-accent);
+	}
+	.tag-white {
+		background-color: var(--ctp-base);
+		color: var(--ctp-on-accent);
+	}
+	.tag-gray {
+		background-color: var(--ctp-overlay2);
+		color: var(--ctp-on-accent);
+	}
+	.tag-gray-dark {
+		background-color: var(--ctp-text);
+		color: var(--ctp-on-accent);
+	}
+	.tag-azure {
+		background-color: var(--ctp-sapphire);
+		color: var(--ctp-on-accent);
+	}
+	.tag-lime {
+		background-color: var(--ctp-green);
+		color: var(--ctp-on-accent);
+	}
+	.tag-primary {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-on-accent);
+	}
+	.tag-secondary {
+		background-color: var(--ctp-overlay2);
+		color: var(--ctp-on-accent);
+	}
+	.tag-success {
+		background-color: var(--ctp-green);
+		color: var(--ctp-on-accent);
+	}
+	.tag-info {
+		background-color: var(--ctp-sapphire);
+		color: var(--ctp-on-accent);
+	}
+	.tag-warning {
+		background-color: var(--ctp-yellow);
+		color: var(--ctp-on-accent);
+	}
+	.tag-danger {
+		background-color: var(--ctp-red);
+		color: var(--ctp-on-accent);
+	}
+	.tag-light {
+		background-color: var(--ctp-mantle);
+		color: var(--ctp-on-accent);
+	}
+	.tag-dark {
+		background-color: var(--ctp-text);
+		color: var(--ctp-on-accent);
+	}
+	.highlight .hll {
+		background-color: color-mix(in srgb, var(--ctp-yellow) 5%, var(--ctp-base));
+	}
+	.highlight .c {
+		color: var(--ctp-subtext0);
+	}
+	.highlight .k {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .o {
+		color: var(--ctp-subtext1);
+	}
+	.highlight .cm {
+		color: var(--ctp-subtext0);
+	}
+	.highlight .cp {
+		color: var(--ctp-teal);
+	}
+	.highlight .c1 {
+		color: var(--ctp-subtext0);
+	}
+	.highlight .cs {
+		color: var(--ctp-subtext0);
+	}
+	.highlight .gd {
+		background-color: color-mix(in srgb, var(--ctp-red) 30%, var(--ctp-base));
+		border: 1px solid var(--ctp-red);
+	}
+	.highlight .gr {
+		color: var(--ctp-red);
+	}
+	.highlight .gh {
+		color: var(--ctp-green);
+	}
+	.highlight .gi {
+		background-color: color-mix(in srgb, var(--ctp-green) 10%, var(--ctp-base));
+		border: 1px solid var(--ctp-green);
+	}
+	.highlight .go {
+		color: var(--ctp-overlay2);
+	}
+	.highlight .gp {
+		color: var(--ctp-accent);
+	}
+	.highlight .gu {
+		color: var(--ctp-green);
+	}
+	.highlight .gt {
+		color: var(--ctp-green);
+	}
+	.highlight .kc {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .kd {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .kn {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .kp {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .kr {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .kt {
+		color: var(--ctp-teal);
+	}
+	.highlight .m {
+		color: var(--ctp-peach);
+	}
+	.highlight .s {
+		color: var(--ctp-red);
+	}
+	.highlight .na {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .nb {
+		color: var(--ctp-teal);
+	}
+	.highlight .nc {
+		color: var(--ctp-teal);
+	}
+	.highlight .no {
+		color: var(--ctp-green);
+	}
+	.highlight .nd {
+		color: var(--ctp-accent);
+	}
+	.highlight .ni {
+		color: var(--ctp-subtext0);
+	}
+	.highlight .ne {
+		color: var(--ctp-red);
+	}
+	.highlight .nf {
+		color: var(--ctp-mauve);
+	}
+	.highlight .nl {
+		color: var(--ctp-accent);
+	}
+	.highlight .nn {
+		color: var(--ctp-teal);
+	}
+	.highlight .nt {
+		color: var(--ctp-sapphire);
+	}
+	.highlight .nv {
+		color: var(--ctp-teal);
+	}
+	.highlight .ow {
+		color: var(--ctp-text);
+	}
+	.highlight .w {
+		color: var(--ctp-overlay2);
+	}
+	.highlight .mf {
+		color: var(--ctp-peach);
+	}
+	.highlight .mh {
+		color: var(--ctp-peach);
+	}
+	.highlight .mi {
+		color: var(--ctp-peach);
+	}
+	.highlight .mo {
+		color: var(--ctp-peach);
+	}
+	.highlight .sb {
+		color: var(--ctp-red);
+	}
+	.highlight .sc {
+		color: var(--ctp-red);
+	}
+	.highlight .sd {
+		color: var(--ctp-red);
+	}
+	.highlight .s2 {
+		color: var(--ctp-red);
+	}
+	.highlight .se {
+		color: var(--ctp-red);
+	}
+	.highlight .sh {
+		color: var(--ctp-red);
+	}
+	.highlight .si {
+		color: var(--ctp-red);
+	}
+	.highlight .sx {
+		color: var(--ctp-red);
+	}
+	.highlight .sr {
+		color: var(--ctp-teal);
+	}
+	.highlight .s1 {
+		color: var(--ctp-red);
+	}
+	.highlight .ss {
+		color: var(--ctp-yellow);
+	}
+	.highlight .bp {
+		color: var(--ctp-teal);
+	}
+	.highlight .vc {
+		color: var(--ctp-teal);
+	}
+	.highlight .vg {
+		color: var(--ctp-teal);
+	}
+	.highlight .vi {
+		color: var(--ctp-teal);
+	}
+	.highlight .il {
+		color: var(--ctp-peach);
+	}
+	.highlight .css .o,
+	.highlight .css .o + .nt,
+	.highlight .css .nt + .nt {
+		color: var(--ctp-subtext0);
+	}
+	.highlight .language-bash::before,
+	.highlight .language-sh::before {
+		color: var(--ctp-accent);
+	}
+	.highlight .language-powershell::before {
+		color: var(--ctp-accent);
+	}
+	.custom-range:focus::-webkit-slider-thumb {
+		border-color: var(--ctp-accent);
+		background-color: var(--ctp-accent);
+	}
+	.custom-range::-webkit-slider-runnable-track {
+		background: var(--ctp-accent);
+	}
+	.custom-range::-webkit-slider-thumb {
+		background: var(--ctp-base);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 12%, transparent) 1px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 6px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 7px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 8px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 9px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 10px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 11px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 12px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 13px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 14px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 15px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 16px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 17px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 18px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 19px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 20px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 21px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 22px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 23px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 24px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 25px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 26px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 27px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 28px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 29px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 30px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 31px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 32px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 33px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 34px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 35px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 36px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 37px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 38px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 39px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 40px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 41px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 42px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 43px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 44px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 45px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 46px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 47px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 48px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 49px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 50px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 51px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 52px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 53px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 54px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 55px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 56px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 57px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 58px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 59px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 60px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 61px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 62px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 63px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 64px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 65px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 66px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 67px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 68px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 69px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 70px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 71px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 72px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 73px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 74px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 75px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 76px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 77px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 78px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 79px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 80px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 81px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 82px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 83px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 84px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 85px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 86px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 87px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 88px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 89px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 90px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 91px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 92px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 93px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 94px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 95px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 96px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 97px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 98px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 99px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 100px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 101px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 102px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 103px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 104px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 105px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 106px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 107px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 108px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 109px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 110px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 111px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 112px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 113px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 114px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 115px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 116px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 117px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 118px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 119px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 120px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 121px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 122px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 123px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 124px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 125px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 126px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 127px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 128px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 129px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 130px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 131px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 132px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 133px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 134px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 135px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 136px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 137px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 138px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 139px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 140px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 141px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 142px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 143px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 144px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 145px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 146px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 147px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 148px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 149px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 150px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 151px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 152px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 153px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 154px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 155px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 156px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 157px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 158px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 159px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 160px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 161px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 162px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 163px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 164px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 165px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 166px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 167px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 168px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 169px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 170px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 171px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 172px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 173px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 174px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 175px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 176px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 177px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 178px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 179px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 180px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 181px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 182px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 183px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 184px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 185px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 186px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 187px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 188px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 189px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 190px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 191px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 192px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 193px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 194px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 195px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 196px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 197px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 198px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 199px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 200px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 201px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 202px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 203px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 204px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 205px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 206px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 207px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 208px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 209px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 210px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 211px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 212px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 213px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 214px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 215px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 216px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 217px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 218px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 219px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 220px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 221px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 222px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 223px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 224px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 225px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 226px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 227px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 228px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 229px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 230px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 231px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 232px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 233px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 234px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 235px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 236px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 237px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 238px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 239px 0px 0px -6px, color-mix(in srgb, var(--ctp-crust) 12%, transparent) 240px 0px 0px -6px;
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.selectgroup-button {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		color: var(--ctp-subtext0);
+	}
+	.selectgroup-input:checked + .selectgroup-button {
+		border-color: var(--ctp-accent);
+		color: var(--ctp-accent);
+		background: var(--ctp-surface0);
+	}
+	.selectgroup-input:focus + .selectgroup-button {
+		border-color: var(--ctp-accent);
+		color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.custom-switch-indicator {
+		background: var(--ctp-surface0);
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.custom-switch-indicator::before {
+		background: var(--ctp-base);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 40%, transparent) 0px 1px 2px 0px;
+	}
+	.custom-switch-input:checked ~ .custom-switch-indicator {
+		background: var(--ctp-accent);
+	}
+	.custom-switch-input:focus ~ .custom-switch-indicator {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+		border-color: var(--ctp-accent);
+	}
+	.custom-switch-description {
+		color: var(--ctp-subtext0);
+	}
+	.custom-switch-input:checked ~ .custom-switch-description {
+		color: var(--ctp-subtext1);
+	}
+	.imagecheck-figure {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.imagecheck-input:focus ~ .imagecheck-figure {
+		border-color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.imagecheck-input:checked ~ .imagecheck-figure {
+		border-color: color-mix(in srgb, var(--ctp-text) 24%, transparent);
+	}
+	.imagecheck-figure::before {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-on-accent);
+	}
+	.imagecheck-caption {
+		color: var(--ctp-subtext0);
+	}
+	.imagecheck:hover .imagecheck-caption,
+	.imagecheck-input:focus ~ .imagecheck-figure .imagecheck-caption,
+	.imagecheck-input:checked ~ .imagecheck-figure .imagecheck-caption {
+		color: var(--ctp-subtext1);
+	}
+	.colorinput-color {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		color: var(--ctp-on-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 5%, transparent) 0px 1px 2px 0px;
+	}
+	.colorinput-input:focus ~ .colorinput-color {
+		border-color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.timeline::before {
+		background-color: var(--ctp-surface0);
+	}
+	.timeline-item:first-child::before,
+	.timeline-item:last-child::before {
+		background: var(--ctp-base);
+	}
+	.timeline-badge {
+		border: 1px solid var(--ctp-mantle);
+		background: var(--ctp-overlay0);
+	}
+	.timeline-time {
+		color: var(--ctp-subtext0);
+	}
+	.payment {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 10%, transparent) 0px 0px 1px 1px;
+	}
+	.jvectormap-tip {
+		background: var(--ctp-text);
+		color: var(--ctp-on-accent);
+	}
+	.jvectormap-zoomin,
+	.jvectormap-zoomout,
+	.jvectormap-goback {
+		background: var(--ctp-text);
+		color: var(--ctp-on-accent);
+	}
+	.jvectormap-legend {
+		background: var(--ctp-text);
+		color: var(--ctp-on-accent);
+	}
+	.selectize-control.plugin-drag_drop.multi > .selectize-input > div.ui-sortable-placeholder {
+		box-shadow: var(--ctp-mantle) 0px 0px 12px 4px inset;
+		background: color-mix(in srgb, var(--ctp-text) 6%, transparent) !important;
+	}
+	.selectize-control.plugin-drag_drop .ui-sortable-helper {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 20%, transparent) 0px 2px 5px;
+	}
+	.selectize-dropdown-header {
+		border-bottom: 1px solid var(--ctp-surface1);
+		background: var(--ctp-mantle);
+	}
+	.selectize-dropdown-header-close {
+		color: var(--ctp-subtext1);
+	}
+	.selectize-dropdown-header-close:hover {
+		color: var(--ctp-text);
+	}
+	.selectize-dropdown.plugin-optgroup_columns .optgroup {
+		border-right: 1px solid var(--ctp-surface0);
+	}
+	.selectize-control.plugin-remove_button [data-value] .remove {
+		border-left: 1px solid var(--ctp-surface1);
+	}
+	.selectize-control.plugin-remove_button [data-value] .remove:hover {
+		background: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	.selectize-control.plugin-remove_button [data-value].active .remove {
+		border-left-color: var(--ctp-surface1);
+	}
+	.selectize-control.plugin-remove_button .disabled [data-value] .remove {
+		border-left-color: var(--ctp-mantle);
+	}
+	.selectize-dropdown,
+	.selectize-input,
+	.selectize-input input {
+		color: var(--ctp-subtext1);
+	}
+	.selectize-input,
+	.selectize-control.single .selectize-input.input-active {
+		background: var(--ctp-base);
+	}
+	.selectize-input {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.selectize-input.full {
+		background-color: var(--ctp-base);
+	}
+	.selectize-input.focus {
+		border-color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.selectize-control.multi .selectize-input > div {
+		background: var(--ctp-surface0);
+		color: var(--ctp-subtext1);
+		border: 0px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.selectize-control.multi .selectize-input > div.active {
+		background: var(--ctp-surface0);
+		color: var(--ctp-text);
+		border: 0px solid var(--ctp-surface1);
+	}
+	.selectize-control.multi .selectize-input.disabled > div,
+	.selectize-control.multi .selectize-input.disabled > div.active {
+		color: var(--ctp-subtext0);
+		background: var(--ctp-base);
+		border: 0px solid var(--ctp-mantle);
+	}
+	.selectize-input.dropdown-active::before {
+		background: var(--ctp-surface0);
+	}
+	.selectize-dropdown {
+		border-color: currentcolor color-mix(in srgb, var(--ctp-text) 12%, transparent) color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		background: var(--ctp-base);
+	}
+	.selectize-dropdown [data-selectable] .highlight {
+		background: color-mix(in srgb, var(--ctp-sapphire) 20%, transparent);
+	}
+	.selectize-dropdown .optgroup-header {
+		color: var(--ctp-subtext1);
+		background: var(--ctp-base);
+	}
+	.selectize-dropdown .active {
+		background-color: var(--ctp-mantle);
+		color: var(--ctp-accent);
+	}
+	.selectize-dropdown .active.create {
+		color: var(--ctp-subtext1);
+	}
+	.selectize-dropdown .create {
+		color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	.selectize-control.single .selectize-input::after {
+		background-color: var(--ctp-overlay1);
+	}
+	.selectize-control .selectize-input.disabled {
+		background-color: var(--ctp-mantle);
+	}
+	.selectize-dropdown .image img,
+	.selectize-input .image img {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 40%, transparent) 0px 1px 2px 0px;
+	}
+	.ReactTable .rt-noData {
+		color: var(--rt-nodata-color);
+		background-color: var(--rt-nodata-bgcolor);
+	}
+	.ReactTable .-loading {
+		color: var(--rt-nodata-color);
+		background-color: var(--rt-nodata-bgcolor);
+	}
+	.ReactTable .-loading .-loading-inner {
+		color: var(--gray300);
+	}
+	.ReactTable .-pagination input,
+	.ReactTable .-pagination select {
+		color: var(--rt-nodata-color);
+		background-color: var(--rt-nodata-bgcolor);
+	}
+	[data-theme="dark"] .ReactTable .rt-table::-webkit-scrollbar-track {
+		background-color: var(--card-bgcolor);
+	}
+	[data-theme="dark"] .ReactTable .rt-table::-webkit-scrollbar-thumb {
+		background-color: var(--ctp-overlay0);
+	}
+	.rt-tr-group.logs__row--red {
+		background-color: color-mix(in srgb, var(--ctp-red) 5%, transparent);
+	}
+	.rt-tr-group.logs__row--green {
+		background-color: color-mix(in srgb, var(--ctp-green) 10%, transparent);
+	}
+	.rt-tr-group.logs__row--blue {
+		background-color: var(--ctp-surface0);
+	}
+	.rt-tr-group.logs__row--yellow {
+		background-color: var(--yellow-pale);
+	}
+	.loading-bar {
+		background: linear-gradient(45deg, var(--ctp-teal) 0%, var(--ctp-green) 100%);
+	}
+	a.btn-success.disabled {
+		color: var(--ctp-on-accent);
+	}
+	.toast {
+		color: var(--ctp-on-accent);
+		background-color: color-mix(in srgb, var(--ctp-red) 75%, transparent);
+	}
+	.toast--success {
+		background-color: color-mix(in srgb, var(--ctp-green) 75%, transparent);
+	}
+	.toast__content a {
+		color: var(--ctp-on-accent);
+	}
+	.version__link {
+		border-bottom: 1px dashed var(--ctp-overlay2);
+	}
+	.btn-secondary.footer__theme-button,
+	[data-theme="dark"] .btn-secondary.footer__theme-button {
+		border-color: var(--ctrl-select-bgcolor);
+	}
+	.footer__theme-icon {
+		color: var(--gray-ac);
+	}
+	[data-theme="dark"] .footer__theme-icon {
+		color: var(--mcolor);
+	}
+	.footer__theme-icon--active,
+	[data-theme="dark"] .footer__theme-icon--active {
+		color: var(--btn-success-bgcolor);
+	}
+	.select.select--theme {
+		border-color: var(--ctrl-select-bgcolor);
+	}
+	.select.select--language {
+		border-color: var(--ctrl-select-bgcolor);
+	}
+	.basic-multi-select .select__control {
+		border: 1px solid var(--card-border-color);
+		background-color: var(--ctrl-bgcolor);
+	}
+	.basic-multi-select .select__control:hover {
+		border: 1px solid color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	.basic-multi-select .select__control--is-focused,
+	.basic-multi-select .select__control--is-focused:hover {
+		border-color: var(--ctp-sapphire);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent) 0px 0px 0px 2px;
+	}
+	.basic-multi-select .select__placeholder {
+		color: var(--ctp-overlay2);
+	}
+	.basic-multi-select .select__menu {
+		background-color: var(--ctrl-bgcolor);
+	}
+	[data-theme="dark"] .basic-multi-select .select__option:hover,
+	[data-theme="dark"] .basic-multi-select .select__option--is-focused,
+	[data-theme="dark"] .basic-multi-select .select__option--is-focused:hover {
+		background-color: var(--ctrl-select-bgcolor);
+		color: var(--ctrl-dropdown-color);
+	}
+	.card-body--loading::before {
+		background-color: color-mix(in srgb, var(--ctp-base) 60%, transparent);
+	}
+	.card-title-stats {
+		color: var(--ctp-subtext0);
+	}
+	.card .logs__cell--red {
+		background-color: var(--ctp-mantle);
+	}
+	.card .logs__cell--green {
+		background-color: var(--ctp-mantle);
+	}
+	.card .logs__row--blue {
+		background-color: var(--ctp-mantle);
+	}
+	[data-theme="dark"] .card .logs__row--blue {
+		background-color: var(--logs__row--blue-bgcolor);
+	}
+	.overlay {
+		background-color: var(--rt-nodata-bgcolor);
+	}
+	.icon--gray {
+		color: var(--gray-a5);
+	}
+	.icon--green {
+		color: var(--green-74);
+	}
+	.icon--disabled {
+		color: var(--gray-d8);
+	}
+	.icon--lightgray {
+		color: var(--gray-8);
+	}
+	.loading::before {
+		background-color: var(--loading-bg);
+	}
+	.dropdown-item.active,
+	.dropdown-item:active {
+		background-color: var(--btn-success-bgcolor);
+	}
+	.dropdown-protection {
+		border-color: var(--ctp-overlay0) var(--ctp-overlay0) var(--ctp-overlay0) currentcolor;
+	}
+	.dropdown-protection__toggle {
+		background-color: var(--ctp-overlay2);
+	}
+	.dropdown-protection__toggle:hover {
+		background-color: var(--ctp-overlay2);
+	}
+	.dropdown-protection__toggle .nav-icon {
+		color: var(--white);
+	}
+	.nav-tabs .nav-link.active {
+		border-color: var(--btn-success-bgcolor);
+		color: var(--btn-success-bgcolor);
+	}
+	.nav-tabs .nav-link.active:hover {
+		border-color: var(--ctp-green);
+		color: var(--ctp-green);
+	}
+	.nav-icon {
+		stroke: var(--ctp-overlay1);
+	}
+	.nav-tabs .nav-link.active .nav-icon,
+	.nav-tabs .nav-item.show .nav-icon {
+		stroke: var(--green-74);
+	}
+	.nav-tabs .nav-link.active:hover .nav-icon,
+	.nav-tabs .nav-item.show:hover .nav-icon {
+		stroke: var(--ctp-green);
+	}
+	.mobile-menu {
+		background-color: var(--header-bgcolor);
+	}
+	.mobile-menu--active {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 10%, transparent) 15px 0px 50px;
+	}
+	.nav-tabs .nav-item.show .nav-link {
+		color: var(--green-74);
+		background-color: var(--ctp-base);
+		border-bottom-color: var(--green-74);
+	}
+	.header__logout {
+		color: var(--ctp-subtext0);
+	}
+	.header__logout:hover,
+	.header__logout:focus {
+		color: var(--ctp-subtext0);
+	}
+	@media screen and (min-width: 992px) {
+		.nav-icon--gray {
+			color: var(--ctp-subtext0);
+		}
+	}
+	@media screen and (min-width: 992px) {
+		.nav-icon--white {
+			color: var(--ctp-on-accent);
+		}
+	}
+	.line__tooltip {
+		border: 1px solid var(--card-border-color);
+		color: var(--mcolor);
+		background-color: var(--card-bgcolor);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 15%, transparent) 0px 2px 8px;
+	}
+	.stats-card__value {
+		color: var(--mcolor);
+	}
+	.stats-card__percent {
+		color: var(--stats-card-accent);
+	}
+	.stats-card__title {
+		color: var(--stats-card-accent);
+	}
+	.tooltip-container {
+		background-color: var(--ctp-base);
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 18%, transparent) 0px 2px 4px;
+	}
+	.tooltip-arrow[data-placement*="bottom"]::after {
+		border-color: transparent transparent var(--ctp-mantle);
+	}
+	.tooltip-arrow[data-placement*="top"]::after {
+		border-color: var(--ctp-mantle) transparent transparent;
+	}
+	.tooltip-arrow[data-placement*="right"]::after {
+		border-color: transparent var(--ctp-mantle) transparent transparent;
+	}
+	.tooltip-arrow[data-placement*="left"]::after {
+		border-color: transparent transparent transparent var(--ctp-mantle);
+	}
+	.tooltip-container {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 20%, transparent) 1px 1px 6px;
+	}
+	[data-theme="dark"] .tooltip-container {
+		background-color: var(--ctrl-select-bgcolor);
+		color: var(--mcolor);
+	}
+	.tooltip-custom__content-link {
+		color: var(--green-86);
+	}
+	.tooltip-custom__container {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 20%, transparent) 2px 4px 8px;
+		background-color: var(--ctrl-bgcolor);
+		color: var(--mcolor);
+	}
+	@media (max-width: 1024px) {
+		.grid .key-colon {
+			color: var(--gray-8);
+		}
+	}
+	.title--border::before {
+		border-top: 0.5px solid var(--gray-d8) !important;
+	}
+	.dashboard-protection-button.btn-gray {
+		border-right-color: var(--ctp-surface2);
+	}
+	.stats__table .rt-tr-group:first-child .popover__body::after,
+	.stats__table .rt-tr-group:nth-child(2) .popover__body::after {
+		border-bottom: 6px solid var(--ctp-overlay2);
+	}
+	.counters__row {
+		border-top: 1px solid var(--card-border-color);
+	}
+	.tabs__controls {
+		border-bottom: 1px solid var(--card-border-color);
+	}
+	.tab__control {
+		color: var(--ctp-subtext1);
+	}
+	.tab__control--active {
+		color: var(--ctp-subtext1);
+	}
+	.tab__icon {
+		fill: var(--ctp-subtext1);
+	}
+	.checkbox__label::before {
+		background-color: var(--checkbox-bg);
+	}
+	.checkbox__input:focus + .checkbox__label::before {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 32%, transparent) 0px 0px 1px 1px;
+	}
+	.checkbox__input:disabled + .checkbox__label {
+		color: var(--gray);
+	}
+	.checkbox__label-subtitle {
+		color: var(--scolor);
+	}
+	.form__message--error {
+		color: var(--ctp-red);
+	}
+	.form__desc {
+		color: var(--scolor);
+	}
+	.btn-icon--green {
+		color: var(--green);
+	}
+	.custom-select:disabled {
+		background-color: var(--ctp-mantle);
+	}
+	.schedule__button-day {
+		color: var(--ctp-subtext1);
+		border: 1px solid var(--card-border-color);
+	}
+	.schedule__button-day[data-active="true"] {
+		color: var(--btn-success-bgcolor);
+		border-color: var(--btn-success-bgcolor);
+	}
+	.schedule__error {
+		color: var(--ctp-red);
+	}
+	.schedule__info-icon {
+		color: var(--ctp-subtext1);
+	}
+	.service {
+		border: 1px solid var(--card-border-color);
+	}
+	.service__icon {
+		color: var(--ctp-subtext1);
+	}
+	.service__icon svg {
+		fill: var(--ctp-subtext1);
+	}
+	.service__icon--table {
+		color: var(--ctp-subtext0);
+	}
+	.service__switch {
+		border: 1px solid color-mix(in srgb, var(--ctp-overlay0) 12%, transparent);
+	}
+	.custom-switch-input:checked ~ .service__switch {
+		background-color: var(--ctp-red);
+	}
+	.custom-switch-input:focus ~ .service__switch {
+		box-shadow: color-mix(in srgb, var(--ctp-crust) 23%, transparent) 0px 0px 0px 2px;
+		border-color: var(--ctp-red);
+	}
+	.ReactModal__Overlay {
+		background-color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	.ReactModal__Overlay--after-open {
+		background-color: var(--modal-overlay-bgcolor) !important;
+	}
+	.logs__text {
+		color: var(--logs__text-color);
+	}
+	[data-theme="dark"] .logs__text a {
+		color: var(--ctp-text);
+	}
+	[data-theme="dark"] .logs__text a:hover {
+		color: var(--ctp-text);
+	}
+	.detailed-info {
+		color: var(--detailed-info-color);
+	}
+	.logs__text--link {
+		color: var(--ctp-accent);
+	}
+	.logs__text--link:hover,
+	.logs__text--link:focus {
+		color: var(--ctp-accent);
+	}
+	[data-theme="dark"] .logs__text--link,
+	[data-theme="dark"] .logs__text--link:hover,
+	[data-theme="dark"] .logs__text--link:focus {
+		color: var(--ctp-text);
+	}
+	.icon--selected {
+		background-color: var(--gray-f3);
+		border: solid 1px var(--gray-d8);
+	}
+	.link--green {
+		color: var(--green79);
+	}
+	[data-theme="dark"] .form-control--transparent option {
+		background-color: var(--card-bgcolor);
+	}
+	.button-action {
+		background: var(--btn-block);
+		color: var(--white);
+	}
+	.button-action--unblock {
+		background: var(--btn-unblock);
+	}
+	.button-action--arrow-option:focus-visible {
+		outline: var(--ctp-accent-hover) solid 2px;
+	}
+	.tooltip-custom__container .button-action--arrow-option:not(:disabled):hover {
+		background: var(--gray-f3);
+	}
+	[data-theme="dark"] .tooltip-custom__container .button-action--arrow-option:not(:disabled):hover {
+		background: var(--ctrl-dropdown-bgcolor-focus);
+	}
+	.logs__table .logs__row {
+		border-bottom: 2px solid var(--gray-216);
+	}
+	.logs__row--blue {
+		background-color: var(--logs__row--blue-bgcolor);
+	}
+	[data-theme="dark"] .logs__row--blue .logs__text--link {
+		color: var(--ctp-text);
+	}
+	.logs__row--green {
+		background-color: var(--green-pale);
+	}
+	.logs__row--red {
+		background-color: var(--red) !important;
+	}
+	.logs__row--white {
+		background-color: var(--logs__row--white-bgcolor);
+	}
+	.logs__row--yellow {
+		background-color: var(--yellow);
+	}
+	.logs__no-data {
+		color: var(--mcolor);
+		background-color: var(--logs__table-bgcolor);
+	}
+	.logs__table {
+		background-color: var(--logs__table-bgcolor);
+	}
+	.bg--danger {
+		color: var(--danger);
+	}
+	.bg--green {
+		color: var(--green79);
+	}
+	[data-theme="dark"] .logs__question.icon--lightgray {
+		color: var(--ctp-text);
+	}
+	.logs__modal-wrap {
+		background-color: var(--card-bgcolor);
+	}
+	[data-theme="dark"] .button-action__icon {
+		color: var(--ctp-text);
+	}
+
+	/* ---- Hand-written ------------------------------------------------------
+
+		 The four statistics cards set their accent as a literal color, and the
+		 sparkline repeats it in SVG attributes, which CSS properties override. */
+	.stats-card--ads {
+		--stats-card-accent: var(--ctp-peach);
+	}
+	.stats-card--threats {
+		--stats-card-accent: var(--ctp-yellow);
+	}
+	.stats-card--adult {
+		--stats-card-accent: var(--ctp-mauve);
+	}
+	.stats-card .recharts-surface stop {
+		stop-color: var(--stats-card-accent);
+	}
+	.stats-card .recharts-surface path[stroke]:not([stroke="none"]) {
+		stroke: var(--stats-card-accent);
+	}
+
+	/* The statistics bars get their color inline, from Tabler's named colors. */
+	.progress-bar[style*="background-color: rgb(70, 127, 207)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-accent) !important;
+	}
+	.progress-bar[style*="background-color: rgb(101, 116, 205)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-lavender) !important;
+	}
+	.progress-bar[style*="background-color: rgb(165, 94, 234)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-mauve) !important;
+	}
+	.progress-bar[style*="background-color: rgb(246, 109, 155)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-pink) !important;
+	}
+	.progress-bar[style*="background-color: rgb(205, 32, 31)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-red) !important;
+	}
+	.progress-bar[style*="background-color: rgb(253, 150, 68)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-peach) !important;
+	}
+	.progress-bar[style*="background-color: rgb(241, 196, 15)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-yellow) !important;
+	}
+	.progress-bar[style*="background-color: rgb(94, 186, 0)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-green) !important;
+	}
+	.progress-bar[style*="background-color: rgb(43, 203, 186)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-teal) !important;
+	}
+	.progress-bar[style*="background-color: rgb(23, 162, 184)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-sky) !important;
+	}
+	.progress-bar[style*="background-color: rgb(69, 170, 242)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-sapphire) !important;
+	}
+	.progress-bar[style*="background-color: rgb(123, 210, 53)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-green) !important;
+	}
+	.progress-bar[style*="background-color: rgb(134, 142, 150)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-overlay1) !important;
+	}
+
+}
+
+/* Mixins live outside @-moz-document and are called by their full path, so
+	 the variables one call returns cannot leak into the next. */
+#agh {
+	.vars(@flavor) {
+		#lib.palette();
+		#lib.css-variables();
+		@pale: if(@flavor = latte, 10%, 20%);
+		color-scheme: if(@flavor = latte, light, dark);
+		--ctp-accent: @accent;
+		--ctp-accent-hover: if(@flavor = latte, darken(@accent, 8%), lighten(@accent, 8%));
+		--ctp-on-accent: if(@flavor = latte, @base, @crust);
+
+		/* Named colors */
+		--indigo: @lavender;
+		--purple: @mauve;
+		--pink: @pink;
+		--orange: @peach;
+		--green: @green;
+		--green-74: @green;
+		--green-86: @green;
+		--green79: @green;
+		--teal: @teal;
+		--cyan: @sky;
+		--azure: @sapphire;
+		--lime: @green;
+		--gray: @overlay1;
+		--gray-ac: @overlay0;
+		--gray-dark: @surface1;
+		--primary: @accent;
+		--secondary: @overlay1;
+		--success: @green;
+		--info: @sapphire;
+		--warning: @yellow;
+		--danger: @red;
+		--light: @mantle;
+		--dark: @crust;
+		--white: @base;
+
+		/* The query log redefines these as pale row backgrounds */
+		--blue: fade(@blue, @pale);
+		--red: fade(@red, @pale);
+		--yellow: fade(@yellow, @pale);
+		--green-pale: fade(@green, @pale);
+		--yellow-pale: fade(@yellow, @pale);
+
+		/* Surfaces and text */
+		--black: @text;
+		--bgcolor: @mantle;
+		--mcolor: @text;
+		--scolor: @subtext0;
+		--border-color: @surface0;
+		--header-bgcolor: @base;
+		--card-bgcolor: @base;
+		--card-border-color: @surface0;
+		--ctrl-bgcolor: @mantle;
+		--ctrl-select-bgcolor: @surface0;
+		--ctrl-dropdown-color: @text;
+		--ctrl-dropdown-bgcolor-focus: @surface0;
+		--ctrl-dropdown-color-focus: @text;
+		--btn-success-bgcolor: @green;
+		--form-disabled-bgcolor: @surface0;
+		--form-disabled-color: @subtext0;
+		--rt-nodata-bgcolor: fade(@base, 80%);
+		--rt-nodata-color: @subtext0;
+		--modal-overlay-bgcolor: fade(@crust, 75%);
+		--loading-bg: fade(@base, 50%);
+		--alert-message-color: @text;
+		--alert-message-border: @surface1;
+		--alert-message-bg: @surface0;
+		--checkbox-bg: @surface1;
+		--radio-bg: @surface1;
+		--detailed-info-color: @subtext0;
+		--gray300: @subtext1;
+		--gray-a5: @overlay1;
+		--gray-d8: @surface2;
+		--gray-f3: @surface0;
+		--gray-216: fade(@surface2, 23%);
+		--gray-4d: @subtext1;
+		--gray-8: @overlay1;
+		--gray-3: @text;
+		--white80: fade(@base, 80%);
+
+		/* Query log */
+		--logs__text-color: @text;
+		--logs__table-bgcolor: @base;
+		--logs__row--blue-bgcolor: fade(@blue, @pale);
+		--logs__row--white-bgcolor: @base;
+
+		/* Block and unblock buttons in the query log */
+		--btn-block: @red;
+		--btn-block-disabled: fade(@red, 40%);
+		--btn-block-active: if(@flavor = latte, darken(@red, 8%), lighten(@red, 8%));
+		--btn-unblock: @overlay1;
+		--btn-unblock-disabled: @surface2;
+		--btn-unblock-active: @subtext1;
+
+		scrollbar-color: @surface2 transparent;
+	}
+}
