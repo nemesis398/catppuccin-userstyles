@@ -1,0 +1,116 @@
+/* ==UserStyle==
+@name Forgejo Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/forgejo
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/forgejo
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/forgejo/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for self-hosted Forgejo instances. Set your instance's address under URLs.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var text urls "URLs of your Forgejo instances" "localhost\:3000"
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * How it works: Forgejo themes are plain CSS variables on :root, and
+ * Catppuccin already maintains a Gitea and Forgejo theme
+ * (github.com/catppuccin/gitea, MIT, © Catppuccin Org). This style loads that
+ * theme for your flavor and accent, the same way Catppuccin's own Codeberg
+ * style does, so an instance gets Catppuccin without installing a theme on
+ * the server. The flavor follows your system. Anything the theme leaves stock
+ * is fixed below.
+ *
+ * codeberg.org is not matched: use Catppuccin's Codeberg style there.
+ */
+
+@-moz-document regexp(replace(replace(%("https?://(%s)/.*", @urls), ",", "|", "g"), " ", "", "g")) {
+	@import (css)
+		url("https://catppuccin.github.io/gitea/theme-catppuccin-@{lightFlavor}-@{accentColor}.css")
+		(prefers-color-scheme: light);
+	@import (css)
+		url("https://catppuccin.github.io/gitea/theme-catppuccin-@{darkFlavor}-@{accentColor}.css")
+		(prefers-color-scheme: dark);
+}
+
+@-moz-document regexp(replace(replace(%("https?://(%s)/.*", @urls), ",", "|", "g"), " ", "", "g")) {
+	@media (prefers-color-scheme: light) {
+		:root {
+			#forgejo.fixes(@lightFlavor);
+		}
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			#forgejo.fixes(@darkFlavor);
+		}
+	}
+}
+
+/* Mixins live outside @-moz-document and are called by their full path, so
+	 the variables one call returns cannot leak into the next. */
+#forgejo {
+	.fixes(@flavor) {
+		#lib.palette();
+
+		/* Forgejo's own tokens that the Gitea theme does not set */
+		--color-pure-black: @crust;
+		--color-thin-green: @green;
+		--color-thin-red: @red;
+		--color-thin-purple: @mauve;
+		--color-thin-violet: @lavender;
+		--color-thin-orange: @peach;
+		--color-thin-blue: @blue;
+		--color-thin-red-highlight: mix(@red, @text, 70%);
+		--color-danger-bg: fade(@red, 15%);
+		--fancy-card-bg: @surface0;
+		--fancy-card-border: @surface1;
+		--color-overlay-backdrop: fade(@crust, 75%);
+		--color-selection-bg: fade(@accent, 30%);
+		--color-selection-fg: @text;
+		--checkerboard-color-1: @surface1;
+		--checkerboard-color-2: @surface0;
+
+		/* Counter on the active tab of a menu */
+		--color-label-bg-alt: if(@flavor = latte, darken(@accent, 8%), lighten(@accent, 8%));
+
+		/* Runner status dots */
+		--color-indicator-offline: @overlay1;
+		--color-indicator-offline-20: fade(@overlay1, 10%);
+		--color-indicator-idle: @green;
+		--color-indicator-idle-20: fade(@green, 10%);
+		--color-indicator-active: @blue;
+		--color-indicator-active-20: fade(@blue, 20%);
+
+		/* Actions log */
+		--color-console-fg: @text;
+		--color-console-fg-subtle: @subtext0;
+		--color-console-bg: @mantle;
+		--color-console-border: @surface0;
+		--color-console-hover-bg: fade(@text, 8%);
+		--color-console-active-bg: @surface1;
+		--color-console-menu-bg: @surface0;
+		--color-console-menu-border: @surface1;
+		--color-ansi-black: if(@flavor = latte, @subtext1, @surface1);
+		--color-ansi-red: @red;
+		--color-ansi-green: @green;
+		--color-ansi-yellow: @yellow;
+		--color-ansi-blue: @blue;
+		--color-ansi-magenta: @pink;
+		--color-ansi-cyan: @teal;
+		--color-ansi-white: if(@flavor = latte, @surface2, @subtext0);
+		--color-ansi-bright-black: if(@flavor = latte, @subtext0, @surface2);
+		--color-ansi-bright-red: @red;
+		--color-ansi-bright-green: @green;
+		--color-ansi-bright-yellow: @yellow;
+		--color-ansi-bright-blue: @blue;
+		--color-ansi-bright-magenta: @pink;
+		--color-ansi-bright-cyan: @teal;
+		--color-ansi-bright-white: if(@flavor = latte, @surface1, @text);
+	}
+}
