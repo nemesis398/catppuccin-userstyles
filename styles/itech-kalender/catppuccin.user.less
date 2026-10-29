@@ -1,0 +1,469 @@
+/* ==UserStyle==
+@name ITECH-Kalender Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/itech-kalender
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/itech-kalender
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/itech-kalender/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for the ITECH-Kalender (itech-bs14.codeberg.page)
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Flavor when your OS is in light mode" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Flavor when your OS is in dark mode" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+@-moz-document url-prefix("https://itech-bs14.codeberg.page/ITECH-Kalender/") {
+	/* The calendar has no dark mode of its own, so the OS setting picks the
+		 flavor. Printing keeps the site's own light print style. */
+	@media screen and (prefers-color-scheme: light) {
+		:root {
+			#catppuccin(@lightFlavor);
+		}
+	}
+	@media screen and (prefers-color-scheme: dark) {
+		:root {
+			#catppuccin(@darkFlavor);
+		}
+	}
+
+	#catppuccin(@flavor) {
+		#lib.palette();
+		#lib.defaults();
+		#lib.css-variables();
+
+		@on-accent: if(@flavor = latte, @base, @crust);
+
+		/* Event category colors (site variable → Catppuccin). The calendar's JavaScript
+			 also writes the same hex values inline (event dots, month view borders),
+			 so the same table drives the attribute selectors further down. */
+		@ln: @red;          // Leistungsnachweis
+		@pr: @maroon;       // Präsentation
+		@ex: @green;        // Exkursion
+		@fe: @blue;         // Ferien
+		@ft: @yellow;       // Feiertag
+		@ab: @mauve;        // Abgabe
+		@qg: @pink;
+		@cp: @pink;
+		@moodle: @peach;
+		@nextcloud: @lavender;
+
+		/* ---------- Site variables ---------- */
+		--color-primary: @mantle;          // header, menu panel, toast backgrounds
+		--color-primary-light: @surface0;  // hover backgrounds in the header
+		--color-bg: @base;
+		--color-bg-alt: @mantle;
+		--color-text: @text;
+		--color-border: @surface0;
+		--color-today: @accent;
+		--color-moodle: @moodle;
+		--color-nextcloud: @nextcloud;
+		--color-ln: @ln;
+		--color-pr: @pr;
+		--color-ex: @ex;
+		--color-fe: @fe;
+		--color-ft: @ft;
+		--color-ab: @ab;
+		--color-qg: @qg;
+		--color-cp: @cp;
+		--color-pflicht: @red;
+		--color-fakultativ: @overlay2;
+		--shadow: 0 2px 8px fade(@crust, 50%);
+
+		scrollbar-color: @surface2 @mantle;
+
+		/* ---------- Base ---------- */
+		body {
+			background: @base;
+			color: @text;
+		}
+		a {
+			color: @accent;
+			&:hover {
+				color: @lavender;
+			}
+		}
+
+		/* ---------- Header ---------- */
+		.header {
+			background: @mantle;
+			color: @text;
+			box-shadow: inset 0 -1px 0 @crust;
+		}
+		.header__nav-btn,
+		.header__menu-btn {
+			color: @text;
+		}
+		.header__nav-btn:hover,
+		.header__menu-btn:hover {
+			background: @surface0;
+		}
+		.header__class-badge {
+			background: @yellow;
+			color: @on-accent;
+			box-shadow: none;
+		}
+		.header__tab {
+			color: @subtext0;
+			&:hover {
+				color: @text;
+			}
+			&.active {
+				color: @text;
+				border-bottom-color: @accent;
+			}
+		}
+		.header__today-btn {
+			background: @surface0;
+			color: @text;
+			&:hover {
+				background: @surface1;
+			}
+		}
+
+		/* ---------- Footer, legend, previews ---------- */
+		.footer {
+			background: @mantle;
+			color: @subtext0;
+			border-top-color: @surface0;
+		}
+		.calendar-legend,
+		.next-week-preview,
+		.impulse-list {
+			background: @mantle;
+			border-color: @surface0;
+			color: @subtext0;
+		}
+		.calendar-legend__group-label,
+		.impulse-legend,
+		.day-view__staff-label,
+		.day-view__empty {
+			color: @subtext0;
+		}
+		.calendar-legend__separator {
+			color: @surface2;
+		}
+		.calendar-legend__swatch--fe { background: fade(@fe, 45%); }
+		.calendar-legend__swatch--ft { background: fade(@ft, 45%); }
+		.next-week-preview strong {
+			color: @text;
+		}
+
+		/* ---------- Year view ---------- */
+		.year-month {
+			background: @mantle;
+			border-color: @surface0;
+		}
+		.mini-grid__head {
+			color: @subtext0;
+		}
+		.mini-grid__day:hover:not(.mini-grid__day--empty) {
+			background: @surface0;
+		}
+		.mini-grid__day--other {
+			color: @overlay1;
+		}
+		.mini-grid__day.is-today {
+			background: @accent;
+			color: @on-accent;
+		}
+
+		/* ---------- Month view ---------- */
+		.month-grid {
+			border-color: @surface0;
+		}
+		.month-grid__head {
+			background: @mantle;
+			color: @subtext1;
+			border-bottom-color: @surface0;
+		}
+		.month-cell {
+			border-color: @surface0;
+			&:hover:not(.month-cell--empty) {
+				background: @mantle;
+			}
+		}
+		.month-cell--empty {
+			background: @crust;
+		}
+		.month-cell--other .month-cell__number {
+			color: @overlay1;
+		}
+		.month-cell.is-today {
+			background: fade(@accent, 8%);
+			box-shadow: inset 0 0 0 2px @accent;
+		}
+		.month-cell.is-today .month-cell__number {
+			background: @accent;
+			color: @on-accent;
+		}
+		.month-event {
+			background: @surface0;
+			color: @text;
+		}
+		.month-event--more {
+			background: none;
+			color: @subtext0;
+		}
+
+		/* ---------- Week view ---------- */
+		.week-col {
+			background: @mantle;
+			border-color: @surface0;
+		}
+		.week-col__header {
+			background: @crust;
+			border-bottom-color: @surface0;
+			color: @text;
+		}
+		.week-col__date {
+			color: @subtext0;
+		}
+		.week-col.is-today {
+			border-color: @accent;
+			box-shadow: 0 0 0 2px @accent;
+		}
+		.week-col.is-today .week-col__header {
+			background: @accent;
+			border-bottom-color: @accent;
+			color: @on-accent;
+		}
+		.week-col.is-today .week-col__date {
+			color: fade(@on-accent, 85%);
+		}
+
+		/* ---------- Event cards ---------- */
+		.event-card {
+			background: @surface0;
+			color: @text;
+			box-shadow: 0 2px 8px fade(@crust, 50%);
+			&:hover {
+				box-shadow: 0 4px 12px fade(@crust, 70%);
+			}
+		}
+		.event-card__time,
+		.event-card__location,
+		.countdown--normal {
+			color: @subtext0;
+		}
+		.event-card__toggle {
+			color: @subtext0;
+			border-top-color: @surface1;
+			&:hover {
+				background: @surface1;
+			}
+		}
+		.event-card__description-qr {
+			border-top-color: @surface1;
+		}
+		.event-card__badge {
+			color: @on-accent;
+		}
+		/* Ferien: a filled card */
+		.event-card--fe {
+			background: @fe;
+			color: @on-accent;
+		}
+		.event-card--fe .event-card__title,
+		.event-card--fe .event-card__time,
+		.event-card--fe .event-card__location,
+		.event-card--fe .event-card__toggle,
+		.event-card__icon--fe {
+			color: @on-accent;
+		}
+		.event-card--fe .event-card__toggle {
+			border-top-color: fade(@on-accent, 25%);
+			&:hover {
+				background: fade(@on-accent, 10%);
+			}
+		}
+		.modal__content .event-card {
+			background: transparent;
+		}
+		.modal__content .event-card--fe {
+			background: @fe;
+		}
+
+		/* Holiday banners */
+		.holiday-banner--fe {
+			background: fade(@fe, 15%);
+			color: @fe;
+			border-color: fade(@fe, 35%);
+		}
+		.holiday-banner--ft {
+			background: fade(@ft, 15%);
+			color: @ft;
+			border-color: fade(@ft, 35%);
+		}
+
+		/* Impulses */
+		.impulse {
+			border-bottom-color: @surface0;
+		}
+		.impulse-dot--fakultativ {
+			box-shadow: none;
+		}
+
+		/* QR codes keep a light background so phones can still scan them */
+		.event-qr {
+			background: @mantle;
+			border-color: @surface0;
+		}
+		.event-qr__image {
+			background: #fff; // ctp-allow: QR codes need white to scan
+		}
+
+		/* ---------- Staff tags ---------- */
+		/* Any staff color becomes a muted tint with readable text */
+		.staff-tag {
+			background: color-mix(in srgb, var(--staff-color, @overlay0) 35%, @surface0) !important;
+			box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--staff-color, @overlay0) 70%, @surface0);
+			color: @text;
+		}
+		.staff-tag__time-btn {
+			background: @surface1;
+			color: @text;
+			box-shadow: none;
+			&:hover {
+				background: @surface2;
+				color: @text;
+			}
+			&:focus-visible {
+				outline-color: @accent;
+			}
+		}
+		.staff-time-popover {
+			background: @crust;
+			color: @text;
+			border: 1px solid @surface0;
+			box-shadow: 0 8px 24px fade(@crust, 60%);
+		}
+		/* The JavaScript sets --staff-color inline (Flat UI palette): remap known values */
+		#staff(@hex, @c) {
+			.staff-tag[style*="@{hex}" i] {
+				--staff-color: @c !important;
+			}
+		}
+		#staff("54a0ff", @blue);
+		#staff("2e86de", @sapphire);
+		#staff("222f3e", @overlay2);
+		#staff("0abde3", @sky);
+		#staff("48dbfb", @sky);
+		#staff("00d2d3", @teal);
+		#staff("f368e0", @pink);
+		#staff("ff9ff3", @pink);
+		#staff("341f97", @mauve);
+		#staff("5f27cd", @flamingo);
+		#staff("575fcf", @lavender);
+		#staff("01a3a4", @green);
+		#staff("1dd1a1", @green);
+		#staff("10ac84", @green);
+		#staff("ff9f43", @peach);
+		#staff("feca57", @yellow);
+		#staff("ff6b6b", @red);
+		#staff("ee5253", @maroon);
+		#staff("c8d6e5", @subtext1);
+		#staff("8395a7", @overlay2);
+		#staff("576574", @overlay1);
+
+		/* ---------- Inline category colors written by JavaScript ---------- */
+		#category(@hex, @c) {
+			.event-dot[style*="@{hex}" i] {
+				background: @c !important;
+			}
+			.month-event[style*="@{hex}" i] {
+				border-left-color: @c !important;
+			}
+		}
+		#category("dc2626", @ln);
+		#category("ea580c", @pr);
+		#category("16a34a", @ex);
+		#category("2563eb", @fe);
+		#category("b45309", @ft);
+		#category("9333ea", @ab);
+		#category("ec4899", @qg);
+		#category("e85d26", @moodle);
+		#category("1e2a3a", @nextcloud);
+
+		/* ---------- Menu (slide-in panel) ---------- */
+		.overlay__backdrop,
+		.modal__backdrop {
+			background: fade(@crust, 70%);
+		}
+		.overlay__panel {
+			background: @mantle;
+			color: @text;
+			border-left: 1px solid @surface0;
+		}
+		.overlay__header,
+		.accordion,
+		.menu-event {
+			border-color: @surface0;
+		}
+		.overlay__close {
+			color: @text;
+			&:hover {
+				background: @surface0;
+			}
+		}
+		.accordion__title:hover {
+			color: @accent;
+		}
+		.menu-event__date,
+		.team-card__subject {
+			color: @subtext0;
+		}
+		.stundenplan-table th,
+		.stundenplan-table td {
+			border-color: @surface1;
+		}
+		.stundenplan-table th {
+			background: @surface0;
+		}
+		.stundenplan-table td:first-child {
+			background: fade(@surface0, 50%);
+		}
+		.team-card {
+			background: @surface0;
+		}
+		.team-card__email a {
+			color: @accent;
+		}
+		.links-list a {
+			color: @text;
+			&:hover {
+				color: @accent;
+				opacity: 1;
+			}
+			i {
+				color: @accent;
+			}
+		}
+
+		/* ---------- Modal + toast ---------- */
+		.modal__panel {
+			background: @mantle;
+			color: @text;
+			border: 1px solid @surface0;
+			box-shadow: 0 8px 32px fade(@crust, 60%);
+		}
+		.modal__close {
+			color: @subtext0;
+			&:hover {
+				background: @surface0;
+				color: @text;
+			}
+		}
+		.toast {
+			background: @surface0;
+			color: @text;
+			border: 1px solid @surface1;
+			box-shadow: 0 4px 16px fade(@crust, 60%);
+		}
+	}
+}
+
