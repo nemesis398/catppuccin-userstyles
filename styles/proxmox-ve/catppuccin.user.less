@@ -1,0 +1,3378 @@
+/* ==UserStyle==
+@name Proxmox VE Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/proxmox-ve
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/proxmox-ve
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/proxmox-ve/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for the Proxmox VE web interface. Set your hosts' addresses under URLs.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var text urls "URLs of your Proxmox VE hosts" "localhost\:8006"
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * How it works: the Proxmox VE interface is ExtJS with the "crisp" theme,
+ * plus Proxmox's own stylesheets and, for dark mode, theme-proxmox-dark.css.
+ * None of them use variables for colors, so the rules below are generated:
+ * every rule of those stylesheets that sets a color is repeated with its
+ * colors replaced by palette variables. Grays map by lightness and use
+ * (background, border, text), blues to the accent and its tints, and status
+ * colors to red, peach, yellow and green. Built from Proxmox VE 9.2.21.
+ *
+ * The flavor follows the theme picked in Proxmox (the user menu, Color
+ * Theme): the Dark Flavor while Proxmox Dark is active, which with "Auto"
+ * means while your system is dark, and the Light Flavor otherwise. The
+ * Proxmox Dark rules are repeated the same way and only apply while that
+ * theme is active, as in Proxmox itself.
+ */
+
+@-moz-document regexp(replace(replace(%("https?://(%s)/.*", @urls), ",", "|", "g"), " ", "", "g")) {
+
+	/* ---- Flavor variables ------------------------------------------------ */
+
+	:root {
+		#pve.vars(@lightFlavor);
+	}
+	@media (prefers-color-scheme: dark) {
+		:root:has(link[href*="theme-proxmox-dark"]) {
+			#pve.vars(@darkFlavor);
+		}
+	}
+	:root:has(link[href*="theme-proxmox-dark"]:not([media])) {
+		#pve.vars(@darkFlavor);
+	}
+
+	/* ---- Generated from the crisp theme and Proxmox's stylesheets -------- */
+
+	.x-ripple {
+		background-color: var(--ctp-base);
+	}
+	.x-treelist {
+		background-color: var(--ctp-base);
+	}
+	.x-treelist-toolstrip {
+		background-color: var(--ctp-mantle);
+	}
+	.x-treelist-item-selected > .x-treelist-row {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-treelist-item-selected > .x-treelist-row-over {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-treelist-item-icon,
+	.x-treelist-item-tool {
+		color: var(--ctp-overlay0);
+	}
+	.x-treelist-item-expander {
+		color: var(--ctp-overlay0);
+	}
+	.x-treelist-item-text {
+		color: var(--ctp-text);
+	}
+	.x-treelist-item-floated > .x-treelist-row {
+		background-color: var(--ctp-mantle);
+	}
+	.x-treelist-item-floated > .x-treelist-row-over {
+		background-color: var(--ctp-mantle);
+	}
+	.x-treelist-item-floated > .x-treelist-row-over > * > .x-treelist-item-text {
+		color: var(--ctp-text);
+	}
+	.x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-icon {
+		color: var(--ctp-overlay0);
+	}
+	.x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-text {
+		color: var(--ctp-text);
+	}
+	.x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-expander {
+		color: var(--ctp-overlay0);
+	}
+	.x-treelist-row-over {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-treelist-row-over > * > .x-treelist-item-icon {
+		color: var(--ctp-overlay0);
+	}
+	.x-treelist-row-over > * > .x-treelist-item-text {
+		color: var(--ctp-text);
+	}
+	.x-treelist-row-over > * > .x-treelist-item-expander {
+		color: var(--ctp-overlay0);
+	}
+	.x-treelist-nav {
+		background-color: var(--ctp-text);
+	}
+	.x-treelist-nav .x-treelist-toolstrip {
+		background-color: var(--ctp-text);
+	}
+	.x-treelist-nav .x-treelist-item-selected.x-treelist-item-tool {
+		color: var(--ctp-overlay0);
+		background-color: var(--ctp-accent);
+	}
+	.x-treelist-nav .x-treelist-item-selected > .x-treelist-row {
+		background-color: var(--ctp-subtext1);
+	}
+	.x-treelist-nav .x-treelist-item-tool-floated:after {
+		background-color: var(--ctp-accent);
+	}
+	.x-treelist-nav .x-treelist-item-icon,
+	.x-treelist-nav .x-treelist-item-tool {
+		color: var(--ctp-overlay1);
+	}
+	.x-treelist-nav .x-treelist-item-expander {
+		color: var(--ctp-overlay1);
+	}
+	.x-treelist-nav .x-treelist-item-text {
+		color: var(--ctp-overlay1);
+	}
+	.x-treelist-nav .x-treelist-row-over:before {
+		background-color: var(--ctp-accent);
+	}
+	.x-treelist-nav .x-treelist-item-selected > .x-treelist-row-over:before {
+		background-color: var(--ctp-accent);
+	}
+	.x-treelist-nav .x-treelist-item-selected > .x-treelist-row:before {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-treelist-nav .x-treelist-item-floated > .x-treelist-row {
+		background-color: var(--ctp-text);
+	}
+	.x-treelist-nav .x-treelist-item-floated > .x-treelist-row-over {
+		background-color: var(--ctp-text);
+	}
+	.x-treelist-nav .x-treelist-item-floated > .x-treelist-row-over > * > .x-treelist-item-text {
+		color: var(--ctp-overlay1);
+	}
+	.x-treelist-nav .x-treelist-item-expanded {
+		background-color: var(--ctp-text);
+	}
+	.x-treelist-nav .x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-icon {
+		color: var(--ctp-on-accent);
+	}
+	.x-treelist-nav .x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-text {
+		color: var(--ctp-on-accent);
+	}
+	.x-treelist-nav .x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-expander {
+		color: var(--ctp-on-accent);
+	}
+	.x-treelist-nav .x-treelist-row-over {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-treelist-nav .x-treelist-row-over > * > .x-treelist-item-icon {
+		color: var(--ctp-on-accent);
+	}
+	.x-treelist-nav .x-treelist-row-over > * > .x-treelist-item-text {
+		color: var(--ctp-on-accent);
+	}
+	.x-treelist-nav .x-treelist-row-over > * > .x-treelist-item-expander {
+		color: var(--ctp-on-accent);
+	}
+	.x-proxy-el {
+		background: var(--ctp-overlay0);
+	}
+	.x-resizable-overlay {
+		background-color: var(--ctp-base);
+	}
+	.x-keyboard-mode .x-view-item-focused {
+		outline: 1px dashed var(--ctp-accent-hover) !important;
+	}
+	.x-keyboard-mode .x-grid-cell-inner-action-col :focus {
+		outline: 1px solid var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-grid-checkcolumn-cell-inner :focus {
+		outline: 1px solid var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-grid-row-expander:focus {
+		outline: 1px solid var(--ctp-accent);
+	}
+	.x-body {
+		color: var(--ctp-text);
+		background: var(--ctp-base);
+	}
+	.x-mask {
+		background-color: color-mix(in srgb, var(--ctp-base) 70%, transparent);
+	}
+	.x-keyboard-mode .x-mask.x-focus {
+		border-color: var(--ctp-accent-hover);
+	}
+	.x-mask-msg {
+		background: var(--ctp-surface1);
+	}
+	.x-mask-msg-inner {
+		color: var(--ctp-subtext0);
+	}
+	.x-progress-default {
+		background-color: var(--ctp-mantle);
+		border-color: var(--ctp-accent-hover);
+	}
+	.x-progress-default .x-progress-bar-default {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-progress-default .x-progress-text {
+		color: var(--ctp-subtext0);
+	}
+	.x-progress-default .x-progress-text-back {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-progress-default.x-progress-focus:after {
+		border: 0 solid var(--ctp-accent-hover);
+	}
+	.x-btn-default-small {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-default-small-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-default-small {
+		border-color: var(--ctp-accent-hover);
+	}
+	.x-btn-inner-default-small {
+		color: var(--ctp-on-accent);
+	}
+	.x-btn-icon-el-default-small {
+		color: var(--ctp-on-accent);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-default-small {
+		background-color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-default-small.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-btn-over.x-btn-default-small {
+		border-color: var(--ctp-accent-hover);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-default-small {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-default-small,
+	.x-btn.x-btn-pressed.x-btn-default-small {
+		border-color: var(--ctp-accent-pressed);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-default-small,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-default-small {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-disabled.x-btn-default-small {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-default-small-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-over .x-btn-default-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-default-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-menu-active .x-btn-default-small-mc,
+	.x-btn.x-btn-pressed .x-btn-default-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-default-small-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-default-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-disabled .x-btn-default-small-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-default-small:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-default-small:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-default-small:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-default-small:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base));
+	}
+	.x-btn-default-medium {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-default-medium-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-default-medium {
+		border-color: var(--ctp-accent-hover);
+	}
+	.x-btn-inner-default-medium {
+		color: var(--ctp-on-accent);
+	}
+	.x-btn-icon-el-default-medium {
+		color: var(--ctp-on-accent);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-default-medium {
+		background-color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-default-medium.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-btn-over.x-btn-default-medium {
+		border-color: var(--ctp-accent-hover);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-default-medium {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-default-medium,
+	.x-btn.x-btn-pressed.x-btn-default-medium {
+		border-color: var(--ctp-accent-pressed);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-default-medium,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-default-medium {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-disabled.x-btn-default-medium {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-default-medium-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-over .x-btn-default-medium-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-default-medium-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-menu-active .x-btn-default-medium-mc,
+	.x-btn.x-btn-pressed .x-btn-default-medium-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-default-medium-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-default-medium-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-disabled .x-btn-default-medium-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-default-medium:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-default-medium:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-default-medium:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-default-medium:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base));
+	}
+	.x-btn-default-large {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-default-large-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-default-large {
+		border-color: var(--ctp-accent-hover);
+	}
+	.x-btn-inner-default-large {
+		color: var(--ctp-on-accent);
+	}
+	.x-btn-icon-el-default-large {
+		color: var(--ctp-on-accent);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-default-large {
+		background-color: var(--ctp-accent);
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-default-large.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-btn-over.x-btn-default-large {
+		border-color: var(--ctp-accent-hover);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-default-large {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-default-large,
+	.x-btn.x-btn-pressed.x-btn-default-large {
+		border-color: var(--ctp-accent-pressed);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-default-large,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-default-large {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-disabled.x-btn-default-large {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-default-large-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-over .x-btn-default-large-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-default-large-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-menu-active .x-btn-default-large-mc,
+	.x-btn.x-btn-pressed .x-btn-default-large-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-default-large-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-default-large-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-disabled .x-btn-default-large-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-default-large:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-default-large:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-default-large:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-default-large:after {
+		border-color: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base));
+	}
+	.x-btn-default-toolbar-small {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-default-toolbar-small {
+		border-color: var(--ctp-surface1);
+	}
+	.x-btn-inner-default-toolbar-small {
+		color: var(--ctp-subtext0);
+	}
+	.x-btn-icon-el-default-toolbar-small {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-default-toolbar-small {
+		background-color: var(--ctp-mantle);
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-default-toolbar-small.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-default-toolbar-small {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-default-toolbar-small {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-default-toolbar-small,
+	.x-btn.x-btn-pressed.x-btn-default-toolbar-small {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-default-toolbar-small,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-default-toolbar-small {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-disabled.x-btn-default-toolbar-small {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-over .x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-btn.x-btn-menu-active .x-btn-default-toolbar-small-mc,
+	.x-btn.x-btn-pressed .x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-default-toolbar-small-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-btn.x-btn-disabled .x-btn-default-toolbar-small-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-default-toolbar-small:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-default-toolbar-small:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-default-toolbar-small:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-default-toolbar-small:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-btn-default-toolbar-medium {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-default-toolbar-medium {
+		border-color: var(--ctp-surface1);
+	}
+	.x-btn-inner-default-toolbar-medium {
+		color: var(--ctp-subtext0);
+	}
+	.x-btn-icon-el-default-toolbar-medium {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-default-toolbar-medium {
+		background-color: var(--ctp-mantle);
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-default-toolbar-medium.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-default-toolbar-medium {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-default-toolbar-medium {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-default-toolbar-medium,
+	.x-btn.x-btn-pressed.x-btn-default-toolbar-medium {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-default-toolbar-medium,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-default-toolbar-medium {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-disabled.x-btn-default-toolbar-medium {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-over .x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-btn.x-btn-menu-active .x-btn-default-toolbar-medium-mc,
+	.x-btn.x-btn-pressed .x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-default-toolbar-medium-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-btn.x-btn-disabled .x-btn-default-toolbar-medium-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-default-toolbar-medium:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-default-toolbar-medium:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-default-toolbar-medium:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-default-toolbar-medium:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-btn-default-toolbar-large {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-default-toolbar-large {
+		border-color: var(--ctp-surface1);
+	}
+	.x-btn-inner-default-toolbar-large {
+		color: var(--ctp-subtext0);
+	}
+	.x-btn-icon-el-default-toolbar-large {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-default-toolbar-large {
+		background-color: var(--ctp-mantle);
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-default-toolbar-large.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-default-toolbar-large {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-default-toolbar-large {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-default-toolbar-large,
+	.x-btn.x-btn-pressed.x-btn-default-toolbar-large {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-default-toolbar-large,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-default-toolbar-large {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-disabled.x-btn-default-toolbar-large {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-btn-over .x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-btn.x-btn-menu-active .x-btn-default-toolbar-large-mc,
+	.x-btn.x-btn-pressed .x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-default-toolbar-large-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-btn.x-btn-disabled .x-btn-default-toolbar-large-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-default-toolbar-large:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-default-toolbar-large:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-default-toolbar-large:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-default-toolbar-large:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-tool-tool-el {
+		color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-splitter-active {
+		background-color: var(--ctp-overlay0);
+	}
+	.x-keyboard-mode .x-splitter-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-toolbar-default {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-toolbar-default .x-tool-img {
+		background-color: var(--ctp-base);
+	}
+	.x-toolbar-default .x-toolbar-separator-horizontal {
+		border-left-color: var(--ctp-surface1);
+		border-right-color: var(--ctp-mantle);
+	}
+	.x-toolbar-default-vertical .x-toolbar-separator-vertical {
+		border-top-color: var(--ctp-surface1);
+		border-bottom-color: var(--ctp-mantle);
+	}
+	.x-toolbar-text-default {
+		color: var(--ctp-text);
+	}
+	.x-box-scroller-toolbar-default {
+		color: var(--ctp-overlay0);
+	}
+	.x-toolbar-footer {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-toolbar-footer .x-tool-img {
+		background-color: var(--ctp-surface0);
+	}
+	.x-toolbar-footer .x-toolbar-separator-horizontal {
+		border-left-color: var(--ctp-surface1);
+		border-right-color: var(--ctp-mantle);
+	}
+	.x-toolbar-footer-vertical .x-toolbar-separator-vertical {
+		border-top-color: var(--ctp-surface1);
+		border-bottom-color: var(--ctp-mantle);
+	}
+	.x-toolbar-text-footer {
+		color: var(--ctp-text);
+	}
+	.x-box-scroller-toolbar-footer {
+		color: var(--ctp-overlay0);
+	}
+	.x-dd-drag-proxy {
+		color: var(--ctp-text);
+		border: 1px solid var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-panel-default {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-default.x-masked {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default {
+		border: 1px solid var(--ctp-mantle);
+	}
+	.x-panel-header-default .x-tool-tool-el {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-title-default {
+		color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-panel-header-title-default.x-title-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-title-default.x-title-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-header-title-default > .x-title-icon-wrap-default > .x-title-icon-default {
+		color: var(--ctp-accent);
+	}
+	.x-panel-body-default {
+		background: var(--ctp-base);
+		border-color: var(--ctp-surface1);
+		color: var(--ctp-text);
+	}
+	.x-panel-header-default {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-vertical {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-panel-header-default .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-default .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-default-outer-border-l {
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-b {
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-bl {
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-r {
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-rl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-rb {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-rbl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-t {
+		border-top-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-tl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-tb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-tbl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-tr {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-trl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-trb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-outer-border-trbl {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-default-framed.x-masked {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed {
+		border: 1px solid var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed .x-tool-tool-el {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-title-default-framed {
+		color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-panel-header-title-default-framed.x-title-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-title-default-framed.x-title-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-header-title-default-framed > .x-title-icon-wrap-default-framed > .x-title-icon-default-framed {
+		color: var(--ctp-accent);
+	}
+	.x-panel-body-default-framed {
+		background: var(--ctp-base);
+		border-color: var(--ctp-surface1);
+		color: var(--ctp-text);
+	}
+	.x-panel-default-framed {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-default-framed-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-default-framed-top {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-top-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-right {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-right-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-bottom {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-bottom-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-left {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-left-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-top {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-top-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-right {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-right-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-bottom {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-bottom-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-left {
+		background-color: var(--ctp-mantle);
+	}
+	.x-panel-header-default-framed-collapsed-left-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-panel-header-default-framed .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-default-framed .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-default-framed-outer-border-l {
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-b {
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-bl {
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-r {
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-rl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-rb {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-rbl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-t {
+		border-top-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-tl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-tb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-tbl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-tr {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-trl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-trb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-default-framed-outer-border-trbl {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.x-btn-group-default {
+		border-color: var(--ctp-mantle);
+		box-shadow: var(--ctp-mantle) 0 1px 0px 0 inset, var(--ctp-mantle) 0 -1px 0px 0 inset, var(--ctp-mantle) -1px 0 0px 0 inset, var(--ctp-mantle) 1px 0 0px 0 inset;
+	}
+	.x-btn-group-header-default {
+		background: var(--ctp-base);
+	}
+	.x-btn-group-header-default .x-tool-img {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-group-header-title-default {
+		color: var(--ctp-text);
+	}
+	.x-btn-group-default-framed {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-group-default-framed-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-group-default-framed-notitle {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-group-default-framed-notitle-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-group-default-framed {
+		border-color: var(--ctp-mantle);
+		box-shadow: var(--ctp-mantle) 0 1px 0px 0 inset, var(--ctp-mantle) 0 -1px 0px 0 inset, var(--ctp-mantle) -1px 0 0px 0 inset, var(--ctp-mantle) 1px 0 0px 0 inset;
+	}
+	.x-btn-group-header-default-framed {
+		background: var(--ctp-base);
+	}
+	.x-btn-group-header-default-framed .x-tool-img {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-group-header-title-default-framed {
+		color: var(--ctp-text);
+	}
+	.x-dashboard .x-panel-dd-spacer {
+		border: 2px dashed var(--ctp-accent);
+		background: var(--ctp-mantle);
+	}
+	.x-window-default {
+		border-color: var(--ctp-mantle);
+	}
+	.x-window-default {
+		background-color: var(--ctp-base);
+	}
+	.x-window-default-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-window-body-default {
+		border-color: var(--ctp-mantle);
+		background: var(--ctp-base);
+		color: var(--ctp-text);
+	}
+	.x-window-header-default {
+		border-color: var(--ctp-mantle);
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default .x-tool-img {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-title-default {
+		color: var(--ctp-accent);
+	}
+	.x-window-header-title-default > .x-title-icon-wrap-default > .x-title-icon-default {
+		color: var(--ctp-accent);
+	}
+	.x-window-header-default-top {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-top-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-right {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-right-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-bottom {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-bottom-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-left {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-left-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-top {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-top-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-right {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-right-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-bottom {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-bottom-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-left {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default-collapsed-left-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-window-header-default .x-window-header-icon {
+		color: var(--ctp-accent);
+	}
+	.x-window-header-default .x-window-header-glyph {
+		color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-window-header-default .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-window-header-default .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-window-default-outer-border-l {
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-b {
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-bl {
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-r {
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-rl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-rb {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-rbl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-t {
+		border-top-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-tl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-tb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-tbl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-tr {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-trl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-trb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-window-default-outer-border-trbl {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.x-form-item-label-default {
+		color: var(--ctp-subtext0);
+	}
+	.x-form-invalid-under-default {
+		color: var(--ctp-red);
+	}
+	.x-form-trigger-wrap-default {
+		border-color: var(--ctp-surface1);
+	}
+	.x-form-trigger-wrap-default.x-form-trigger-wrap-focus {
+		border-color: var(--ctp-accent);
+	}
+	.x-form-trigger-wrap-default.x-form-trigger-wrap-invalid {
+		border-color: var(--ctp-red);
+	}
+	.x-form-text-default {
+		color: var(--ctp-text);
+		background-color: var(--ctp-base);
+	}
+	.x-form-invalid-field-default {
+		background-color: var(--ctp-base);
+	}
+	.x-form-trigger-default {
+		background-color: var(--ctp-base);
+	}
+	.x-message-box .x-window-body {
+		background-color: var(--ctp-base);
+	}
+	.x-form-cb-label-default {
+		color: var(--ctp-subtext0);
+	}
+	.x-form-invalid .x-form-item-body-default.x-form-checkboxgroup-body {
+		border-color: var(--ctp-red);
+	}
+	.x-fieldset-default {
+		border: 1px solid var(--ctp-surface1);
+	}
+	.x-fieldset-header-default > .x-fieldset-header-text {
+		color: var(--ctp-text);
+	}
+	.x-keyboard-mode .x-fieldset-header-tool-default.x-focus {
+		outline: 1px solid var(--ctp-accent);
+	}
+	.x-form-spinner-default {
+		background-color: var(--ctp-base);
+	}
+	.x-boundlist {
+		border-color: var(--ctp-surface1);
+		background: var(--ctp-base);
+	}
+	.x-boundlist-item {
+		border-color: var(--ctp-mantle);
+		color: var(--ctp-text);
+	}
+	.x-boundlist-selected {
+		background: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		border-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-boundlist-item-over {
+		background: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		border-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-datepicker {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-datepicker-header {
+		background-color: var(--ctp-mantle);
+	}
+	.x-datepicker-arrow {
+		background-color: var(--ctp-mantle);
+	}
+	.x-datepicker-month .x-btn-inner {
+		color: var(--ctp-accent);
+	}
+	.x-datepicker-column-header {
+		color: var(--ctp-text);
+		background-color: var(--ctp-base);
+	}
+	.x-datepicker-cell {
+		border: 1px solid var(--ctp-mantle);
+	}
+	.x-datepicker-date {
+		color: var(--ctp-text);
+	}
+	div.x-datepicker-date:hover {
+		color: var(--ctp-text);
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-datepicker-selected {
+		border-color: var(--ctp-accent);
+	}
+	.x-datepicker-selected div.x-datepicker-date {
+		background-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		color: var(--ctp-text);
+	}
+	.x-datepicker-prevday .x-datepicker-date,
+	.x-datepicker-nextday .x-datepicker-date {
+		color: var(--ctp-overlay1);
+	}
+	.x-datepicker-disabled .x-datepicker-date {
+		background-color: var(--ctp-surface0);
+	}
+	.x-datepicker-disabled div.x-datepicker-date:hover {
+		background-color: var(--ctp-surface0);
+	}
+	.x-datepicker-footer,
+	.x-monthpicker-buttons {
+		background-color: var(--ctp-mantle);
+	}
+	.x-monthpicker {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-monthpicker-months {
+		border-color: var(--ctp-surface1);
+	}
+	.x-monthpicker-item-inner {
+		color: var(--ctp-text);
+		border: 1px solid var(--ctp-mantle);
+	}
+	a.x-monthpicker-item-inner:hover {
+		color: var(--ctp-text);
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-monthpicker-item a.x-monthpicker-selected {
+		background-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		color: var(--ctp-text);
+		border-color: var(--ctp-accent);
+	}
+	.x-monthpicker-yearnav-button {
+		background-color: var(--ctp-base);
+	}
+	.x-form-display-field-default {
+		color: var(--ctp-text);
+	}
+	.x-keyboard-mode .x-form-display-field-default.x-field-form-focus {
+		outline: 1px solid var(--ctp-accent);
+	}
+	.x-ie10p .x-keyboard-mode .x-form-display-field-default.x-field-form-focus:after {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-tip-default {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-default-mc {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-default {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+		border-color: var(--ctp-surface1);
+	}
+	.x-tip-default .x-tool-img {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-header-title-default {
+		color: var(--ctp-text);
+	}
+	.x-tip-body-default {
+		color: var(--ctp-text);
+	}
+	.x-tip-body-default a {
+		color: var(--ctp-text);
+	}
+	.x-tip-default .x-tip-anchor-top {
+		border-bottom: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-default .x-tip-anchor-bottom {
+		border-top: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-default .x-tip-anchor-left {
+		border-right: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-default .x-tip-anchor-right {
+		border-left: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-default .x-tip-anchor-top:after {
+		border-bottom: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-default .x-tip-anchor-bottom:after {
+		border-top: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-default .x-tip-anchor-left:after {
+		border-right: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-default .x-tip-anchor-right:after {
+		border-left: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-form-invalid {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-form-invalid-mc {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-form-invalid {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+		border-color: var(--ctp-surface1);
+	}
+	.x-tip-form-invalid .x-tool-img {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-header-title-form-invalid {
+		color: var(--ctp-text);
+	}
+	.x-tip-body-form-invalid {
+		color: var(--ctp-text);
+	}
+	.x-tip-body-form-invalid a {
+		color: var(--ctp-text);
+	}
+	.x-tip-form-invalid .x-tip-anchor-top {
+		border-bottom: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-form-invalid .x-tip-anchor-bottom {
+		border-top: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-form-invalid .x-tip-anchor-left {
+		border-right: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-form-invalid .x-tip-anchor-right {
+		border-left: 10px solid var(--ctp-surface1);
+	}
+	.x-tip-form-invalid .x-tip-anchor-top:after {
+		border-bottom: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-form-invalid .x-tip-anchor-bottom:after {
+		border-top: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-form-invalid .x-tip-anchor-left:after {
+		border-right: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-tip-form-invalid .x-tip-anchor-right:after {
+		border-left: 10px solid color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-color-picker {
+		background-color: var(--ctp-base);
+		border-color: var(--ctp-mantle);
+	}
+	.x-color-picker-item {
+		border-color: var(--ctp-mantle);
+		background-color: var(--ctp-base);
+	}
+	a.x-color-picker-item:hover {
+		border-color: var(--ctp-accent);
+		background-color: var(--ctp-surface0);
+	}
+	.x-color-picker-selected {
+		border-color: var(--ctp-accent);
+		background-color: var(--ctp-surface0);
+	}
+	.x-color-picker-item-inner {
+		border-color: var(--ctp-surface1);
+	}
+	.x-html-editor-wrap textarea {
+		background-color: var(--ctp-base);
+	}
+	.x-htmleditor-iframe {
+		background-color: var(--ctp-base);
+	}
+	.x-form-text-default .x-tagfield-item {
+		background-color: var(--ctp-mantle);
+		border: 1px solid var(--ctp-surface1);
+		color: var(--ctp-text);
+	}
+	.x-form-text-default .x-tagfield-item:hover {
+		background-color: var(--ctp-surface1);
+		border-color: var(--ctp-overlay0);
+		color: var(--ctp-text);
+	}
+	.x-form-text-default .x-tagfield-item.x-tagfield-item-selected {
+		background-color: color-mix(in srgb, var(--ctp-accent) 25%, var(--ctp-base));
+		border-color: var(--ctp-accent-hover);
+		color: var(--ctp-text);
+	}
+	.x-grid-body {
+		background: var(--ctp-base);
+		border-color: var(--ctp-surface1);
+	}
+	.x-grid-empty {
+		background-color: var(--ctp-base);
+	}
+	.x-grid-item {
+		color: var(--ctp-text);
+		background-color: var(--ctp-base);
+	}
+	.x-grid-item-alt {
+		background-color: var(--ctp-mantle);
+	}
+	.x-grid-item-over {
+		color: var(--ctp-text);
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-grid-item-focused {
+		color: var(--ctp-text);
+	}
+	.x-keyboard-mode .x-grid-item-focused .x-grid-cell-inner:before {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-grid-item-selected {
+		color: var(--ctp-text);
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-grid-with-row-lines .x-grid-item {
+		border-color: var(--ctp-surface1);
+	}
+	.x-grid-with-row-lines .x-grid-item:first-child {
+		border-top-color: var(--ctp-mantle);
+	}
+	.x-grid-with-row-lines .x-grid-item.x-grid-item-over {
+		border-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-with-row-lines .x-grid-item-over + .x-grid-item {
+		border-top-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-with-row-lines .x-grid-item.x-grid-item-selected {
+		border-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-grid-with-row-lines .x-grid-item-selected + .x-grid-item {
+		border-top-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-grid-cell-special {
+		border-color: var(--ctp-surface1);
+	}
+	.x-grid-row .x-grid-cell-selected {
+		color: var(--ctp-text);
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-grid-with-col-lines .x-grid-cell {
+		border-color: var(--ctp-surface1);
+	}
+	.x-grid-with-col-lines .x-grid-item-over .x-grid-cell {
+		border-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-with-col-lines .x-grid-item-selected .x-grid-cell {
+		border-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-grid-resize-marker {
+		background-color: var(--ctp-text);
+	}
+	.x-grid-drop-indicator {
+		background-color: var(--ctp-green);
+	}
+	.x-grid-header-ct {
+		border: 1px solid var(--ctp-surface1);
+		border-bottom-color: var(--ctp-mantle);
+		background-color: var(--ctp-base);
+	}
+	.x-grid-body {
+		border-top-color: var(--ctp-surface1);
+	}
+	.x-column-header {
+		border-right: 1px solid var(--ctp-surface1);
+		color: var(--ctp-subtext0);
+		background-color: var(--ctp-base);
+	}
+	.x-group-sub-header {
+		border-top: 1px solid var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-column-header.x-column-header-focus {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-column-header.x-column-header-focus .x-column-header-inner:after {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-column-header-over {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-column-header-sort-ASC,
+	.x-column-header-sort-DESC {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-column-header-open {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+	}
+	.x-column-header-open .x-column-header-trigger {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-action-col-icon {
+		color: var(--ctp-overlay0);
+	}
+	.x-column-header-checkbox {
+		border-color: var(--ctp-surface1);
+	}
+	.x-grid-cell-row-numberer {
+		background-color: var(--ctp-base);
+	}
+	.x-btn-grid-cell-small {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-grid-cell-small {
+		border-color: var(--ctp-accent-hover);
+	}
+	.x-btn-inner-grid-cell-small {
+		color: var(--ctp-on-accent);
+	}
+	.x-btn-icon-el-grid-cell-small {
+		color: var(--ctp-on-accent);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-grid-cell-small {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-grid-cell-small {
+		border-color: var(--ctp-accent-hover);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-menu-active.x-btn-grid-cell-small,
+	.x-btn.x-btn-pressed.x-btn-grid-cell-small {
+		border-color: var(--ctp-accent-pressed);
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-disabled.x-btn-grid-cell-small {
+		background-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-btn-focus .x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-btn-over .x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-menu-active .x-btn-grid-cell-small-mc,
+	.x-btn.x-btn-pressed .x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-grid-cell-small-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-btn.x-btn-disabled .x-btn-grid-cell-small-mc {
+		background-color: var(--ctp-accent);
+	}
+	.x-grid-group-hd {
+		border-color: var(--ctp-surface1);
+		background: var(--ctp-base);
+	}
+	.x-grid-group-title {
+		color: var(--ctp-subtext0);
+	}
+	.x-docked-summary {
+		border-color: var(--ctp-surface1);
+		background: var(--ctp-base) !important;
+	}
+	.x-grid-row-summary .x-grid-cell,
+	.x-grid-row-summary .x-grid-rowwrap,
+	.x-grid-row-summary .x-grid-cell-rowbody {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-base) !important;
+		border-top: 1px solid var(--ctp-surface1);
+	}
+	.x-docked-summary > :first-child {
+		background-color: var(--ctp-base);
+	}
+	.x-menu-default {
+		border-color: var(--ctp-surface1);
+	}
+	.x-menu-body-default {
+		background: var(--ctp-base);
+	}
+	.x-menu-icon-separator-default {
+		border-left: solid 1px var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-menu-item-default.x-menu-item-focus,
+	.x-menu-item-default.x-menu-item-active {
+		background-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-menu-item-default.x-menu-item-separator {
+		border-top: solid 1px var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-menu-item-default .x-form-item-label {
+		color: var(--ctp-text);
+	}
+	.x-menu-item-text-default {
+		color: var(--ctp-text);
+	}
+	.x-box-scroller-menu-default {
+		color: var(--ctp-overlay0);
+	}
+	.x-menu-default-menubar {
+		border-color: var(--ctp-surface1);
+	}
+	.x-menu-body-default-menubar {
+		background: var(--ctp-base);
+	}
+	.x-menu-icon-separator-default-menubar {
+		border-left: solid 1px var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-menu-item-default-menubar.x-menu-item-focus,
+	.x-menu-item-default-menubar.x-menu-item-active {
+		background-color: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+	}
+	.x-menu-item-default-menubar.x-menu-item-separator {
+		border-top: solid 1px var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+	.x-menu-item-default-menubar .x-form-item-label {
+		color: var(--ctp-text);
+	}
+	.x-menu-item-text-default-menubar {
+		color: var(--ctp-text);
+	}
+	.x-box-scroller-menu-default-menubar {
+		color: var(--ctp-overlay0);
+	}
+	.x-grid-locked-split .x-grid-inner-normal {
+		border-left-color: var(--ctp-overlay0);
+	}
+	.x-grid-locking-body > .x-splitter {
+		background-color: var(--ctp-surface2);
+	}
+	.x-grid-locking-body > .x-splitter-active {
+		background-color: var(--ctp-overlay0);
+	}
+	.x-grid-inner-locked {
+		border-right-color: var(--ctp-overlay0);
+	}
+	.x-grid-scrollbar-clipper > .x-grid-view,
+	.x-grid-scrollbar-clipper > .x-tree-view {
+		background-color: var(--ctp-base);
+	}
+	.x-grid-scrollbar-clipper-locked,
+	.x-grid-scrollbar-locked {
+		border-color: var(--ctp-overlay0);
+	}
+	.x-grid-scroll-container {
+		background-color: var(--ctp-base);
+	}
+	.x-grid-row-editor .x-panel-body {
+		border-top: 1px solid var(--ctp-surface1) !important;
+		border-bottom: 1px solid var(--ctp-surface1) !important;
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-row-editor-buttons-default-bottom {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-row-editor-buttons-default-bottom-mc {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-row-editor-buttons-default-top {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-row-editor-buttons-default-top-mc {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-grid-row-editor-buttons {
+		border-color: var(--ctp-surface1);
+	}
+	.x-ssm-extender-drag-handle {
+		background-color: var(--ctp-accent-hover);
+	}
+	.x-ssm-extender-mask {
+		border: 1px dotted var(--ctp-accent-hover);
+	}
+	.x-accordion-layout-ct {
+		background-color: var(--ctp-base);
+	}
+	.x-accordion-hd .x-panel-header-title {
+		color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-accordion-hd .x-panel-header-title.x-title-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-accordion-hd .x-panel-header-title.x-title-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-accordion-item .x-accordion-hd {
+		background: var(--ctp-base);
+		border-color: var(--ctp-mantle) var(--ctp-surface1) var(--ctp-surface1);
+	}
+	.x-accordion-item .x-accordion-hd-sibling-expanded {
+		border-top-color: var(--ctp-surface1);
+	}
+	.x-accordion-item .x-accordion-hd-last-collapsed {
+		border-bottom-color: var(--ctp-mantle);
+	}
+	.x-accordion-hd .x-tool-tool-el {
+		background-color: var(--ctp-base);
+		color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-accordion-hd .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-accordion-hd .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	body.x-border-layout-ct,
+	div.x-border-layout-ct {
+		background-color: var(--ctp-surface2);
+	}
+	.x-resizable-handle {
+		background-color: var(--ctp-surface2);
+	}
+	.x-resizable-proxy {
+		border: 1px dashed var(--ctp-accent-pressed);
+	}
+	.x-tab-default-top {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-top-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-bottom {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-bottom-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-left {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-left-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-right {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default-right-mc {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-default {
+		border-color: var(--ctp-mantle);
+	}
+	.x-keyboard-mode .x-tab-default-top.x-tab-focus {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-top.x-tab-focus.x-tab-over {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-top.x-tab-focus.x-tab-active {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-right.x-tab-focus {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-right.x-tab-focus.x-tab-over {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-right.x-tab-focus.x-tab-active {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-bottom.x-tab-focus {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-bottom.x-tab-focus.x-tab-over {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-bottom.x-tab-focus.x-tab-active {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-left.x-tab-focus {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-left.x-tab-focus.x-tab-over {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-tab-default-left.x-tab-focus.x-tab-active {
+		box-shadow: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 0 -1px 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) -1px 0 0px 0 inset, color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base)) 1px 0 0px 0 inset;
+	}
+	.x-tab-inner-default {
+		color: var(--ctp-text);
+	}
+	.x-tab-icon-el-default {
+		color: var(--ctp-text);
+	}
+	.x-keyboard-mode .x-tab-focus.x-tab-default {
+		border-color: var(--ctp-mantle);
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab-over.x-tab-default {
+		border-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-keyboard-mode .x-tab-focus.x-tab-over.x-tab-default {
+		border-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-tab.x-tab-active.x-tab-default {
+		border-color: var(--ctp-accent);
+		background-color: var(--ctp-accent);
+	}
+	.x-tab.x-tab-active.x-tab-default .x-tab-inner-default {
+		color: var(--ctp-on-accent);
+	}
+	.x-tab.x-tab-active.x-tab-default .x-tab-icon-el {
+		color: var(--ctp-on-accent);
+	}
+	.x-keyboard-mode .x-tab-focus.x-tab-active.x-tab-default {
+		border-color: var(--ctp-accent);
+		background-color: var(--ctp-accent);
+	}
+	.x-tab.x-tab-disabled.x-tab-default {
+		border-color: var(--ctp-mantle);
+		background-color: var(--ctp-mantle);
+	}
+	.x-tab.x-tab-disabled.x-tab-default .x-tab-icon-el {
+		color: var(--ctp-text);
+	}
+	.x-tab-bar-default {
+		background-color: var(--ctp-mantle);
+	}
+	.x-box-scroller-tab-bar-default {
+		color: var(--ctp-on-accent);
+	}
+	.x-tab-bar-plain .x-box-scroller-tab-bar-default {
+		color: var(--ctp-overlay0);
+	}
+	.x-box-scroller-tab-bar-default {
+		background-color: var(--ctp-mantle);
+	}
+	.x-tree-icon {
+		color: var(--ctp-overlay0);
+	}
+	.x-multiselector-remove {
+		color: var(--ctp-overlay0);
+	}
+	.x-toast-light .x-window-header {
+		background-color: var(--ctp-base);
+	}
+	.x-toast-light .x-tool-img {
+		background-color: var(--ctp-base);
+	}
+	.x-toast-light .x-window-body {
+		border: 0px solid var(--ctp-mantle);
+	}
+	.x-btn-inner-plain-toolbar-small {
+		color: var(--ctp-subtext0);
+	}
+	.x-btn-icon-el-plain-toolbar-small {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-plain-toolbar-small {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-plain-toolbar-small.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-plain-toolbar-small {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-plain-toolbar-small {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-plain-toolbar-small,
+	.x-btn.x-btn-pressed.x-btn-plain-toolbar-small {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-small,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-small {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn-over .x-btn-plain-toolbar-small-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-mc,
+	.x-btn.x-btn-pressed .x-btn-plain-toolbar-small-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-small-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-plain-toolbar-small:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-plain-toolbar-small:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-small:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-small:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-btn-inner-plain-toolbar-medium {
+		color: var(--ctp-subtext0);
+	}
+	.x-btn-icon-el-plain-toolbar-medium {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-plain-toolbar-medium {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-plain-toolbar-medium.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-plain-toolbar-medium {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-plain-toolbar-medium {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-plain-toolbar-medium,
+	.x-btn.x-btn-pressed.x-btn-plain-toolbar-medium {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-medium,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-medium {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn-over .x-btn-plain-toolbar-medium-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-mc,
+	.x-btn.x-btn-pressed .x-btn-plain-toolbar-medium-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-medium-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-plain-toolbar-medium:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-plain-toolbar-medium:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-medium:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-medium:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-btn-inner-plain-toolbar-large {
+		color: var(--ctp-subtext0);
+	}
+	.x-btn-icon-el-plain-toolbar-large {
+		color: var(--ctp-subtext0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-plain-toolbar-large {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-keyboard-mode .x-btn-plain-toolbar-large.x-arrow-focus .x-btn-arrow-el {
+		border: 1px solid var(--ctp-accent);
+	}
+	.x-btn-over.x-btn-plain-toolbar-large {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over.x-btn-plain-toolbar-large {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn.x-btn-menu-active.x-btn-plain-toolbar-large,
+	.x-btn.x-btn-pressed.x-btn-plain-toolbar-large {
+		border-color: var(--ctp-surface1);
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-large,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-large {
+		box-shadow: var(--ctp-accent) 0 1px 0px 0 inset, var(--ctp-accent) 0 -1px 0px 0 inset, var(--ctp-accent) -1px 0 0px 0 inset, var(--ctp-accent) 1px 0 0px 0 inset;
+	}
+	.x-btn-over .x-btn-plain-toolbar-large-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-mc {
+		background-color: var(--ctp-surface0);
+	}
+	.x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-mc,
+	.x-btn.x-btn-pressed .x-btn-plain-toolbar-large-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-mc,
+	.x-keyboard-mode .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-large-mc {
+		background-color: var(--ctp-surface1);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-plain-toolbar-large:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-plain-toolbar-large:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-large:after,
+	.x-keyboard-mode .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-large:after {
+		border-color: var(--ctp-accent);
+	}
+	.x-btn-plain-toolbar-small-disabled .x-btn-icon-el,
+	.x-btn-plain-toolbar-medium-disabled .x-btn-icon-el,
+	.x-btn-plain-toolbar-large-disabled .x-btn-icon-el {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-light {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-light.x-masked {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-header-light {
+		border: 1px solid var(--ctp-mantle);
+	}
+	.x-panel-header-light .x-tool-tool-el {
+		color: var(--ctp-text);
+	}
+	.x-panel-header-light .x-tool-tool-el {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-title-light {
+		color: var(--ctp-text);
+	}
+	.x-keyboard-mode .x-panel-header-title-light.x-title-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-title-light.x-title-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-header-title-light > .x-title-icon-wrap-light > .x-title-icon-light {
+		color: var(--ctp-text);
+	}
+	.x-panel-body-light {
+		background: var(--ctp-base);
+		border-color: var(--ctp-surface1);
+		color: var(--ctp-text);
+	}
+	.x-panel-header-light {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-vertical {
+		background-color: var(--ctp-base);
+	}
+	.x-keyboard-mode .x-panel-header-light .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-light .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-light-outer-border-l {
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-b {
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-bl {
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-r {
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-rl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-rb {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-rbl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-t {
+		border-top-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-tl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-tb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-tbl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-tr {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-trl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-trb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-outer-border-trbl {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-light-framed.x-masked {
+		border-color: var(--ctp-mantle);
+	}
+	.x-panel-header-light-framed {
+		border: 1px solid var(--ctp-mantle);
+	}
+	.x-panel-header-light-framed .x-tool-tool-el {
+		color: var(--ctp-text);
+	}
+	.x-panel-header-light-framed .x-tool-tool-el {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-title-light-framed {
+		color: var(--ctp-text);
+	}
+	.x-keyboard-mode .x-panel-header-title-light-framed.x-title-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-title-light-framed.x-title-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed > .x-title-icon-light-framed {
+		color: var(--ctp-text);
+	}
+	.x-panel-body-light-framed {
+		background: var(--ctp-base);
+		border-color: var(--ctp-surface1);
+		color: var(--ctp-text);
+	}
+	.x-panel-light-framed {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-light-framed-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-top {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-top-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-right {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-right-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-bottom {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-bottom-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-left {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-left-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-top {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-top-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-right {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-right-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-bottom {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-bottom-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-left {
+		background-color: var(--ctp-base);
+	}
+	.x-panel-header-light-framed-collapsed-left-mc {
+		background-color: var(--ctp-base);
+	}
+	.x-keyboard-mode .x-panel-header-light-framed .x-tool-focus {
+		outline: 1px solid var(--ctp-accent-hover);
+	}
+	.x-ie10p .x-keyboard-mode .x-panel-header-light-framed .x-tool-focus:after {
+		border: 1px solid var(--ctp-accent-hover);
+	}
+	.x-panel-light-framed-outer-border-l {
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-b {
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-bl {
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-r {
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-rl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-rb {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-rbl {
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-t {
+		border-top-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-tl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-tb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-tbl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-tr {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-trl {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-left-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-trb {
+		border-top-color: var(--ctp-mantle) !important;
+		border-right-color: var(--ctp-mantle) !important;
+		border-bottom-color: var(--ctp-mantle) !important;
+	}
+	.x-panel-light-framed-outer-border-trbl {
+		border-color: var(--ctp-mantle) !important;
+	}
+	.x-form-file-wrap .x-form-trigger-wrap .x-form-text {
+		border-color: var(--ctp-surface1);
+	}
+	.x-form-file-wrap .x-form-trigger-wrap .x-form-text.x-form-invalid-field {
+		border-color: var(--ctp-red);
+	}
+	.x-html-editor-container {
+		border-color: var(--ctp-surface1);
+	}
+	.x-grid-header-ct {
+		border: 1px solid var(--ctp-surface1);
+	}
+	.x-column-header-trigger {
+		background-color: color-mix(in srgb, var(--ctp-accent) 10%, var(--ctp-base));
+		border-left: 1px solid var(--ctp-surface1);
+	}
+	.x-column-header-last .x-column-header-over .x-column-header-trigger {
+		border-right: 1px solid var(--ctp-surface1);
+	}
+	.x-legend {
+		background: var(--ctp-base);
+	}
+	.x-legend-horizontal .x-legend-item {
+		border-right: 1px solid var(--ctp-surface1);
+		border-top: 1px solid var(--ctp-surface1);
+		border-bottom: 1px solid var(--ctp-surface1);
+	}
+	.x-legend-horizontal .x-legend-item:first-child {
+		border-left: 1px solid var(--ctp-surface1);
+	}
+	.x-legend-vertical .x-legend-item {
+		border-left: 1px solid var(--ctp-surface1);
+		border-right: 1px solid var(--ctp-surface1);
+		border-bottom: 1px solid var(--ctp-surface1);
+	}
+	.x-legend-vertical .x-legend-item:first-child {
+		border-top: 1px solid var(--ctp-surface1);
+	}
+	.x-legend-item {
+		color: var(--ctp-text);
+		background: color-mix(in srgb, var(--ctp-base) 0%, transparent);
+	}
+	.x-legend-item-marker {
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 30%, transparent) 0 1px 0, color-mix(in srgb, var(--ctp-crust) 40%, transparent) 0 1px 0 inset;
+	}
+	.x-legend-container {
+		background: var(--ctp-base);
+		box-shadow: color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 0 1px 1px;
+	}
+	.x-btn-inner-default-toolbar-small {
+		color: var(--ctp-text);
+	}
+	.x-menu-header {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-accent);
+	}
+	.x-css-shadow {
+		box-shadow: var(--ctp-overlay0) 0px -1px 15px !important;
+	}
+	.x-tree-icon-parent,
+	.x-tree-icon-parent-expanded,
+	.x-tree-icon-leaf {
+		color: var(--ctp-subtext1);
+	}
+	.x-tree-icon-custom {
+		color: var(--ctp-subtext1);
+	}
+	.x-grid-icon-custom {
+		color: var(--ctp-subtext1);
+	}
+	.x-tree-icon-custom.running,
+	.x-grid-icon-custom.running {
+		color: var(--ctp-text);
+	}
+	.x-tree-icon-custom.stopped,
+	.x-grid-icon-custom.stopped,
+	.x-tree-icon-custom.offline,
+	.x-grid-icon-custom.offline {
+		color: var(--ctp-overlay0);
+	}
+	.x-tree-icon-custom:after,
+	.x-grid-icon-custom:after {
+		text-shadow: -1px 0px 2px var(--ctp-on-accent);
+	}
+	.x-tree-icon-custom.online:after,
+	.x-grid-icon-custom.online:after {
+		color: var(--ctp-green);
+	}
+	.x-tree-icon-custom.unknown:after,
+	.x-grid-icon-custom.unknown:after {
+		color: var(--ctp-overlay2);
+	}
+	.x-tree-icon-custom.running:after,
+	.x-grid-icon-custom.running:after {
+		color: var(--ctp-green);
+	}
+	.x-tree-icon-custom.paused:after,
+	.x-grid-icon-custom.paused:after {
+		color: var(--ctp-peach);
+	}
+	.x-tree-icon-custom.suspended:after,
+	.x-grid-icon-custom.suspended:after {
+		color: var(--ctp-peach);
+	}
+	.x-tree-icon-custom.locked:after,
+	.x-grid-icon-custom.locked:after {
+		color: var(--ctp-text);
+	}
+	.x-tree-icon-custom.lock-backup:after,
+	.x-grid-icon-custom.lock-backup:after {
+		color: var(--ctp-text);
+	}
+	.x-tree-icon-custom.lock-migrate:after,
+	.x-grid-icon-custom.lock-migrate:after {
+		color: var(--ctp-text);
+	}
+	.x-tree-icon-custom.lock-suspending:after,
+	.x-grid-icon-custom.lock-suspending:after {
+		color: var(--ctp-peach);
+	}
+	.x-tree-icon-custom.lock-suspended:after,
+	.x-grid-icon-custom.lock-suspended:after {
+		color: var(--ctp-text);
+	}
+	.x-tree-icon-custom.ha-maintenance:after,
+	.x-grid-icon-custom.ha-maintenance:after {
+		color: var(--ctp-accent);
+	}
+	.x-tree-icon-custom.pending:after,
+	.x-grid-icon-custom.pending:after,
+	.x-tree-icon-custom.io-error:after,
+	.x-grid-icon-custom.io-error:after,
+	.x-tree-icon-custom.internal-error:after,
+	.x-grid-icon-custom.internal-error:after,
+	.x-tree-icon-custom.guest-panicked:after,
+	.x-grid-icon-custom.guest-panicked:after {
+		color: var(--ctp-yellow);
+	}
+	.x-tree-icon-custom.error:after,
+	.x-grid-icon-custom.error:after,
+	.x-tree-icon-custom.offline:after,
+	.x-grid-icon-custom.offline:after,
+	.x-tree-icon-custom.ha-error:after,
+	.x-grid-icon-custom.ha-error:after {
+		color: var(--ctp-red);
+	}
+	.x-tree-icon-custom.lxc:after,
+	.x-grid-icon-custom.lxc:after {
+		background: var(--ctp-base);
+	}
+	.x-treelist-item-icon.lxc:after {
+		background: var(--ctp-base);
+	}
+	.x-tree-icon-custom.qemu:after,
+	.x-grid-icon-custom.qemu:after {
+		background: var(--ctp-base);
+	}
+	.x-treelist-item-over .lxc:after,
+	.x-grid-item-over .qemu:after,
+	.x-grid-item-over .lxc:after {
+		background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+		text-shadow: -1px 0px 2px color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+	}
+	.x-treelist-item-selected .lxc:after,
+	.x-grid-item-selected .qemu:after,
+	.x-grid-item-selected .lxc:after {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		text-shadow: -1px 0px 2px color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+	}
+	.x-button-reset:after {
+		text-shadow: 0 0 2px var(--ctp-on-accent);
+	}
+	.proxmox-inline-button .x-btn-inner {
+		color: var(--ctp-text);
+	}
+	.x-progress.critical .x-progress-bar {
+		background-color: var(--ctp-red);
+	}
+	.x-progress.warning .x-progress-bar {
+		background-color: var(--ctp-yellow);
+	}
+	.x-treelist-pve-nav {
+		background-color: var(--ctp-mantle);
+	}
+	.x-treelist-item-icon {
+		color: var(--ctp-text);
+	}
+	.x-treelist-item-text {
+		color: var(--ctp-text);
+	}
+	.x-treelist-row-over > * > .x-treelist-item-icon,
+	.x-treelist-row-over > * > .x-treelist-item-text {
+		color: var(--ctp-text);
+	}
+	div.monitor {
+		border: var(--ctp-surface1) solid 1px;
+	}
+	table.osds td {
+		border-right: 1px solid var(--ctp-surface1);
+	}
+	table.osds tr {
+		border-bottom: 1px solid var(--ctp-surface1);
+	}
+	.x-grid-filters-filtered-column .x-column-header-text:after {
+		color: var(--ctp-subtext1);
+	}
+	.proxmox-invalid-row {
+		background-color: color-mix(in srgb, var(--ctp-red) 25%, var(--ctp-base));
+	}
+	.pve-toolbar-bg {
+		background-color: var(--ctp-mantle);
+	}
+	.usage-wrapper {
+		border: 1px solid var(--ctp-overlay2);
+	}
+	.usage {
+		background-color: var(--ctp-subtext1);
+	}
+	.install-mask {
+		background-color: var(--ctp-mantle);
+		color: var(--ctp-text);
+	}
+	.pve-edit-tag.editable span {
+		background-color: var(--ctp-base);
+		border: 1px solid var(--ctp-surface2);
+		color: var(--ctp-text);
+	}
+	.pve-ceph-warning-action:hover {
+		box-shadow: inset 0 0 0 2em color-mix(in srgb, var(--ctp-crust) 18%, transparent);
+	}
+	.pve-ceph-status-busy {
+		color: var(--ctp-accent);
+	}
+	.proxmox-tags-full .proxmox-tag-light {
+		color: var(--ctp-on-accent);
+		background-color: var(--ctp-text);
+	}
+	.proxmox-tags-full .proxmox-tag-dark {
+		color: var(--ctp-text);
+		background-color: var(--ctp-surface0);
+	}
+	.x-window-header-default-top .x-mask {
+		background-color: color-mix(in srgb, var(--ctp-mantle) 71%, transparent);
+	}
+	.proxmox-disabled-row,
+	.proxmox-disabled-row td {
+		color: var(--ctp-subtext0);
+	}
+	.proxmox-invalid-row {
+		background-color: color-mix(in srgb, var(--ctp-red) 25%, var(--ctp-base));
+	}
+	.proxmox-warning-row {
+		background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base));
+	}
+	.proxmox-good-row {
+		background-color: var(--ctp-green);
+	}
+	.black {
+		color: var(--ctp-text);
+	}
+	.normal {
+		color: var(--ctp-accent);
+	}
+	.faded {
+		color: var(--ctp-overlay0);
+	}
+	.good {
+		color: var(--ctp-green);
+	}
+	.warning {
+		color: var(--ctp-yellow);
+	}
+	.critical {
+		color: var(--ctp-red);
+	}
+	.info-blue {
+		color: var(--ctp-accent);
+	}
+	.x-progress.critical .x-progress-bar {
+		background-color: var(--ctp-red);
+	}
+	.x-progress.warning .x-progress-bar {
+		background-color: var(--ctp-yellow);
+	}
+	.x-treelist-item-icon {
+		color: var(--ctp-text);
+	}
+	.x-tab-icon-el-default {
+		color: var(--ctp-text);
+	}
+	.x-treelist-pve-nav {
+		background-color: var(--ctp-mantle);
+	}
+	.proxmox-apt-repos .x-grid-group-hd {
+		color: var(--ctp-text);
+		background-color: var(--ctp-mantle);
+	}
+	.proxmox-apt-repos .x-grid-group-title {
+		color: var(--ctp-text);
+	}
+	.pmx-md code {
+		background-color: var(--ctp-mantle);
+	}
+	.pmx-md pre code {
+		border-left: 3px solid var(--ctp-surface1);
+	}
+	.pmx-md blockquote {
+		border-left: 1px solid var(--ctp-overlay2);
+	}
+	.pmx-md tbody td {
+		border-bottom: 1px solid var(--ctp-surface1);
+	}
+	.pmx-md tbody tr:nth-of-type(even) {
+		background-color: var(--ctp-mantle);
+	}
+	.pmx-md tbody tr:last-of-type td {
+		border-bottom: 1px solid var(--ctp-overlay2);
+	}
+	.pmx-md tbody tr:hover td {
+		background-color: var(--ctp-surface1);
+	}
+	.x-action-col-icon:hover:before,
+	.x-action-col-icon:hover:after {
+		text-shadow: 1px 1px 1px var(--ctp-overlay1);
+	}
+	.x-action-col-icon:before {
+		color: var(--ctp-subtext1);
+	}
+	.pmx-journal-prio-0,
+	.pmx-journal-prio-1,
+	.pmx-journal-prio-2 {
+		color: var(--ctp-red);
+	}
+	.pmx-journal-prio-3 {
+		color: var(--ctp-red);
+	}
+	.pmx-journal-prio-4 {
+		color: var(--ctp-peach);
+	}
+	.pmx-journal-prio-7 {
+		color: var(--ctp-subtext0);
+	}
+	.pmx-journal-reboot {
+		color: var(--ctp-subtext0);
+	}
+
+	/* ---- Hand-written ------------------------------------------------------ */
+
+	/* The user menu button in the header gets an inline color per user */
+	a.x-btn-default-small[style*="background-color"] {
+		background-color: var(--ctp-accent) !important;
+		border-color: var(--ctp-accent) !important;
+	}
+
+	/* ---- Generated from Proxmox Dark, active only with that theme --------- */
+
+	@media (prefers-color-scheme: dark) {
+		:root:has(link[href*="theme-proxmox-dark"]) {
+			#pve.dark();
+		}
+	}
+	:root:has(link[href*="theme-proxmox-dark"]:not([media])) {
+		#pve.dark();
+	}
+}
+
+/* Mixins live outside @-moz-document and are called by their full path, so
+	 the variables one call returns cannot leak into the next. */
+#pve {
+	.vars(@flavor) {
+		#lib.palette();
+		#lib.css-variables();
+		color-scheme: if(@flavor = latte, light, dark);
+		--ctp-accent: @accent;
+		--ctp-accent-hover: if(@flavor = latte, darken(@accent, 8%), lighten(@accent, 8%));
+		--ctp-accent-pressed: if(@flavor = latte, darken(@accent, 16%), lighten(@accent, 16%));
+		--ctp-on-accent: if(@flavor = latte, @base, @crust);
+
+		/* Charts and gauges read these */
+		--pwt-panel-background: @base;
+		--pwt-text-color: @text;
+		--pwt-gauge-default: @accent;
+		--pwt-gauge-back: @surface0;
+		--pwt-gauge-warn: @peach;
+		--pwt-gauge-crit: @red;
+		--pwt-chart-primary: @accent;
+		--pwt-chart-grid-stroke: @surface1;
+	}
+
+	.dark() {
+		.x-legend-container {
+			background-color: var(--ctp-surface0);
+		}
+		.x-legend-horizontal .x-legend-item {
+			background-color: var(--ctp-surface0);
+			color: var(--ctp-text);
+			border-top: solid 1px var(--ctp-crust);
+			border-right: solid 1px var(--ctp-crust);
+			border-bottom: solid 1px var(--ctp-crust);
+		}
+		.x-legend-horizontal .x-legend-item:first-child {
+			border-left: solid 1px var(--ctp-crust);
+		}
+		.x-tool .x-mask {
+			background-color: var(--ctp-surface0);
+		}
+		.x-grid-icon-custom.running,
+		.x-tree-icon-custom.running,
+		.x-tree-icon-custom,
+		.fa-database::before,
+		.fa-tags::before,
+		.fa-file-o::before,
+		.fa-building::before,
+		.x-action-col-icon::before,
+		.fa-shield::before,
+		.fa-file-text-o::before,
+		.fa-clock-o::before,
+		.x-tab-icon-el-default,
+		.pve-icon-verify-lettering::after,
+		.x-tree-icon-custom.lock-migrate::after,
+		.x-grid-icon-custom.lock-migrate::after,
+		.x-tree-icon-leaf:not(.x-tree-icon-custom)::before,
+		.x-tree-icon-parent:not(.x-tree-icon-custom)::before,
+		.x-tree-icon-parent-expanded:not(.x-tree-icon-custom)::before,
+		.x-grid-filters-filtered-column .x-column-header-text::after {
+			color: var(--ctp-text);
+		}
+		.pve-itype-icon-cpu .x-grid-cell-inner,
+		.pve-itype-icon-cdrom .x-grid-cell-inner,
+		.pve-itype-icon-memory .x-grid-cell-inner,
+		.pve-itype-icon-pci .x-grid-cell-inner,
+		.pve-itype-icon-serial .x-grid-cell-inner,
+		.pve-itype-icon-die .x-grid-cell-inner,
+		.pmx-itype-icon-processor .x-grid-cell-inner,
+		.pmx-itype-icon-memory .x-grid-cell-inner,
+		.pve-itype-icon-storage .x-grid-cell-inner,
+		.x-tree-node-harddisk .x-grid-cell-inner,
+		.x-grid-tree-node-expanded .x-tree-node-harddisk .x-grid-cell-inner {
+			color: var(--ctp-base);
+		}
+		.x-keyboard-mode .pve-itype-icon-cpu.x-grid-item-focused,
+		.x-keyboard-mode .pve-itype-icon-cdrom.x-grid-item-focused,
+		.x-keyboard-mode .pve-itype-icon-memory.x-grid-item-focused,
+		.x-keyboard-mode .pve-itype-icon-pci.x-grid-item-focused,
+		.x-keyboard-mode .pve-itype-icon-serial.x-grid-item-focused,
+		.x-keyboard-mode .pve-itype-icon-die.x-grid-item-focused,
+		.x-keyboard-mode .pmx-itype-icon-processor.x-grid-item-focused,
+		.x-keyboard-mode .pmx-itype-icon-memory.x-grid-item-focused,
+		.x-keyboard-mode .pve-itype-icon-storage.x-grid-item-focused,
+		.x-keyboard-mode .x-tree-node-harddisk.x-grid-item-focused,
+		.x-keyboard-mode .x-grid-tree-node-expanded .x-tree-node-harddisk.x-grid-item-focused {
+			background-color: var(--ctp-overlay1);
+		}
+		.x-keyboard-mode .pve-itype-icon-cpu.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pve-itype-icon-cdrom.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pve-itype-icon-memory.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pve-itype-icon-pci.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pve-itype-icon-serial.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pve-itype-icon-die.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pmx-itype-icon-processor.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pmx-itype-icon-memory.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .pve-itype-icon-storage.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .x-tree-node-harddisk.x-grid-item-focused .x-grid-cell-inner::before,
+		.x-keyboard-mode .x-grid-tree-node-expanded .x-tree-node-harddisk.x-grid-item-focused .x-grid-cell-inner::before {
+			border-color: var(--ctp-peach);
+		}
+		.x-tree-icon-custom,
+		.x-grid-icon-custom {
+			color: var(--ctp-text);
+		}
+		.x-tree-icon-custom::after,
+		.x-grid-icon-custom::after {
+			color: var(--ctp-text);
+			text-shadow: -1px 0 1px var(--ctp-crust);
+		}
+		.x-tree-icon-custom.stopped,
+		.x-tree-icon-custom.offline,
+		.x-tree-icon-custom.unknown::after,
+		.x-grid-icon-custom.stopped,
+		.x-grid-icon-custom.offline,
+		.x-grid-icon-custom.unknown::after {
+			color: var(--ctp-overlay2);
+		}
+		.x-tree-icon-custom.locked::after,
+		.x-grid-icon-custom.locked::after {
+			color: var(--ctp-text);
+		}
+		.x-tree-icon-custom.lxc::after,
+		.x-tree-icon-custom.qemu::after,
+		.x-grid-icon-custom.lxc::after,
+		.x-grid-icon-custom.qemu::after {
+			background-color: var(--ctp-base);
+			color: var(--ctp-text);
+		}
+		.pmx-tree-icon-custom::after {
+			text-shadow: -1px 0 1px var(--ctp-crust);
+		}
+		.pmx-tree-icon-custom.maintenance::before {
+			color: var(--ctp-overlay2);
+		}
+		.pmx-tree-icon-custom.maintenance::after {
+			color: var(--ctp-text);
+		}
+		.x-treelist-item-icon.lxc::after,
+		.x-treelist-item-icon.qemu::after {
+			background-color: var(--ctp-base);
+			color: var(--ctp-text);
+		}
+		.x-grid-item .x-grid-icon-custom.lxc::after,
+		.x-grid-item .x-grid-icon-custom.qemu::after {
+			background-color: var(--ctp-base);
+		}
+		.x-grid-item-alt .x-grid-icon-custom.lxc::after,
+		.x-grid-item-alt .x-grid-icon-custom.qemu::after {
+			background-color: var(--ctp-mantle);
+		}
+		.x-treelist-item-selected .lxc::after,
+		.x-treelist-item-selected .qemu::after {
+			background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+			text-shadow: -1px 0 1px var(--ctp-accent);
+		}
+		.x-grid-item-over .lxc::after,
+		.x-grid-item-over .qemu::after,
+		.x-treelist-item-over .lxc::after,
+		.x-treelist-item-over .qemu::after,
+		.x-grid-item-selected .lxc::after,
+		.x-grid-item-selected .qemu::after,
+		.x-keyboard-mode .x-grid-item-focused .lxc::after,
+		.x-keyboard-mode .x-grid-item-focused .qemu::after {
+			background-color: var(--ctp-surface2) !important;
+			text-shadow: -1px 0 1px var(--ctp-crust);
+		}
+		.x-action-col-icon:hover::before,
+		.x-action-col-icon:hover::after {
+			text-shadow: -1px 0 1px var(--ctp-crust);
+		}
+		.fa.black {
+			color: var(--ctp-text);
+		}
+		.usage-wrapper {
+			border: 1px solid var(--ctp-overlay1);
+		}
+		.usage {
+			background-color: var(--ctp-text);
+		}
+		.x-btn-default-small {
+			background-color: var(--ctp-accent-hover);
+			border-color: var(--ctp-accent-hover);
+		}
+		.x-btn-default-small.x-btn-over,
+		.x-keyboard-mode .x-btn-default-small.x-btn-focus {
+			background-color: var(--ctp-accent-hover);
+			border-color: var(--ctp-accent-hover);
+		}
+		.x-btn-default-small.x-btn.x-btn-disabled {
+			background-color: var(--ctp-accent-hover);
+		}
+		.x-btn-default-small.x-btn.x-btn-pressed {
+			background-color: var(--ctp-accent-pressed);
+			border-color: var(--ctp-accent-hover);
+		}
+		.x-btn-default-toolbar-small {
+			background-color: var(--ctp-surface1);
+			border-color: var(--ctp-surface1);
+		}
+		.x-btn-default-toolbar-small .x-btn-inner-default-toolbar-small {
+			color: var(--ctp-text);
+		}
+		.x-btn-default-toolbar-small .x-btn-icon-el-default-toolbar-small {
+			color: var(--ctp-text);
+		}
+		.x-btn-default-toolbar-small.x-btn-over,
+		.x-keyboard-mode .x-btn-default-toolbar-small.x-btn-focus {
+			background-color: var(--ctp-surface2);
+			border-color: var(--ctp-surface1);
+		}
+		.x-btn-default-toolbar-small.x-btn.x-btn-disabled {
+			background-color: var(--ctp-surface1);
+		}
+		.x-btn-default-toolbar-small.x-btn.x-btn-menu-active,
+		.x-btn-default-toolbar-small.x-btn.x-btn-pressed {
+			background-color: var(--ctp-accent);
+			border-color: var(--ctp-accent);
+		}
+		.x-form-trigger-default {
+			background-color: var(--ctp-surface0);
+		}
+		.x-boundlist {
+			background-color: var(--ctp-surface0);
+			border-color: var(--ctp-surface0);
+		}
+		.x-boundlist-item {
+			background-color: var(--ctp-surface0);
+			border-color: var(--ctp-surface0);
+			color: var(--ctp-text);
+		}
+		.x-boundlist-selected {
+			background-color: var(--ctp-surface1);
+		}
+		.x-boundlist-item-over {
+			background-color: var(--ctp-surface2);
+		}
+		.x-form-display-field-default {
+			color: var(--ctp-text);
+		}
+		.x-form-text-default {
+			background-color: var(--ctp-surface0);
+			color: var(--ctp-text);
+		}
+		.x-form-trigger-wrap-default {
+			border-color: var(--ctp-surface0);
+		}
+		.x-form-trigger-wrap-default.x-form-trigger-wrap-focus {
+			border-color: var(--ctp-accent);
+		}
+		.x-form-item-label-default {
+			color: var(--ctp-text);
+		}
+		.x-form-spinner-default {
+			background-color: var(--ctp-surface0);
+		}
+		.x-form-cb-label-default {
+			color: var(--ctp-text);
+		}
+		.x-fieldset-default {
+			border-color: var(--ctp-surface1);
+		}
+		.x-column-header {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-item,
+		.x-column-header-default,
+		.x-grid-cell-row-numberer {
+			color: var(--ctp-text);
+			background-color: var(--ctp-base);
+		}
+		.x-column-header-trigger {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-cell-special {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-group-hd {
+			background-color: var(--ctp-base);
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-group-title {
+			color: var(--ctp-text);
+		}
+		.x-grid-header-ct {
+			border: solid 1px var(--ctp-surface0);
+			background-color: var(--ctp-surface0);
+		}
+		.x-grid-item-alt {
+			background-color: var(--ctp-mantle);
+		}
+		.x-grid-with-row-lines .x-grid-item {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-with-row-lines .x-grid-item:last-child {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-with-row-lines .x-grid-item:first-child {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-with-row-lines .x-grid-item.x-grid-item-over,
+		.x-grid-with-row-lines .x-grid-item.x-grid-item-selected {
+			background-color: var(--ctp-surface2);
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-with-row-lines .x-grid-item-selected+.x-grid-item,
+		.x-grid-with-row-lines .x-grid-item-over+.x-grid-item {
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-item-over,
+		.x-grid-item-selected {
+			background-color: var(--ctp-surface2);
+		}
+		.x-column-header-over,
+		.x-column-header-open,
+		.x-column-header-last .x-column-header-over .x-column-header-trigger {
+			background-color: var(--ctp-surface1);
+		}
+		.x-column-header-sort-ASC,
+		.x-column-header-sort-DESC {
+			background-color: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+		}
+		.x-grid-row-summary .x-grid-cell,
+		.x-grid-row-summary .x-grid-rowwrap,
+		.x-grid-row-summary .x-grid-cell-rowbody {
+			background-color: var(--ctp-base) !important;
+			border-color: var(--ctp-surface1);
+		}
+		.x-grid-with-col-lines .x-grid-cell,
+		.x-grid-with-col-lines .x-grid-item-over .x-grid-cell,
+		.x-grid-with-col-lines .x-grid-item-selected .x-grid-cell {
+			border-color: var(--ctp-surface1);
+		}
+		.x-dd-drag-proxy {
+			background-color: var(--ctp-mantle);
+			border-color: var(--ctp-surface1);
+			color: var(--ctp-text);
+		}
+		.x-keyboard-mode .x-grid-item-focused {
+			background-color: var(--ctp-surface2);
+			color: var(--ctp-text);
+		}
+		.x-keyboard-mode .x-grid-item-focused .x-grid-cell-inner::before {
+			border-color: var(--ctp-accent);
+		}
+		.x-keyboard-mode .x-column-header.x-column-header-focus {
+			color: var(--ctp-text);
+		}
+		.x-keyboard-mode .x-column-header.x-column-header-focus .x-column-header-inner::after {
+			border-color: var(--ctp-accent);
+		}
+		.x-keyboard-mode .proxmox-invalid-row .x-grid-item-focused {
+			background-color: color-mix(in srgb, var(--ctp-red) 20%, var(--ctp-base));
+		}
+		.x-grid-empty {
+			background-color: var(--ctp-base);
+			color: var(--ctp-text);
+		}
+		.x-menu-default {
+			border-color: var(--ctp-surface0);
+		}
+		.x-menu-body-default {
+			background-color: var(--ctp-surface0);
+		}
+		.x-menu-header {
+			background-color: var(--ctp-accent-hover);
+		}
+		.x-menu-item-default.x-menu-item-separator {
+			background-color: var(--ctp-surface0);
+			border-color: var(--ctp-surface1);
+		}
+		.x-menu-item-default.x-menu-item-focus,
+		.x-menu-item-default.x-menu-item-active {
+			background-color: var(--ctp-surface2);
+			color: var(--ctp-text);
+		}
+		.x-menu-item-text-default {
+			color: var(--ctp-text);
+		}
+		.x-menu-item-icon-default {
+			color: var(--ctp-text);
+		}
+		.x-menu-icon-separator-default {
+			background-color: var(--ctp-surface0);
+			border-color: var(--ctp-surface1);
+		}
+		.x-panel-header-default {
+			background-color: var(--ctp-surface0);
+		}
+		.x-panel-header-title-default {
+			color: var(--ctp-accent);
+		}
+		.x-panel-body-default {
+			background-color: var(--ctp-base);
+			border-color: var(--ctp-surface1);
+			color: var(--ctp-text);
+		}
+		div[id^="pveResourceTree-"][id$="-body"] {
+			border-color: var(--ctp-surface0);
+		}
+		.x-progress-default {
+			background-color: var(--ctp-surface0);
+		}
+		.x-progress-default .x-progress-bar-default {
+			background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		}
+		.x-progress-default .x-progress-text {
+			color: var(--ctp-text);
+		}
+		.x-splitter {
+			background-color: var(--ctp-mantle);
+		}
+		.x-splitter-horizontal {
+			background-color: var(--ctp-crust);
+		}
+		.x-keyboard-mode .x-splitter-focus::after {
+			border-color: var(--ctp-accent);
+		}
+		.x-tab-bar-default {
+			background-color: var(--ctp-base);
+		}
+		.x-tab-default.x-tab-over {
+			background-color: var(--ctp-accent-pressed);
+			border-color: var(--ctp-accent-pressed);
+		}
+		.x-tab-default.x-tab.x-tab-active {
+			background-color: var(--ctp-accent);
+			border-color: var(--ctp-accent);
+		}
+		.x-tab-default.x-tab.x-tab-disabled {
+			background-color: var(--ctp-base);
+			color: var(--ctp-text);
+		}
+		.x-keyboard-mode .x-tab-default.x-tab-focus,
+		.x-keyboard-mode .x-tab-default.x-tab-focus.x-tab-over,
+		.x-keyboard-mode .x-tab-default.x-tab-focus.x-tab-active {
+			background-color: var(--ctp-accent);
+			border-color: var(--ctp-accent);
+		}
+		.x-tab-default-top {
+			background-color: var(--ctp-base);
+			border-color: var(--ctp-surface0);
+		}
+		.x-tab-inner-default {
+			color: var(--ctp-text);
+		}
+		.x-tip-default {
+			background-color: var(--ctp-mantle);
+			border-color: var(--ctp-surface1);
+		}
+		.x-tip-body-default {
+			color: var(--ctp-text);
+		}
+		.x-tip-form-invalid {
+			background-color: var(--ctp-surface0);
+			border-color: var(--ctp-surface1);
+		}
+		.x-tip-body-form-invalid {
+			color: var(--ctp-text);
+		}
+		.x-toolbar {
+			background-color: var(--ctp-base);
+		}
+		.x-toolbar-default {
+			background-color: var(--ctp-base);
+			border-color: var(--ctp-surface1);
+		}
+		.x-toolbar-default.x-docked-top {
+			border-color: var(--ctp-surface1);
+		}
+		.x-toolbar-default .x-toolbar-separator {
+			border-color: var(--ctp-surface1);
+		}
+		.x-toolbar-text-default {
+			color: var(--ctp-text);
+		}
+		.x-treelist-item {
+			background-color: var(--ctp-base);
+		}
+		.x-treelist-item-text,
+		.x-treelist-item-icon,
+		.x-treelist-row-over .x-treelist-item-icon,
+		.x-treelist-row-over .x-treelist-item-text {
+			color: var(--ctp-text);
+		}
+		.x-treelist-item-selected>.x-treelist-row {
+			background-color: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		}
+		.x-treelist-row-over {
+			background-color: var(--ctp-surface2);
+		}
+		.x-treelist-pve-nav {
+			background-color: var(--ctp-base);
+			border-color: var(--ctp-surface1);
+		}
+		.x-window-default {
+			background-color: var(--ctp-mantle);
+		}
+		.x-window-header-default {
+			background-color: var(--ctp-base);
+		}
+		.x-window-header-default .x-mask {
+			background-color: color-mix(in srgb, var(--ctp-base) 70%, transparent);
+		}
+		.x-window-header-title-default {
+			color: var(--ctp-accent);
+		}
+		.x-window-body-default {
+			background-color: var(--ctp-base);
+			border-color: var(--ctp-surface1);
+			color: var(--ctp-text);
+		}
+		.x-window-ghost {
+			background-color: var(--ctp-base);
+		}
+		.x-message-box .x-window-body {
+			background-color: var(--ctp-surface0);
+		}
+		.x-body {
+			color: var(--ctp-text);
+			background-color: var(--ctp-mantle);
+		}
+		&.x-viewport>.x-body {
+			background-color: var(--ctp-mantle);
+		}
+		body.x-border-layout-ct,
+		div.x-border-layout-ct {
+			background-color: var(--ctp-mantle);
+		}
+		.x-mask {
+			background-color: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+		}
+		.x-css-shadow {
+			box-shadow: var(--ctp-crust) 0 -1px 15px 5px !important;
+		}
+		.x-fieldset-header-default>.x-fieldset-header-text {
+			color: var(--ctp-text);
+		}
+		.proxmox-invalid-row {
+			background-color: color-mix(in srgb, var(--ctp-red) 20%, var(--ctp-base));
+		}
+		.proxmox-warning-row {
+			background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base));
+		}
+		.proxmox-disabled-row td {
+			color: var(--ctp-overlay2);
+		}
+		.pmx-hint {
+			background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base));
+		}
+		.pmx-hint a {
+			color: var(--ctp-accent);
+		}
+		.pmx-hint a:active {
+			color: var(--ctp-accent);
+		}
+		.pmx-journal-prio-0,
+		.pmx-journal-prio-1,
+		.pmx-journal-prio-2,
+		.pmx-journal-prio-3 {
+			color: var(--ctp-red);
+		}
+		.pmx-journal-prio-4 {
+			color: var(--ctp-peach);
+		}
+		.pmx-journal-prio-7,
+		.pmx-journal-reboot {
+			color: var(--ctp-subtext0);
+		}
+		.proxmox-inline-button {
+			background-color: var(--ctp-overlay1);
+			border-color: var(--ctp-overlay1);
+			color: var(--ctp-base);
+		}
+		.proxmox-inline-button.x-btn-over,
+		.proxmox-inline-button.x-btn.x-btn-pressed.x-btn-default-toolbar-small,
+		.x-keyboard-mode .proxmox-inline-button.x-btn-default-toolbar-small.x-btn-focus {
+			background-color: var(--ctp-subtext0);
+			border-color: var(--ctp-overlay1);
+		}
+		.proxmox-inline-button .x-btn-inner,
+		.proxmox-inline-button .x-btn-icon-el {
+			color: var(--ctp-base);
+		}
+		.x-grid-row-loading,
+		.x-treelist-item-loading .x-treelist-item-icon,
+		.x-treelist-nav .x-treelist-item-loading .x-treelist-item-icon,
+		.x-mask-msg-text,
+		.x-grid-tree-loading .x-tree-icon {
+			color: var(--ctp-base);
+		}
+		.x-keyboard-mode .x-grid-item-focused.x-grid-row-loading {
+			background-color: var(--ctp-overlay1);
+		}
+		.x-keyboard-mode .x-grid-item-focused.x-grid-row-loading .x-grid-cell-inner::before {
+			border-color: var(--ctp-peach) !important;
+		}
+		.x-mask-msg {
+			background-color: var(--ctp-surface0);
+			border: solid 1px var(--ctp-surface1);
+		}
+		.pmx-md code {
+			background-color: var(--ctp-mantle);
+		}
+		.pmx-md pre code {
+			border-color: var(--ctp-surface1);
+		}
+		.pmx-md tbody tr td {
+			border-color: var(--ctp-surface1);
+		}
+		.pmx-md tbody tr:nth-of-type(2n) {
+			background-color: var(--ctp-mantle);
+		}
+		.pmx-md tbody tr:hover td {
+			background-color: var(--ctp-surface1);
+		}
+		.pmx-md a {
+			color: var(--ctp-accent);
+		}
+		.pmx-md a:active {
+			color: var(--ctp-accent);
+		}
+		.proxmox-apt-repos .x-grid-group-hd {
+			background-color: var(--ctp-mantle);
+			border-color: var(--ctp-surface1);
+		}
+		.proxmox-apt-repos .x-grid-group-title {
+			color: var(--ctp-text);
+		}
+		.info-blue {
+			color: var(--ctp-accent) !important;
+		}
+		.critical {
+			color: var(--ctp-red) !important;
+		}
+		tr.blocked,
+		.x-keyboard-mode tr.blocked .x-grid-item-focused {
+			background-color: color-mix(in srgb, var(--ctp-red) 20%, var(--ctp-base));
+		}
+		tr.quarantine,
+		.x-keyboard-mode tr.quarantine .x-grid-item-focused {
+			background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base));
+		}
+		tr.bounced,
+		.x-keyboard-mode tr.bounced .x-grid-item-focused {
+			background-color: color-mix(in srgb, var(--ctp-peach) 20%, var(--ctp-base));
+		}
+		table.osds tr {
+			border-color: var(--ctp-surface1);
+		}
+		table.osds td {
+			border-color: var(--ctp-surface1);
+		}
+		.install-mask {
+			background-color: var(--ctp-base);
+			color: var(--ctp-text);
+		}
+		.x-window.install-mask {
+			box-shadow: var(--ctp-crust) 0 -1px 5px 1px !important;
+		}
+		div.monitor {
+			border-color: var(--ctp-surface1);
+		}
+		.pve-edit-tag.editable span {
+			background-color: var(--ctp-surface0);
+			color: var(--ctp-text);
+			border-color: var(--ctp-surface1);
+		}
+		.proxmox-tags-full .proxmox-tag-light,
+		.proxmox-tags-full .proxmox-tag-dark,
+		.proxmox-tags-circle .proxmox-tag-light,
+		.proxmox-tags-circle .proxmox-tag-dark {
+			outline: 1px solid color-mix(in srgb, var(--ctp-surface0) 30%, transparent);
+		}
+		.x-datepicker,
+		.x-datepicker-column-header,
+		.x-monthpicker {
+			background-color: var(--ctp-base);
+			color: var(--ctp-text);
+		}
+		.x-datepicker-month .x-btn-over.x-btn-default-small {
+			background-color: var(--ctp-surface2);
+		}
+		.x-monthpicker-months {
+			border-color: var(--ctp-surface1);
+		}
+		.x-datepicker-header {
+			background-color: var(--ctp-mantle);
+		}
+		.x-datepicker-date,
+		.x-monthpicker-item-inner {
+			color: var(--ctp-text);
+		}
+		.x-datepicker-prevday .x-datepicker-date,
+		.x-datepicker-nextday .x-datepicker-date {
+			color: var(--ctp-overlay2);
+		}
+		.x-datepicker-footer,
+		.x-monthpicker-buttons {
+			background-color: var(--ctp-mantle);
+		}
+		.x-datepicker-selected div.x-datepicker-date,
+		.x-monthpicker-item a.x-monthpicker-selected,
+		a.x-monthpicker-item-inner:hover,
+		div.x-datepicker-date:hover {
+			background-color: var(--ctp-surface2);
+			color: var(--ctp-text);
+		}
+		.x-datepicker-disabled .x-datepicker-date {
+			background-color: var(--ctp-mantle);
+		}
+		.x-datepicker-disabled div.x-datepicker-date:hover {
+			background-color: var(--ctp-base);
+		}
+	}
+}
