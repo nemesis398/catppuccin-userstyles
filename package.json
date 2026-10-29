@@ -1,0 +1,12 @@
+{
+  "name": "catppuccin-userstyles",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check.mjs"
+  },
+  "devDependencies": {
+    "less": "4.9.1"
+  }
+}
