@@ -1,0 +1,2347 @@
+/* ==UserStyle==
+@name Ansible Docs Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/ansible-docs
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/ansible-docs
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/ansible-docs/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for docs.ansible.com: landing pages, Sphinx docs and MkDocs docs.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * docs.ansible.com runs three different site engines under one domain, so
+ * this style has three parts. Each part only matches its own engine, keyed
+ * on markup that engine always emits:
+ *
+ *   1. Sphinx docs (package docs, collections, most /projects/ pages)
+ *      Read the Docs theme plus sphinx_ansible_theme and antsibull.
+ *      Marker: <body class="wy-body-for-nav">. Follows the OS.
+ *   2. Landing pages (/, users.html, ecosystem.html, ...)
+ *      Nikola with Bootstrap 4. Marker: <body id="top"> with
+ *      #content.global-container as a direct child. Follows the OS.
+ *   3. MkDocs Material docs (dev-tools, lint, navigator, molecule, ...)
+ *      These have their own light/dark toggle, and the flavor follows it:
+ *      the light flavor for "default", the dark flavor for "slate".
+ *
+ * Part 1 is generated. Every color rule in sphinx_rtd_theme 3.1.0 and
+ * sphinx_ansible_theme (main, 2026-09-07) is repeated with its selector
+ * scoped to the marker and its color mapped onto the palette, so the
+ * overrides always win on specificity. Code colors follow the Catppuccin
+ * Pygments style.
+ *
+ * The rules only read --ctp-* variables. They are set per flavor on :root
+ * for parts 1 and 2 and on the MkDocs body for part 3, and a color-mix() in
+ * a rule resolves on the element it applies to, so every tint follows the
+ * flavor that is showing.
+ */
+
+/* Mixins live outside @-moz-document and are called by their full path, so
+	 the variables one call returns cannot leak into the next. */
+#ansible {
+	.vars(@flavor) {
+		#lib.palette();
+		#lib.css-variables();
+		--ctp-scheme: if(@flavor = latte, light, dark);
+		--ctp-blue-tint: mix(@blue, @base, 12%);
+		--ctp-peach-tint: mix(@peach, @base, 12%);
+		--ctp-red-tint: mix(@red, @base, 12%);
+		--ctp-teal-tint: mix(@teal, @base, 12%);
+		--ctp-green-tint: mix(@green, @base, 12%);
+		--ctp-yellow-tint: mix(@yellow, @base, 12%);
+		--ctp-accent: @accent;
+		--ctp-accent-hover: mix(@accent, @text, 70%);
+		--ctp-logo-filter: if(@flavor = latte, none, ~"invert(1) hue-rotate(180deg) brightness(1.1)");
+
+		/* Read the Docs addons (flyout, search, notifications) on every page */
+		--readthedocs-flyout-background-color: var(--ctp-crust);
+		--readthedocs-flyout-color: var(--ctp-overlay2);
+		--readthedocs-flyout-item-link-color: var(--ctp-subtext1);
+		--readthedocs-flyout-link-color: var(--ctp-accent);
+		--readthedocs-flyout-section-heading-color: var(--ctp-overlay2);
+		--readthedocs-flyout-current-version-color: var(--ctp-green);
+		--readthedocs-flyout-divider-color: var(--ctp-surface0);
+		--readthedocs-search-color: var(--ctp-text);
+		--readthedocs-search-backdrop-color: fade(@crust, 60%);
+		--readthedocs-search-content-background-color: var(--ctp-base);
+		--readthedocs-search-content-border-color: var(--ctp-surface1);
+		--readthedocs-search-input-background-color: var(--ctp-mantle);
+		--readthedocs-search-filters-border-color: var(--ctp-surface1);
+		--readthedocs-search-link-color: var(--ctp-accent);
+		--readthedocs-search-result-color: var(--ctp-subtext1);
+		--readthedocs-search-result-heading-color: var(--ctp-accent);
+		--readthedocs-search-result-subheading-color: var(--ctp-text);
+		--readthedocs-search-result-icon-color: var(--ctp-overlay1);
+		--readthedocs-search-result-highlight-color: var(--ctp-yellow);
+		--readthedocs-search-result-background-color: var(--ctp-base);
+		--readthedocs-search-result-active-background-color: var(--ctp-surface0);
+		--readthedocs-search-result-border-color: var(--ctp-surface0);
+		--readthedocs-search-footer-background-color: var(--ctp-mantle);
+		--readthedocs-search-footer-color: var(--ctp-overlay2);
+		--readthedocs-search-footer-code-background-color: var(--ctp-surface0);
+		--readthedocs-search-footer-code-border-color: var(--ctp-surface1);
+		--readthedocs-search-badge-color: var(--ctp-text);
+		--readthedocs-search-badge-background-color: var(--ctp-surface1);
+		--readthedocs-notification-color: var(--ctp-text);
+		--readthedocs-notification-background-color: var(--ctp-surface0);
+		--readthedocs-notification-title-color: var(--ctp-text);
+		--readthedocs-notification-title-background-color: var(--ctp-surface1);
+		--readthedocs-notification-link-color: var(--ctp-accent);
+		--readthedocs-notification-inverted-color: var(--ctp-base);
+		--readthedocs-notification-inverted-background-color: var(--ctp-peach);
+		--readthedocs-notification-inverted-title-color: var(--ctp-base);
+		--readthedocs-notification-inverted-link-color: var(--ctp-base);
+		--readthedocs-filetreediff-color: var(--ctp-text);
+		--readthedocs-filetreediff-background-color: var(--ctp-crust);
+		--readthedocs-filetreediff-chunks-color: var(--ctp-green);
+	}
+
+	/* The landing page's menu icon */
+	.landing(@flavor) {
+		#lib.palette();
+		@stroke: replace(~"@{text}", "#", "%23");
+		body#top:has(> #content.global-container) .nav-toggle-icon {
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='@{stroke}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+		}
+	}
+}
+
+@-moz-document domain("docs.ansible.com") {
+
+	@media (prefers-color-scheme: light) {
+		:root {
+			#ansible.vars(@lightFlavor);
+		}
+		#ansible.landing(@lightFlavor);
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			#ansible.vars(@darkFlavor);
+		}
+		#ansible.landing(@darkFlavor);
+	}
+
+	/* MkDocs: the site's own scheme picks the flavor. */
+	body[data-md-color-scheme="default"] {
+		#ansible.vars(@lightFlavor);
+	}
+	body[data-md-color-scheme="slate"] {
+		#ansible.vars(@darkFlavor);
+	}
+
+	/* ===================================================================
+		 1. Sphinx docs
+		 =================================================================== */
+
+	html:has(> body.wy-body-for-nav) {
+		color-scheme: var(--ctp-scheme);
+		scrollbar-color: var(--ctp-surface2) var(--ctp-mantle);
+
+		/* antsibull module and plugin pages */
+		--antsibull-links-background: var(--ctp-accent);
+		--antsibull-links-background-active: var(--ctp-accent-hover);
+		--antsibull-links-focus-outline: var(--ctp-text);
+		--antsibull-links-text: var(--ctp-base);
+		--antsibull-table-background-header: var(--ctp-surface0);
+		--antsibull-table-background-even: var(--ctp-base);
+		--antsibull-table-background-odd: var(--ctp-mantle);
+		--antsibull-table-border: var(--ctp-surface1);
+		--antsibull-narrowtable-background: var(--ctp-surface0);
+		--antsibull-option-type: var(--ctp-pink);
+		--antsibull-option-elements: var(--ctp-pink);
+		--antsibull-option-required: var(--ctp-red);
+		--antsibull-option-version-added: var(--ctp-green);
+		--antsibull-option-aliases: var(--ctp-green);
+		--antsibull-option-default: var(--ctp-blue);
+		--antsibull-option-sample: var(--ctp-blue);
+		--antsibull-option-sample-header: var(--ctp-text);
+		--antsibull-attribute-support-none: var(--ctp-red);
+		--antsibull-attribute-support-partial: var(--ctp-yellow);
+		--antsibull-attribute-support-full: var(--ctp-green);
+		--antsibull-attribute-support-na: inherit;
+		--antsibull-deprecation-border: var(--ctp-peach);
+		--antsibull-deprecation-background: var(--ctp-peach-tint);
+		--antsibull-deprecation-color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav ::selection {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+
+	/* Form controls have no background in the theme, so the browser's white
+		 would show through. */
+	body.wy-body-for-nav input:not([type=checkbox]):not([type=radio]):not([type=submit]),
+	body.wy-body-for-nav select,
+	body.wy-body-for-nav textarea {
+		background-color: var(--ctp-surface0);
+		color: var(--ctp-text);
+	}
+	body.wy-body-for-nav input::placeholder {
+		color: var(--ctp-overlay1);
+	}
+
+	/* Tables in module docs use black grid lines */
+	body.wy-body-for-nav .rst-content table.docutils:not(.field-list) tr:nth-child(2n) td {
+		background-color: var(--ctp-base);
+	}
+
+	/* Inline code inside links and headings keeps the link color */
+	body.wy-body-for-nav .rst-content a code,
+	body.wy-body-for-nav .rst-content code.xref {
+		color: inherit;
+	}
+
+	/* ---- Generated from the theme CSS ---- */
+	body.wy-body-for-nav ins {
+		background: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav ins,
+	body.wy-body-for-nav mark {
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav mark {
+		background: var(--ctp-yellow);
+	}
+
+	body.wy-body-for-nav .chromeframe {
+		background: var(--ctp-surface0);
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .fa-border {
+		border: .08em solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .fa-inverse {
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .rst-content .admonition,
+	body.wy-body-for-nav .rst-content .admonition-todo,
+	body.wy-body-for-nav .rst-content .attention,
+	body.wy-body-for-nav .rst-content .caution,
+	body.wy-body-for-nav .rst-content .danger,
+	body.wy-body-for-nav .rst-content .error,
+	body.wy-body-for-nav .rst-content .hint,
+	body.wy-body-for-nav .rst-content .important,
+	body.wy-body-for-nav .rst-content .note,
+	body.wy-body-for-nav .rst-content .seealso,
+	body.wy-body-for-nav .rst-content .tip,
+	body.wy-body-for-nav .rst-content .warning,
+	body.wy-body-for-nav .wy-alert {
+		background: var(--ctp-blue-tint);
+	}
+
+	body.wy-body-for-nav .rst-content .admonition-title,
+	body.wy-body-for-nav .wy-alert-title {
+		color: var(--ctp-base);
+		background: var(--ctp-blue);
+	}
+
+	body.wy-body-for-nav .rst-content .danger,
+	body.wy-body-for-nav .rst-content .error,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.admonition,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.admonition-todo,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.attention,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.caution,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.hint,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.important,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.note,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.seealso,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.tip,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.warning,
+	body.wy-body-for-nav .wy-alert.wy-alert-danger {
+		background: var(--ctp-red-tint);
+	}
+
+	body.wy-body-for-nav .rst-content .danger .admonition-title,
+	body.wy-body-for-nav .rst-content .danger .wy-alert-title,
+	body.wy-body-for-nav .rst-content .error .admonition-title,
+	body.wy-body-for-nav .rst-content .error .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.admonition-todo .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.admonition-todo .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.admonition .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.admonition .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.attention .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.attention .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.caution .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.caution .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.hint .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.hint .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.important .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.important .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.note .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.note .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.seealso .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.seealso .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.tip .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.tip .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.warning .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-danger.warning .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert.wy-alert-danger .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-danger .rst-content .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-danger .wy-alert-title {
+		background: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .rst-content .admonition-todo,
+	body.wy-body-for-nav .rst-content .attention,
+	body.wy-body-for-nav .rst-content .caution,
+	body.wy-body-for-nav .rst-content .warning,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.admonition,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.danger,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.error,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.hint,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.important,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.note,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.seealso,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.tip,
+	body.wy-body-for-nav .wy-alert.wy-alert-warning {
+		background: var(--ctp-peach-tint);
+	}
+
+	body.wy-body-for-nav .rst-content .admonition-todo .admonition-title,
+	body.wy-body-for-nav .rst-content .admonition-todo .wy-alert-title,
+	body.wy-body-for-nav .rst-content .attention .admonition-title,
+	body.wy-body-for-nav .rst-content .attention .wy-alert-title,
+	body.wy-body-for-nav .rst-content .caution .admonition-title,
+	body.wy-body-for-nav .rst-content .caution .wy-alert-title,
+	body.wy-body-for-nav .rst-content .warning .admonition-title,
+	body.wy-body-for-nav .rst-content .warning .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.admonition .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.admonition .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.danger .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.danger .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.error .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.error .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.hint .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.hint .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.important .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.important .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.note .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.note .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.seealso .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.seealso .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.tip .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-warning.tip .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert.wy-alert-warning .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-warning .rst-content .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-warning .wy-alert-title {
+		background: var(--ctp-peach);
+	}
+
+	body.wy-body-for-nav .rst-content .note,
+	body.wy-body-for-nav .rst-content .seealso,
+	body.wy-body-for-nav .rst-content .wy-alert-info.admonition,
+	body.wy-body-for-nav .rst-content .wy-alert-info.admonition-todo,
+	body.wy-body-for-nav .rst-content .wy-alert-info.attention,
+	body.wy-body-for-nav .rst-content .wy-alert-info.caution,
+	body.wy-body-for-nav .rst-content .wy-alert-info.danger,
+	body.wy-body-for-nav .rst-content .wy-alert-info.error,
+	body.wy-body-for-nav .rst-content .wy-alert-info.hint,
+	body.wy-body-for-nav .rst-content .wy-alert-info.important,
+	body.wy-body-for-nav .rst-content .wy-alert-info.tip,
+	body.wy-body-for-nav .rst-content .wy-alert-info.warning,
+	body.wy-body-for-nav .wy-alert.wy-alert-info {
+		background: var(--ctp-blue-tint);
+	}
+
+	body.wy-body-for-nav .rst-content .note .admonition-title,
+	body.wy-body-for-nav .rst-content .note .wy-alert-title,
+	body.wy-body-for-nav .rst-content .seealso .admonition-title,
+	body.wy-body-for-nav .rst-content .seealso .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.admonition-todo .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.admonition-todo .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.admonition .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.admonition .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.attention .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.attention .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.caution .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.caution .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.danger .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.danger .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.error .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.error .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.hint .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.hint .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.important .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.important .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.tip .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.tip .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.warning .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-info.warning .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert.wy-alert-info .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-info .rst-content .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-info .wy-alert-title {
+		background: var(--ctp-blue);
+	}
+
+	body.wy-body-for-nav .rst-content .hint,
+	body.wy-body-for-nav .rst-content .important,
+	body.wy-body-for-nav .rst-content .tip,
+	body.wy-body-for-nav .rst-content .wy-alert-success.admonition,
+	body.wy-body-for-nav .rst-content .wy-alert-success.admonition-todo,
+	body.wy-body-for-nav .rst-content .wy-alert-success.attention,
+	body.wy-body-for-nav .rst-content .wy-alert-success.caution,
+	body.wy-body-for-nav .rst-content .wy-alert-success.danger,
+	body.wy-body-for-nav .rst-content .wy-alert-success.error,
+	body.wy-body-for-nav .rst-content .wy-alert-success.note,
+	body.wy-body-for-nav .rst-content .wy-alert-success.seealso,
+	body.wy-body-for-nav .rst-content .wy-alert-success.warning,
+	body.wy-body-for-nav .wy-alert.wy-alert-success {
+		background: var(--ctp-teal-tint);
+	}
+
+	body.wy-body-for-nav .rst-content .hint .admonition-title,
+	body.wy-body-for-nav .rst-content .hint .wy-alert-title,
+	body.wy-body-for-nav .rst-content .important .admonition-title,
+	body.wy-body-for-nav .rst-content .important .wy-alert-title,
+	body.wy-body-for-nav .rst-content .tip .admonition-title,
+	body.wy-body-for-nav .rst-content .tip .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.admonition-todo .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.admonition-todo .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.admonition .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.admonition .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.attention .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.attention .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.caution .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.caution .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.danger .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.danger .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.error .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.error .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.note .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.note .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.seealso .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.seealso .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.warning .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-success.warning .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert.wy-alert-success .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-success .rst-content .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-success .wy-alert-title {
+		background: var(--ctp-teal);
+	}
+
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition-todo,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.attention,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.caution,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.danger,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.error,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.hint,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.important,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.note,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.seealso,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.tip,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.warning,
+	body.wy-body-for-nav .wy-alert.wy-alert-neutral {
+		background: var(--ctp-mantle);
+	}
+
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition-todo .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition-todo .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.attention .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.attention .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.caution .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.caution .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.danger .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.danger .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.error .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.error .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.hint .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.hint .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.important .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.important .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.note .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.note .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.seealso .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.seealso .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.tip .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.tip .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.warning .admonition-title,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.warning .wy-alert-title,
+	body.wy-body-for-nav .rst-content .wy-alert.wy-alert-neutral .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-neutral .rst-content .admonition-title,
+	body.wy-body-for-nav .wy-alert.wy-alert-neutral .wy-alert-title {
+		color: var(--ctp-text);
+		background: var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition-todo a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.admonition a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.attention a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.caution a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.danger a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.error a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.hint a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.important a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.note a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.seealso a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.tip a,
+	body.wy-body-for-nav .rst-content .wy-alert-neutral.warning a,
+	body.wy-body-for-nav .wy-alert.wy-alert-neutral a {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .wy-tray-container li {
+		color: var(--ctp-base);
+		box-shadow: 0 5px 5px 0 color-mix(in srgb, var(--ctp-crust) 50%, transparent);
+	}
+
+	body.wy-body-for-nav .wy-tray-container li.wy-tray-item-success {
+		background: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav .wy-tray-container li.wy-tray-item-info {
+		background: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .wy-tray-container li.wy-tray-item-warning {
+		background: var(--ctp-peach);
+	}
+
+	body.wy-body-for-nav .wy-tray-container li.wy-tray-item-danger {
+		background: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .btn {
+		color: var(--ctp-base);
+		border: 1px solid var(--ctp-surface0);
+		background-color: var(--ctp-green);
+		box-shadow: inset 0 1px 2px -1px hsla(0,0%,100%,.5),inset 0 -2px 0 0 color-mix(in srgb, var(--ctp-crust) 50%, transparent); /* ctp-allow: the theme's white bevel */
+	}
+
+	body.wy-body-for-nav .btn-hover {
+		background: var(--ctp-accent-hover);
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .btn:hover {
+		background: color-mix(in srgb, var(--ctp-green) 70%, var(--ctp-text));
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .btn:focus {
+		background: color-mix(in srgb, var(--ctp-green) 70%, var(--ctp-text));
+	}
+
+	body.wy-body-for-nav .btn:active {
+		box-shadow: inset 0 -1px 0 0 color-mix(in srgb, var(--ctp-crust) 30%, transparent),inset 0 2px 0 0 color-mix(in srgb, var(--ctp-crust) 50%, transparent);
+	}
+
+	body.wy-body-for-nav .btn:visited {
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .btn-info {
+		background-color: var(--ctp-accent) !important;
+	}
+
+	body.wy-body-for-nav .btn-info:hover {
+		background-color: var(--ctp-accent-hover) !important;
+	}
+
+	body.wy-body-for-nav .btn-neutral {
+		background-color: var(--ctp-surface0) !important;
+		color: var(--ctp-text) !important;
+	}
+
+	body.wy-body-for-nav .btn-neutral:hover {
+		background-color: var(--ctp-surface1) !important;
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .btn-neutral:visited {
+		color: var(--ctp-text) !important;
+	}
+
+	body.wy-body-for-nav .btn-success {
+		background-color: var(--ctp-green) !important;
+	}
+
+	body.wy-body-for-nav .btn-success:hover {
+		background-color: color-mix(in srgb, var(--ctp-green) 70%, var(--ctp-text)) !important;
+	}
+
+	body.wy-body-for-nav .btn-danger {
+		background-color: var(--ctp-red) !important;
+	}
+
+	body.wy-body-for-nav .btn-danger:hover {
+		background-color: color-mix(in srgb, var(--ctp-red) 70%, var(--ctp-text)) !important;
+	}
+
+	body.wy-body-for-nav .btn-warning {
+		background-color: var(--ctp-peach) !important;
+	}
+
+	body.wy-body-for-nav .btn-warning:hover {
+		background-color: color-mix(in srgb, var(--ctp-peach) 70%, var(--ctp-text)) !important;
+	}
+
+	body.wy-body-for-nav .btn-invert {
+		background-color: var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav .btn-invert:hover {
+		background-color: var(--ctp-mantle) !important;
+	}
+
+	body.wy-body-for-nav .btn-link {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .btn-link:active,
+	body.wy-body-for-nav .btn-link:hover {
+		color: var(--ctp-accent-hover) !important;
+	}
+
+	body.wy-body-for-nav .btn-link:visited {
+		color: var(--ctp-pink);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu {
+		background: var(--ctp-base);
+		border: 1px solid var(--ctp-surface1);
+		box-shadow: 0 2px 2px 0 color-mix(in srgb, var(--ctp-crust) 50%, transparent);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu>dd>a {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu>dd>a:hover {
+		background: var(--ctp-accent);
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu>dd.divider {
+		border-top: 1px solid var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu>dd.call-to-action {
+		background: var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu>dd.call-to-action:hover {
+		background: var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-menu>dd.call-to-action .btn {
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-dropdown.wy-dropdown-bubble .wy-dropdown-menu {
+		background: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-dropdown.wy-dropdown-bubble .wy-dropdown-menu a:hover {
+		background: var(--ctp-accent);
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-dropdown-arrow:before {
+		border-bottom: 5px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav label {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-control-group.wy-control-group-required>label:after {
+		color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .wy-form-message-inline {
+		color: var(--ctp-overlay1);
+	}
+
+	body.wy-body-for-nav .wy-form-message {
+		color: var(--ctp-overlay1);
+	}
+
+	body.wy-body-for-nav input[type=color],
+	body.wy-body-for-nav input[type=date],
+	body.wy-body-for-nav input[type=datetime-local],
+	body.wy-body-for-nav input[type=datetime],
+	body.wy-body-for-nav input[type=email],
+	body.wy-body-for-nav input[type=month],
+	body.wy-body-for-nav input[type=number],
+	body.wy-body-for-nav input[type=password],
+	body.wy-body-for-nav input[type=search],
+	body.wy-body-for-nav input[type=tel],
+	body.wy-body-for-nav input[type=text],
+	body.wy-body-for-nav input[type=time],
+	body.wy-body-for-nav input[type=url],
+	body.wy-body-for-nav input[type=week] {
+		border: 1px solid var(--ctp-surface1);
+		box-shadow: inset 0 1px 3px var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav input[type=color]:focus,
+	body.wy-body-for-nav input[type=date]:focus,
+	body.wy-body-for-nav input[type=datetime-local]:focus,
+	body.wy-body-for-nav input[type=datetime]:focus,
+	body.wy-body-for-nav input[type=email]:focus,
+	body.wy-body-for-nav input[type=month]:focus,
+	body.wy-body-for-nav input[type=number]:focus,
+	body.wy-body-for-nav input[type=password]:focus,
+	body.wy-body-for-nav input[type=search]:focus,
+	body.wy-body-for-nav input[type=tel]:focus,
+	body.wy-body-for-nav input[type=text]:focus,
+	body.wy-body-for-nav input[type=time]:focus,
+	body.wy-body-for-nav input[type=url]:focus,
+	body.wy-body-for-nav input[type=week]:focus {
+		border-color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav input.no-focus:focus {
+		border-color: var(--ctp-surface1) !important;
+	}
+
+	body.wy-body-for-nav input[type=checkbox]:focus,
+	body.wy-body-for-nav input[type=file]:focus,
+	body.wy-body-for-nav input[type=radio]:focus {
+		outline: thin dotted var(--ctp-accent);
+		outline: 1px auto var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav input[type=color][disabled],
+	body.wy-body-for-nav input[type=date][disabled],
+	body.wy-body-for-nav input[type=datetime-local][disabled],
+	body.wy-body-for-nav input[type=datetime][disabled],
+	body.wy-body-for-nav input[type=email][disabled],
+	body.wy-body-for-nav input[type=month][disabled],
+	body.wy-body-for-nav input[type=number][disabled],
+	body.wy-body-for-nav input[type=password][disabled],
+	body.wy-body-for-nav input[type=search][disabled],
+	body.wy-body-for-nav input[type=tel][disabled],
+	body.wy-body-for-nav input[type=text][disabled],
+	body.wy-body-for-nav input[type=time][disabled],
+	body.wy-body-for-nav input[type=url][disabled],
+	body.wy-body-for-nav input[type=week][disabled] {
+		background-color: var(--ctp-mantle);
+	}
+
+	body.wy-body-for-nav input:focus:invalid,
+	body.wy-body-for-nav select:focus:invalid,
+	body.wy-body-for-nav textarea:focus:invalid {
+		color: var(--ctp-red);
+		border: 1px solid var(--ctp-red);
+	}
+
+	body.wy-body-for-nav input:focus:invalid:focus,
+	body.wy-body-for-nav select:focus:invalid:focus,
+	body.wy-body-for-nav textarea:focus:invalid:focus {
+		border-color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav input[type=checkbox]:focus:invalid:focus,
+	body.wy-body-for-nav input[type=file]:focus:invalid:focus,
+	body.wy-body-for-nav input[type=radio]:focus:invalid:focus {
+		outline-color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav select,
+	body.wy-body-for-nav textarea {
+		border: 1px solid var(--ctp-surface1);
+		box-shadow: inset 0 1px 3px var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav select {
+		border: 1px solid var(--ctp-surface1);
+		background-color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav input[readonly],
+	body.wy-body-for-nav select[disabled],
+	body.wy-body-for-nav select[readonly],
+	body.wy-body-for-nav textarea[disabled],
+	body.wy-body-for-nav textarea[readonly] {
+		background-color: var(--ctp-mantle);
+	}
+
+	body.wy-body-for-nav .wy-checkbox,
+	body.wy-body-for-nav .wy-radio {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-input-prefix .wy-input-context,
+	body.wy-body-for-nav .wy-input-suffix .wy-input-context {
+		background-color: var(--ctp-mantle);
+		border: 1px solid var(--ctp-surface1);
+		color: var(--ctp-overlay1);
+	}
+
+	body.wy-body-for-nav .wy-switch:before {
+		background: var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-switch:after {
+		background: var(--ctp-surface2);
+	}
+
+	body.wy-body-for-nav .wy-switch span {
+		color: var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-switch.active:before {
+		background: color-mix(in srgb, var(--ctp-green) 70%, var(--ctp-base));
+	}
+
+	body.wy-body-for-nav .wy-switch.active:after {
+		background: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error .wy-form-message,
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error>label {
+		color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=color],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=date],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=datetime-local],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=datetime],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=email],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=month],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=number],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=password],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=search],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=tel],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=text],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=time],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=url],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error input[type=week],
+	body.wy-body-for-nav .wy-control-group.wy-control-group-error textarea {
+		border: 1px solid var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .wy-inline-validate.wy-inline-validate-success .wy-input-context {
+		color: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav .wy-inline-validate.wy-inline-validate-danger .wy-input-context {
+		color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .wy-inline-validate.wy-inline-validate-warning .wy-input-context {
+		color: var(--ctp-peach);
+	}
+
+	body.wy-body-for-nav .wy-inline-validate.wy-inline-validate-info .wy-input-context {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils caption,
+	body.wy-body-for-nav .rst-content table.field-list caption,
+	body.wy-body-for-nav .wy-table caption {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils thead,
+	body.wy-body-for-nav .rst-content table.field-list thead,
+	body.wy-body-for-nav .wy-table thead {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils thead th,
+	body.wy-body-for-nav .rst-content table.field-list thead th,
+	body.wy-body-for-nav .wy-table thead th {
+		border-bottom: 2px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-table-secondary {
+		color: var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav .wy-table-tertiary {
+		color: var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,
+	body.wy-body-for-nav .wy-table-backed,
+	body.wy-body-for-nav .wy-table-odd td,
+	body.wy-body-for-nav .wy-table-striped tr:nth-child(2n-1) td {
+		background-color: var(--ctp-mantle);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils,
+	body.wy-body-for-nav .wy-table-bordered-all {
+		border: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils td,
+	body.wy-body-for-nav .wy-table-bordered-all td {
+		border-bottom: 1px solid var(--ctp-surface0);
+		border-left: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-table-bordered {
+		border: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-table-bordered-rows td {
+		border-bottom: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-table-horizontal td,
+	body.wy-body-for-nav .wy-table-horizontal th {
+		border-bottom: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav a {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav a:hover {
+		color: var(--ctp-accent-hover);
+	}
+
+	body.wy-body-for-nav a:visited {
+		color: var(--ctp-pink);
+	}
+
+	body.wy-body-for-nav {
+		color: var(--ctp-text);
+		background: var(--ctp-mantle);
+	}
+
+	body.wy-body-for-nav .wy-text-warning {
+		color: var(--ctp-peach) !important;
+	}
+
+	body.wy-body-for-nav a.wy-text-warning:hover {
+		color: color-mix(in srgb, var(--ctp-peach) 70%, var(--ctp-text)) !important;
+	}
+
+	body.wy-body-for-nav .wy-text-info {
+		color: var(--ctp-accent) !important;
+	}
+
+	body.wy-body-for-nav a.wy-text-info:hover {
+		color: var(--ctp-accent-hover) !important;
+	}
+
+	body.wy-body-for-nav .wy-text-success {
+		color: var(--ctp-green) !important;
+	}
+
+	body.wy-body-for-nav a.wy-text-success:hover {
+		color: color-mix(in srgb, var(--ctp-green) 70%, var(--ctp-text)) !important;
+	}
+
+	body.wy-body-for-nav .wy-text-danger {
+		color: var(--ctp-red) !important;
+	}
+
+	body.wy-body-for-nav a.wy-text-danger:hover {
+		color: color-mix(in srgb, var(--ctp-red) 70%, var(--ctp-text)) !important;
+	}
+
+	body.wy-body-for-nav .wy-text-neutral {
+		color: var(--ctp-text) !important;
+	}
+
+	body.wy-body-for-nav a.wy-text-neutral:hover {
+		color: var(--ctp-subtext0) !important;
+	}
+
+	body.wy-body-for-nav hr {
+		border-top: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content code,
+	body.wy-body-for-nav .rst-content tt,
+	body.wy-body-for-nav code {
+		background: var(--ctp-mantle);
+		border: 1px solid var(--ctp-surface0);
+		color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .breadcrumb-item:before {
+		color: var(--ctp-overlay0);
+	}
+
+	body.wy-body-for-nav .wy-breadcrumbs-extra {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .wy-menu-horiz li.divide-left {
+		border-left: 1px solid var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-menu-horiz li.divide-right {
+		border-right: 1px solid var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical header,
+	body.wy-body-for-nav .wy-menu-vertical p.caption {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.divide-top {
+		border-top: 1px solid var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.divide-bottom {
+		border-bottom: 1px solid var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current {
+		background: var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current a {
+		color: var(--ctp-subtext0);
+		border-right: 1px solid var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current a:hover {
+		background: var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li button.toctree-expand {
+		color: var(--ctp-overlay1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current>a,
+	body.wy-body-for-nav .wy-menu-vertical li.on a {
+		color: var(--ctp-text);
+		background: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current>a:hover,
+	body.wy-body-for-nav .wy-menu-vertical li.on a:hover {
+		background: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current>a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.on a:hover button.toctree-expand {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.current>a button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.on a button.toctree-expand {
+		color: var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l1.current>a {
+		border-bottom: 1px solid var(--ctp-surface1);
+		border-top: 1px solid var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l2 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l3 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l4 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l5 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l6 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l7 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l8 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l9 a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l10 a {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l2 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l3 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l4 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l5 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l6 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l7 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l8 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l9 a:hover button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l10 a:hover button.toctree-expand {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l2.current>a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l2.current li.toctree-l3>a {
+		background: var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l2 button.toctree-expand {
+		color: var(--ctp-overlay1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l3.current>a,
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l3.current li.toctree-l4>a {
+		background: var(--ctp-surface2);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li.toctree-l3 button.toctree-expand {
+		color: var(--ctp-overlay1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical li ul li a {
+		color: var(--ctp-subtext1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical a {
+		color: var(--ctp-subtext1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical a:hover {
+		background-color: var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical a:hover button.toctree-expand {
+		color: var(--ctp-subtext1);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical a:active {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical a:active button.toctree-expand {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-side-nav-search {
+		background-color: var(--ctp-crust);
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-side-nav-search input[type=text] {
+		border-color: var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .wy-side-nav-search img {
+		background-color: var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav .wy-side-nav-search .wy-dropdown>a,
+	body.wy-body-for-nav .wy-side-nav-search>a {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-side-nav-search>div.switch-menus>div.language-switch select option,
+	body.wy-body-for-nav .wy-side-nav-search>div.switch-menus>div.version-switch select option {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-nav .wy-menu-vertical header {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .wy-nav .wy-menu-vertical a {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .wy-nav .wy-menu-vertical a:hover {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav {
+		background: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-nav-side {
+		color: var(--ctp-subtext0);
+		background: var(--ctp-mantle);
+	}
+
+	body.wy-body-for-nav .wy-nav-top {
+		background: var(--ctp-crust);
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-nav-top a {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .wy-nav-top img {
+		background-color: var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav .wy-nav-content-wrap {
+		background: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-body-mask {
+		background: color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+	}
+
+	body.wy-body-for-nav footer {
+		color: var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav .rst-content footer span.commit tt,
+	body.wy-body-for-nav footer span.commit .rst-content tt,
+	body.wy-body-for-nav footer span.commit code {
+		color: var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav #search-results .search li {
+		border-bottom: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav #search-results .search li:first-child {
+		border-top: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav #search-results .context {
+		color: var(--ctp-overlay2);
+	}
+
+	@media screen and (max-width:768px) {
+		body.wy-body-for-nav {
+			background: var(--ctp-base);
+		}
+	}
+
+	@media screen and (min-width:1100px) {
+		body.wy-body-for-nav .wy-nav-content-wrap {
+			background: var(--ctp-mantle);
+		}
+	}
+
+	@media screen and (min-width:1100px) {
+		body.wy-body-for-nav .wy-nav-content {
+			background: var(--ctp-base);
+		}
+	}
+
+	body.wy-body-for-nav .rst-versions {
+		color: var(--ctp-text);
+		background: var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav .rst-versions a {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .rst-versions .rst-current-version {
+		background-color: var(--ctp-mantle);
+		color: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav .rst-content .code-block-caption .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content .eqno .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content .rst-versions .rst-current-version .admonition-title,
+	body.wy-body-for-nav .rst-content code.download .rst-versions .rst-current-version span:first-child,
+	body.wy-body-for-nav .rst-content dl dt .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content h1 .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content h2 .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content h3 .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content h4 .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content h5 .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content h6 .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content p .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content table>caption .rst-versions .rst-current-version .headerlink,
+	body.wy-body-for-nav .rst-content tt.download .rst-versions .rst-current-version span:first-child,
+	body.wy-body-for-nav .rst-versions .rst-current-version .fa,
+	body.wy-body-for-nav .rst-versions .rst-current-version .icon,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content .admonition-title,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content .code-block-caption .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content .eqno .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content code.download span:first-child,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content dl dt .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content h1 .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content h2 .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content h3 .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content h4 .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content h5 .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content h6 .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content p .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content table>caption .headerlink,
+	body.wy-body-for-nav .rst-versions .rst-current-version .rst-content tt.download span:first-child,
+	body.wy-body-for-nav .rst-versions .rst-current-version .wy-menu-vertical li button.toctree-expand,
+	body.wy-body-for-nav .wy-menu-vertical li .rst-versions .rst-current-version button.toctree-expand {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-versions .rst-current-version.rst-out-of-date {
+		background-color: var(--ctp-red);
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-versions .rst-current-version.rst-active-old-version {
+		background-color: color-mix(in srgb, var(--ctp-yellow) 25%, transparent);
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .rst-versions .rst-other-versions {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .rst-versions .rst-other-versions hr {
+		border-top: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-versions .rst-other-versions dd a {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content.style-external-links a.reference.external:after {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .rst-content div[class^=highlight],
+	body.wy-body-for-nav .rst-content pre.literal-block {
+		border: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content .linenodiv pre {
+		border-right: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content div.highlight span.linenos {
+		border-right: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content .admonition table {
+		border-color: var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content .admonition table td,
+	body.wy-body-for-nav .rst-content .admonition table th {
+		border-color: var(--ctp-surface0) !important;
+	}
+
+	body.wy-body-for-nav .rst-content .toc-backref {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content .sidebar {
+		background: var(--ctp-mantle);
+		border: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content .sidebar .sidebar-title {
+		background: var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .rst-content .highlighted {
+		background: color-mix(in srgb, var(--ctp-yellow) 25%, transparent);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--ctp-yellow) 25%, transparent);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils.footnote,
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content table.docutils.citation,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content aside.footnote,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content aside.footnote-list aside.footnote,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content div.citation-list>div.citation,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl.citation,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl.footnote {
+		color: var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils.footnote code,
+	body.wy-body-for-nav .rst-content table.docutils.footnote tt,
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content table.docutils.citation code,
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content table.docutils.citation tt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content aside.footnote-list aside.footnote code,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content aside.footnote-list aside.footnote tt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content aside.footnote code,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content aside.footnote tt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content div.citation-list>div.citation code,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content div.citation-list>div.citation tt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl.citation code,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl.citation tt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl.footnote code,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl.footnote tt {
+		color: var(--ctp-subtext0);
+	}
+
+	body.wy-body-for-nav .rst-content table.docutils th {
+		border-color: var(--ctp-surface0);
+	}
+
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content table.docutils th {
+		border: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .rst-content code,
+	body.wy-body-for-nav .rst-content tt {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content code.literal,
+	body.wy-body-for-nav .rst-content tt.literal {
+		color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .rst-content code.xref,
+	body.wy-body-for-nav .rst-content tt.xref,
+	body.wy-body-for-nav a .rst-content code,
+	body.wy-body-for-nav a .rst-content tt {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content a code,
+	body.wy-body-for-nav .rst-content a tt {
+		color: var(--ctp-accent);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils)>dt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt {
+		background: var(--ctp-blue-tint);
+		color: var(--ctp-accent);
+		border-top: 3px solid var(--ctp-blue);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils)>dt:before,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt:before {
+		color: var(--ctp-blue);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils)>dt .headerlink,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt .headerlink {
+		color: var(--ctp-text);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt {
+		border-left: 3px solid var(--ctp-surface1);
+		background: var(--ctp-surface0);
+		color: var(--ctp-subtext0);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt .headerlink,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt .headerlink {
+		color: var(--ctp-text);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils) .optional,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) .optional {
+		color: var(--ctp-text);
+	}
+
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils) .descclassname,
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils) .descname,
+	html.writer-html4:has(> body.wy-body-for-nav) .rst-content dl:not(.docutils) .sig-name,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) .descclassname,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) .descname,
+	html.writer-html5:has(> body.wy-body-for-nav) .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) .sig-name {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .rst-content .viewcode-back,
+	body.wy-body-for-nav .rst-content .viewcode-link {
+		color: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav .rst-content .guilabel,
+	body.wy-body-for-nav .rst-content .menuselection {
+		border: 1px solid var(--ctp-blue);
+		background: var(--ctp-blue-tint);
+	}
+
+	body.wy-body-for-nav .rst-content :not(dl.option-list)>:not(dt):not(kbd):not(.kbd)>.kbd,
+	body.wy-body-for-nav .rst-content :not(dl.option-list)>:not(dt):not(kbd):not(.kbd)>kbd {
+		background-color: var(--ctp-mantle);
+		border: 1px solid var(--ctp-surface2);
+		box-shadow: 0 2px var(--ctp-overlay2);
+	}
+
+	body.wy-body-for-nav span[id*=MathJax-Span] {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav table.documentation-table .value-required {
+		color: var(--ctp-red);
+	}
+
+	body.wy-body-for-nav .value-added-in {
+		color: var(--ctp-green);
+	}
+
+	body.wy-body-for-nav .DocSiteProduct-header:active,
+	body.wy-body-for-nav .DocSiteProduct-header:focus,
+	body.wy-body-for-nav .DocSiteProduct-header:visited {
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .DocSiteProduct-header--core {
+		background-color: var(--ctp-accent);
+		border: 2px solid var(--ctp-accent);
+		color: var(--ctp-base);
+	}
+
+	body.wy-body-for-nav .wy-nav-top,
+	body.wy-body-for-nav .wy-side-nav-search {
+		background-color: var(--ctp-crust);
+	}
+
+	body.wy-body-for-nav .wy-menu-vertical header,
+	body.wy-body-for-nav .wy-menu-vertical p.caption {
+		color: var(--ctp-accent);
+	}
+
+	body.wy-body-for-nav .documentation-table td,
+	body.wy-body-for-nav .documentation-table th {
+		border-left: 1px solid var(--ctp-surface1);
+		border-top: 1px solid var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .documentation-table {
+		border-right: 1px solid var(--ctp-surface1);
+		border-bottom: 1px solid var(--ctp-surface1);
+	}
+
+	body.wy-body-for-nav .ansibleNav {
+		background: var(--ctp-crust);
+		border-bottom: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .ansibleNav ul li {
+		border-bottom: 1px solid var(--ctp-surface0);
+	}
+
+	body.wy-body-for-nav .ansibleNav ul li a {
+		color: var(--ctp-text);
+	}
+
+	body.wy-body-for-nav .ansibleNav ul li a:hover {
+		color: var(--ctp-accent);
+	}
+
+	@media screen and (min-width: 768px) {
+		body.wy-body-for-nav .DocSite-nav {
+			background-color: var(--ctp-crust);
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		body.wy-body-for-nav .DocSiteNav-title {
+			color: var(--ctp-text);
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		body.wy-body-for-nav .ansibleNav ul li a {
+			color: var(--ctp-text);
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		body.wy-body-for-nav .DocSite-nav {
+			background-color: var(--ctp-crust);
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		body.wy-body-for-nav .DocSiteNav-title {
+			color: var(--ctp-text);
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		body.wy-body-for-nav .ansibleNav ul li a {
+			color: var(--ctp-text);
+		}
+	}
+
+	body.wy-body-for-nav .rst-content code.xref.std-envvar {
+		color: var(--ctp-accent);
+	}
+
+	/* ---- Code (Catppuccin Pygments style) ---- */
+	body.wy-body-for-nav td.linenos .normal { color: var(--ctp-overlay1); background-color: transparent }
+	body.wy-body-for-nav span.linenos { color: var(--ctp-overlay1); background-color: transparent }
+	body.wy-body-for-nav td.linenos .special { color: var(--ctp-yellow); background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-mantle)) }
+	body.wy-body-for-nav span.linenos.special { color: var(--ctp-yellow); background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-mantle)) }
+	body.wy-body-for-nav .highlight .hll { background-color: color-mix(in srgb, var(--ctp-mauve) 18%, var(--ctp-mantle)) }
+	body.wy-body-for-nav .highlight { background: var(--ctp-mantle); color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .c { color: var(--ctp-overlay2); font-style: italic }
+	body.wy-body-for-nav .highlight .err { color: var(--ctp-red); background-color: var(--ctp-mantle); border: 1px solid var(--ctp-red) }
+	body.wy-body-for-nav .highlight .esc { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .g { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .k { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .l { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .n { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .o { color: var(--ctp-sky) }
+	body.wy-body-for-nav .highlight .x { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .p { color: var(--ctp-overlay2) }
+	body.wy-body-for-nav .highlight .ch { color: var(--ctp-overlay2); font-style: italic }
+	body.wy-body-for-nav .highlight .cm { color: var(--ctp-overlay2); font-style: italic }
+	body.wy-body-for-nav .highlight .cp { color: var(--ctp-pink) }
+	body.wy-body-for-nav .highlight .cpf { color: var(--ctp-overlay2); font-style: italic }
+	body.wy-body-for-nav .highlight .c1 { color: var(--ctp-overlay2); font-style: italic }
+	body.wy-body-for-nav .highlight .cs { color: var(--ctp-overlay2); font-weight: bold; font-style: italic; background-color: var(--ctp-mantle) }
+	body.wy-body-for-nav .highlight .gd { color: var(--ctp-red); background-color: color-mix(in srgb, var(--ctp-red) 12%, var(--ctp-mantle)) }
+	body.wy-body-for-nav .highlight .ge { color: var(--ctp-text); font-style: italic }
+	body.wy-body-for-nav .highlight .ges { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .gr { color: var(--ctp-red) }
+	body.wy-body-for-nav .highlight .gh { color: var(--ctp-blue); font-weight: bold }
+	body.wy-body-for-nav .highlight .gi { color: var(--ctp-green); background-color: color-mix(in srgb, var(--ctp-green) 12%, var(--ctp-mantle)) }
+	body.wy-body-for-nav .highlight .go { color: var(--ctp-subtext0) }
+	body.wy-body-for-nav .highlight .gp { color: var(--ctp-mauve); font-weight: bold }
+	body.wy-body-for-nav .highlight .gs { color: var(--ctp-text); font-weight: bold }
+	body.wy-body-for-nav .highlight .gu { color: var(--ctp-mauve); font-weight: bold }
+	body.wy-body-for-nav .highlight .gt { color: var(--ctp-red) }
+	body.wy-body-for-nav .highlight .kc { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .kd { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .kn { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .kp { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .kr { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .kt { color: var(--ctp-yellow) }
+	body.wy-body-for-nav .highlight .ld { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .m { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .s { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .na { color: var(--ctp-blue) }
+	body.wy-body-for-nav .highlight .nb { color: var(--ctp-red) }
+	body.wy-body-for-nav .highlight .nc { color: var(--ctp-yellow) }
+	body.wy-body-for-nav .highlight .no { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .nd { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .ni { color: var(--ctp-teal) }
+	body.wy-body-for-nav .highlight .ne { color: var(--ctp-yellow) }
+	body.wy-body-for-nav .highlight .nf { color: var(--ctp-blue) }
+	body.wy-body-for-nav .highlight .nl { color: var(--ctp-sapphire) }
+	body.wy-body-for-nav .highlight .nn { color: var(--ctp-yellow) }
+	body.wy-body-for-nav .highlight .nx { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .py { color: var(--ctp-text) }
+	body.wy-body-for-nav .highlight .nt { color: var(--ctp-blue) }
+	body.wy-body-for-nav .highlight .nv { color: var(--ctp-flamingo) }
+	body.wy-body-for-nav .highlight .ow { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .pm { color: var(--ctp-overlay2) }
+	body.wy-body-for-nav .highlight .w { color: var(--ctp-overlay0) }
+	body.wy-body-for-nav .highlight .mb { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .mf { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .mh { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .mi { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .mo { color: var(--ctp-peach) }
+	body.wy-body-for-nav .highlight .sa { color: var(--ctp-mauve) }
+	body.wy-body-for-nav .highlight .sb { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .sc { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .dl { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .sd { color: var(--ctp-green); font-style: italic }
+	body.wy-body-for-nav .highlight .s2 { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .se { color: var(--ctp-pink) }
+	body.wy-body-for-nav .highlight .sh { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .si { color: var(--ctp-pink) }
+	body.wy-body-for-nav .highlight .sx { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .sr { color: var(--ctp-pink) }
+	body.wy-body-for-nav .highlight .s1 { color: var(--ctp-green) }
+	body.wy-body-for-nav .highlight .ss { color: var(--ctp-flamingo) }
+	body.wy-body-for-nav .highlight .bp { color: var(--ctp-red) }
+	body.wy-body-for-nav .highlight .fm { color: var(--ctp-blue) }
+	body.wy-body-for-nav .highlight .vc { color: var(--ctp-flamingo) }
+	body.wy-body-for-nav .highlight .vg { color: var(--ctp-flamingo) }
+	body.wy-body-for-nav .highlight .vi { color: var(--ctp-flamingo) }
+	body.wy-body-for-nav .highlight .vm { color: var(--ctp-flamingo) }
+	body.wy-body-for-nav .highlight .il { color: var(--ctp-peach) }
+	body.wy-body-for-nav .rst-content div[class^=highlight] {
+		border-color: var(--ctp-surface0);
+	}
+
+	/* ===================================================================
+		 2. Landing pages (Nikola, Bootstrap 4)
+		 =================================================================== */
+
+	html:has(> body#top > #content.global-container) {
+		color-scheme: var(--ctp-scheme);
+		scrollbar-color: var(--ctp-surface2) var(--ctp-mantle);
+	}
+
+	body#top:has(> #content.global-container) {
+		background: var(--ctp-base);
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) ::selection {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+	body#top:has(> #content.global-container) a,
+	body#top:has(> #content.global-container) .doc-link a,
+	body#top:has(> #content.global-container) .continue-link,
+	body#top:has(> #content.global-container) .homepage-link,
+	body#top:has(> #content.global-container) .top-link a,
+	body#top:has(> #content.global-container) .contribute-content a,
+	body#top:has(> #content.global-container) .ecosystem-project-content a,
+	body#top:has(> #content.global-container) .banner-platform-learn .banner-platform-link {
+		color: var(--ctp-accent);
+	}
+	body#top:has(> #content.global-container) a:hover {
+		color: var(--ctp-accent-hover);
+	}
+	body#top:has(> #content.global-container) h1, body#top:has(> #content.global-container) h2, body#top:has(> #content.global-container) h3, body#top:has(> #content.global-container) h4, body#top:has(> #content.global-container) h5, body#top:has(> #content.global-container) h6 {
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) .text-muted {
+		color: var(--ctp-overlay2) !important;
+	}
+	body#top:has(> #content.global-container) hr {
+		border-color: var(--ctp-surface1);
+	}
+
+	/* Navigation */
+	body#top:has(> #content.global-container) .bg-pool {
+		background-color: var(--ctp-mantle) !important;
+	}
+	/* Keep the network photo as a faint texture */
+	body#top:has(> #content.global-container) .hero-container {
+		background-color: var(--ctp-mantle) !important;
+		background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 90%, transparent), color-mix(in srgb, var(--ctp-mantle) 90%, transparent)), url(/assets/images/unsplash.jpg) !important;
+	}
+	body#top:has(> #content.global-container) .navbar-brand #blog-title,
+	body#top:has(> #content.global-container) .nav-link-color,
+	body#top:has(> #content.global-container) .hero-container .nav-link-color {
+		color: var(--ctp-text) !important;
+	}
+	body#top:has(> #content.global-container) .navbar-brand #blog-title:hover,
+	body#top:has(> #content.global-container) .nav-link-color:hover,
+	body#top:has(> #content.global-container) .hero-container .nav-link-color:hover,
+	body#top:has(> #content.global-container) .hero-container #blog-title:hover {
+		color: var(--ctp-accent) !important;
+	}
+	/* The menu icon is an SVG with its stroke color inside it; set per flavor above. */
+	body#top:has(> #content.global-container) .navbar-toggler {
+		border-color: var(--ctp-surface1);
+	}
+	body#top:has(> #content.global-container) .navbar .dropdown-menu {
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+	}
+	body#top:has(> #content.global-container) .navbar .dropdown-menu a,
+	body#top:has(> #content.global-container) .navbar .dropdown-menu a:hover {
+		color: var(--ctp-text) !important;
+	}
+	body#top:has(> #content.global-container) .navbar .dropdown-item:hover {
+		background-color: var(--ctp-surface1) !important;
+	}
+	body#top:has(> #content.global-container) .navbar .dropdown-menu .dropdown-item.active,
+	body#top:has(> #content.global-container) .navbar .dropdown-menu .dropdown-item:active {
+		background-color: var(--ctp-surface0);
+	}
+	/* Black logos would vanish on a dark background, so the dark flavors
+		 invert them. The hue rotation keeps the Red Hat red close to red. */
+	body#top:has(> #content.global-container) .navbar-brand img,
+	body#top:has(> #content.global-container) img[src$="/platform.svg"] {
+		filter: var(--ctp-logo-filter);
+	}
+
+	/* Top banner */
+	body#top:has(> #content.global-container) #top-banner {
+		background-color: var(--ctp-crust);
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) #top-banner a {
+		color: var(--ctp-text) !important;
+		text-decoration-color: var(--ctp-accent) !important;
+	}
+	body#top:has(> #content.global-container) #top-banner a:hover {
+		text-decoration-color: var(--ctp-text) !important;
+	}
+
+	/* Bands */
+	body#top:has(> #content.global-container) .banner-main-content,
+	body#top:has(> #content.global-container) .homepage-ansible-band,
+	body#top:has(> #content.global-container) .homepage-ecosystem-band,
+	body#top:has(> #content.global-container) .homepage-platform-band,
+	body#top:has(> #content.global-container) .homepage-personas-white {
+		background-color: var(--ctp-base);
+	}
+	body#top:has(> #content.global-container) .homepage-tab-menu-band,
+	body#top:has(> #content.global-container) .homepage-community-band,
+	body#top:has(> #content.global-container) .homepage-contribute-band,
+	body#top:has(> #content.global-container) .homepage-personas-grey {
+		background-color: var(--ctp-mantle);
+	}
+	body#top:has(> #content.global-container) .homepage-bullhorn-band {
+		background-color: var(--ctp-surface0);
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) .tab-menu-row a,
+	body#top:has(> #content.global-container) .section-icon,
+	body#top:has(> #content.global-container) .community-social-text,
+	body#top:has(> #content.global-container) .community-social-text .fa,
+	body#top:has(> #content.global-container) .fa-bookmark,
+	body#top:has(> #content.global-container) .fa-book {
+		color: var(--ctp-accent);
+	}
+	body#top:has(> #content.global-container) .community-social-text:hover {
+		color: var(--ctp-text) !important;
+	}
+	body#top:has(> #content.global-container) .fa-calendar-check {
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) .tab-menu-anchor:hover {
+		background-color: var(--ctp-surface0);
+		color: var(--ctp-accent);
+	}
+
+	/* Buttons */
+	body#top:has(> #content.global-container) .homepage-anchor,
+	body#top:has(> #content.global-container) a.ansible-button,
+	body#top:has(> #content.global-container) .tags li a,
+	body#top:has(> #content.global-container) .tags > li a {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-base);
+	}
+	body#top:has(> #content.global-container) .homepage-anchor:hover,
+	body#top:has(> #content.global-container) a.ansible-button:hover,
+	body#top:has(> #content.global-container) .tags li a:hover,
+	body#top:has(> #content.global-container) .tags > li a:hover {
+		background-color: var(--ctp-accent-hover) !important;
+		color: var(--ctp-base) !important;
+	}
+	body#top:has(> #content.global-container) .platform-anchor {
+		background-color: var(--ctp-red);
+		color: var(--ctp-base);
+	}
+	body#top:has(> #content.global-container) .ecosystem-content .btn {
+		background-color: transparent;
+		border-color: var(--ctp-accent);
+		color: var(--ctp-accent);
+	}
+	body#top:has(> #content.global-container) .ecosystem-content .btn:hover {
+		background-color: var(--ctp-accent);
+		color: var(--ctp-base);
+	}
+	body#top:has(> #content.global-container) .clipboard .btn,
+	body#top:has(> #content.global-container) .clipboard .popup {
+		background-color: var(--ctp-surface0) !important;
+		border-color: var(--ctp-accent) !important;
+		color: var(--ctp-accent) !important;
+	}
+	body#top:has(> #content.global-container) .clipboard .btn:hover {
+		background-color: var(--ctp-surface1) !important;
+	}
+
+	/* Cards */
+	body#top:has(> #content.global-container) .ecosystem-card,
+	body#top:has(> #content.global-container) .ecosystem-project-card,
+	body#top:has(> #content.global-container) .card {
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+		box-shadow: 0 4px 8px 0 color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+	}
+
+	/* Content pages */
+	body#top:has(> #content.global-container) .ansible-content code,
+	body#top:has(> #content.global-container) code {
+		color: var(--ctp-peach);
+	}
+	body#top:has(> #content.global-container) .ansible-content pre,
+	body#top:has(> #content.global-container) pre,
+	body#top:has(> #content.global-container) pre.code,
+	body#top:has(> #content.global-container) .code .codetable,
+	body#top:has(> #content.global-container) .highlight pre {
+		background: var(--ctp-mantle);
+		border-color: var(--ctp-surface0);
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) .ansible-content hr {
+		border-color: var(--ctp-surface1);
+	}
+	body#top:has(> #content.global-container) a.u-url {
+		color: var(--ctp-text) !important;
+	}
+	body#top:has(> #content.global-container) table,
+	body#top:has(> #content.global-container) .table {
+		color: var(--ctp-text);
+	}
+	body#top:has(> #content.global-container) .table td,
+	body#top:has(> #content.global-container) .table th,
+	body#top:has(> #content.global-container) table td,
+	body#top:has(> #content.global-container) table th {
+		border-color: var(--ctp-surface0);
+	}
+	body#top:has(> #content.global-container) #footer {
+		color: var(--ctp-overlay1);
+		border-top-color: var(--ctp-surface0);
+	}
+	body#top:has(> #content.global-container) ul.pager li a {
+		background-color: var(--ctp-surface0);
+		border-color: var(--ctp-surface1);
+	}
+
+	/* Footer */
+	body#top:has(> #content.global-container) .redhat-footer {
+		background-color: var(--ctp-crust);
+	}
+	body#top:has(> #content.global-container) .redhat-footer .footer-left a,
+	body#top:has(> #content.global-container) .redhat-footer .redhat {
+		color: var(--ctp-text);
+	}
+
+	/* ---- Code ---- */
+	body#top:has(> #content.global-container) td.linenos .normal { color: var(--ctp-overlay1); background-color: transparent }
+	body#top:has(> #content.global-container) span.linenos { color: var(--ctp-overlay1); background-color: transparent }
+	body#top:has(> #content.global-container) td.linenos .special { color: var(--ctp-yellow); background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-mantle)) }
+	body#top:has(> #content.global-container) span.linenos.special { color: var(--ctp-yellow); background-color: color-mix(in srgb, var(--ctp-yellow) 15%, var(--ctp-mantle)) }
+	body#top:has(> #content.global-container) pre.code .hll, body#top:has(> #content.global-container) .code .codetable .hll, body#top:has(> #content.global-container) .highlight pre .hll { background-color: color-mix(in srgb, var(--ctp-mauve) 18%, var(--ctp-mantle)) }
+	body#top:has(> #content.global-container) pre.code, body#top:has(> #content.global-container) .code .codetable, body#top:has(> #content.global-container) .highlight pre { background: var(--ctp-mantle); color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .c, body#top:has(> #content.global-container) .code .codetable .c, body#top:has(> #content.global-container) .highlight pre .c { color: var(--ctp-overlay2); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .err, body#top:has(> #content.global-container) .code .codetable .err, body#top:has(> #content.global-container) .highlight pre .err { color: var(--ctp-red); background-color: var(--ctp-mantle); border: 1px solid var(--ctp-red) }
+	body#top:has(> #content.global-container) pre.code .esc, body#top:has(> #content.global-container) .code .codetable .esc, body#top:has(> #content.global-container) .highlight pre .esc { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .g, body#top:has(> #content.global-container) .code .codetable .g, body#top:has(> #content.global-container) .highlight pre .g { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .k, body#top:has(> #content.global-container) .code .codetable .k, body#top:has(> #content.global-container) .highlight pre .k { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .l, body#top:has(> #content.global-container) .code .codetable .l, body#top:has(> #content.global-container) .highlight pre .l { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .n, body#top:has(> #content.global-container) .code .codetable .n, body#top:has(> #content.global-container) .highlight pre .n { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .o, body#top:has(> #content.global-container) .code .codetable .o, body#top:has(> #content.global-container) .highlight pre .o { color: var(--ctp-sky) }
+	body#top:has(> #content.global-container) pre.code .x, body#top:has(> #content.global-container) .code .codetable .x, body#top:has(> #content.global-container) .highlight pre .x { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .p, body#top:has(> #content.global-container) .code .codetable .p, body#top:has(> #content.global-container) .highlight pre .p { color: var(--ctp-overlay2) }
+	body#top:has(> #content.global-container) pre.code .ch, body#top:has(> #content.global-container) .code .codetable .ch, body#top:has(> #content.global-container) .highlight pre .ch { color: var(--ctp-overlay2); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .cm, body#top:has(> #content.global-container) .code .codetable .cm, body#top:has(> #content.global-container) .highlight pre .cm { color: var(--ctp-overlay2); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .cp, body#top:has(> #content.global-container) .code .codetable .cp, body#top:has(> #content.global-container) .highlight pre .cp { color: var(--ctp-pink) }
+	body#top:has(> #content.global-container) pre.code .cpf, body#top:has(> #content.global-container) .code .codetable .cpf, body#top:has(> #content.global-container) .highlight pre .cpf { color: var(--ctp-overlay2); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .c1, body#top:has(> #content.global-container) .code .codetable .c1, body#top:has(> #content.global-container) .highlight pre .c1 { color: var(--ctp-overlay2); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .cs, body#top:has(> #content.global-container) .code .codetable .cs, body#top:has(> #content.global-container) .highlight pre .cs { color: var(--ctp-overlay2); font-weight: bold; font-style: italic; background-color: var(--ctp-mantle) }
+	body#top:has(> #content.global-container) pre.code .gd, body#top:has(> #content.global-container) .code .codetable .gd, body#top:has(> #content.global-container) .highlight pre .gd { color: var(--ctp-red); background-color: color-mix(in srgb, var(--ctp-red) 12%, var(--ctp-mantle)) }
+	body#top:has(> #content.global-container) pre.code .ge, body#top:has(> #content.global-container) .code .codetable .ge, body#top:has(> #content.global-container) .highlight pre .ge { color: var(--ctp-text); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .ges, body#top:has(> #content.global-container) .code .codetable .ges, body#top:has(> #content.global-container) .highlight pre .ges { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .gr, body#top:has(> #content.global-container) .code .codetable .gr, body#top:has(> #content.global-container) .highlight pre .gr { color: var(--ctp-red) }
+	body#top:has(> #content.global-container) pre.code .gh, body#top:has(> #content.global-container) .code .codetable .gh, body#top:has(> #content.global-container) .highlight pre .gh { color: var(--ctp-blue); font-weight: bold }
+	body#top:has(> #content.global-container) pre.code .gi, body#top:has(> #content.global-container) .code .codetable .gi, body#top:has(> #content.global-container) .highlight pre .gi { color: var(--ctp-green); background-color: color-mix(in srgb, var(--ctp-green) 12%, var(--ctp-mantle)) }
+	body#top:has(> #content.global-container) pre.code .go, body#top:has(> #content.global-container) .code .codetable .go, body#top:has(> #content.global-container) .highlight pre .go { color: var(--ctp-subtext0) }
+	body#top:has(> #content.global-container) pre.code .gp, body#top:has(> #content.global-container) .code .codetable .gp, body#top:has(> #content.global-container) .highlight pre .gp { color: var(--ctp-mauve); font-weight: bold }
+	body#top:has(> #content.global-container) pre.code .gs, body#top:has(> #content.global-container) .code .codetable .gs, body#top:has(> #content.global-container) .highlight pre .gs { color: var(--ctp-text); font-weight: bold }
+	body#top:has(> #content.global-container) pre.code .gu, body#top:has(> #content.global-container) .code .codetable .gu, body#top:has(> #content.global-container) .highlight pre .gu { color: var(--ctp-mauve); font-weight: bold }
+	body#top:has(> #content.global-container) pre.code .gt, body#top:has(> #content.global-container) .code .codetable .gt, body#top:has(> #content.global-container) .highlight pre .gt { color: var(--ctp-red) }
+	body#top:has(> #content.global-container) pre.code .kc, body#top:has(> #content.global-container) .code .codetable .kc, body#top:has(> #content.global-container) .highlight pre .kc { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .kd, body#top:has(> #content.global-container) .code .codetable .kd, body#top:has(> #content.global-container) .highlight pre .kd { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .kn, body#top:has(> #content.global-container) .code .codetable .kn, body#top:has(> #content.global-container) .highlight pre .kn { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .kp, body#top:has(> #content.global-container) .code .codetable .kp, body#top:has(> #content.global-container) .highlight pre .kp { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .kr, body#top:has(> #content.global-container) .code .codetable .kr, body#top:has(> #content.global-container) .highlight pre .kr { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .kt, body#top:has(> #content.global-container) .code .codetable .kt, body#top:has(> #content.global-container) .highlight pre .kt { color: var(--ctp-yellow) }
+	body#top:has(> #content.global-container) pre.code .ld, body#top:has(> #content.global-container) .code .codetable .ld, body#top:has(> #content.global-container) .highlight pre .ld { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .m, body#top:has(> #content.global-container) .code .codetable .m, body#top:has(> #content.global-container) .highlight pre .m { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .s, body#top:has(> #content.global-container) .code .codetable .s, body#top:has(> #content.global-container) .highlight pre .s { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .na, body#top:has(> #content.global-container) .code .codetable .na, body#top:has(> #content.global-container) .highlight pre .na { color: var(--ctp-blue) }
+	body#top:has(> #content.global-container) pre.code .nb, body#top:has(> #content.global-container) .code .codetable .nb, body#top:has(> #content.global-container) .highlight pre .nb { color: var(--ctp-red) }
+	body#top:has(> #content.global-container) pre.code .nc, body#top:has(> #content.global-container) .code .codetable .nc, body#top:has(> #content.global-container) .highlight pre .nc { color: var(--ctp-yellow) }
+	body#top:has(> #content.global-container) pre.code .no, body#top:has(> #content.global-container) .code .codetable .no, body#top:has(> #content.global-container) .highlight pre .no { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .nd, body#top:has(> #content.global-container) .code .codetable .nd, body#top:has(> #content.global-container) .highlight pre .nd { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .ni, body#top:has(> #content.global-container) .code .codetable .ni, body#top:has(> #content.global-container) .highlight pre .ni { color: var(--ctp-teal) }
+	body#top:has(> #content.global-container) pre.code .ne, body#top:has(> #content.global-container) .code .codetable .ne, body#top:has(> #content.global-container) .highlight pre .ne { color: var(--ctp-yellow) }
+	body#top:has(> #content.global-container) pre.code .nf, body#top:has(> #content.global-container) .code .codetable .nf, body#top:has(> #content.global-container) .highlight pre .nf { color: var(--ctp-blue) }
+	body#top:has(> #content.global-container) pre.code .nl, body#top:has(> #content.global-container) .code .codetable .nl, body#top:has(> #content.global-container) .highlight pre .nl { color: var(--ctp-sapphire) }
+	body#top:has(> #content.global-container) pre.code .nn, body#top:has(> #content.global-container) .code .codetable .nn, body#top:has(> #content.global-container) .highlight pre .nn { color: var(--ctp-yellow) }
+	body#top:has(> #content.global-container) pre.code .nx, body#top:has(> #content.global-container) .code .codetable .nx, body#top:has(> #content.global-container) .highlight pre .nx { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .py, body#top:has(> #content.global-container) .code .codetable .py, body#top:has(> #content.global-container) .highlight pre .py { color: var(--ctp-text) }
+	body#top:has(> #content.global-container) pre.code .nt, body#top:has(> #content.global-container) .code .codetable .nt, body#top:has(> #content.global-container) .highlight pre .nt { color: var(--ctp-blue) }
+	body#top:has(> #content.global-container) pre.code .nv, body#top:has(> #content.global-container) .code .codetable .nv, body#top:has(> #content.global-container) .highlight pre .nv { color: var(--ctp-flamingo) }
+	body#top:has(> #content.global-container) pre.code .ow, body#top:has(> #content.global-container) .code .codetable .ow, body#top:has(> #content.global-container) .highlight pre .ow { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .pm, body#top:has(> #content.global-container) .code .codetable .pm, body#top:has(> #content.global-container) .highlight pre .pm { color: var(--ctp-overlay2) }
+	body#top:has(> #content.global-container) pre.code .w, body#top:has(> #content.global-container) .code .codetable .w, body#top:has(> #content.global-container) .highlight pre .w { color: var(--ctp-overlay0) }
+	body#top:has(> #content.global-container) pre.code .mb, body#top:has(> #content.global-container) .code .codetable .mb, body#top:has(> #content.global-container) .highlight pre .mb { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .mf, body#top:has(> #content.global-container) .code .codetable .mf, body#top:has(> #content.global-container) .highlight pre .mf { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .mh, body#top:has(> #content.global-container) .code .codetable .mh, body#top:has(> #content.global-container) .highlight pre .mh { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .mi, body#top:has(> #content.global-container) .code .codetable .mi, body#top:has(> #content.global-container) .highlight pre .mi { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .mo, body#top:has(> #content.global-container) .code .codetable .mo, body#top:has(> #content.global-container) .highlight pre .mo { color: var(--ctp-peach) }
+	body#top:has(> #content.global-container) pre.code .sa, body#top:has(> #content.global-container) .code .codetable .sa, body#top:has(> #content.global-container) .highlight pre .sa { color: var(--ctp-mauve) }
+	body#top:has(> #content.global-container) pre.code .sb, body#top:has(> #content.global-container) .code .codetable .sb, body#top:has(> #content.global-container) .highlight pre .sb { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .sc, body#top:has(> #content.global-container) .code .codetable .sc, body#top:has(> #content.global-container) .highlight pre .sc { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .dl, body#top:has(> #content.global-container) .code .codetable .dl, body#top:has(> #content.global-container) .highlight pre .dl { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .sd, body#top:has(> #content.global-container) .code .codetable .sd, body#top:has(> #content.global-container) .highlight pre .sd { color: var(--ctp-green); font-style: italic }
+	body#top:has(> #content.global-container) pre.code .s2, body#top:has(> #content.global-container) .code .codetable .s2, body#top:has(> #content.global-container) .highlight pre .s2 { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .se, body#top:has(> #content.global-container) .code .codetable .se, body#top:has(> #content.global-container) .highlight pre .se { color: var(--ctp-pink) }
+	body#top:has(> #content.global-container) pre.code .sh, body#top:has(> #content.global-container) .code .codetable .sh, body#top:has(> #content.global-container) .highlight pre .sh { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .si, body#top:has(> #content.global-container) .code .codetable .si, body#top:has(> #content.global-container) .highlight pre .si { color: var(--ctp-pink) }
+	body#top:has(> #content.global-container) pre.code .sx, body#top:has(> #content.global-container) .code .codetable .sx, body#top:has(> #content.global-container) .highlight pre .sx { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .sr, body#top:has(> #content.global-container) .code .codetable .sr, body#top:has(> #content.global-container) .highlight pre .sr { color: var(--ctp-pink) }
+	body#top:has(> #content.global-container) pre.code .s1, body#top:has(> #content.global-container) .code .codetable .s1, body#top:has(> #content.global-container) .highlight pre .s1 { color: var(--ctp-green) }
+	body#top:has(> #content.global-container) pre.code .ss, body#top:has(> #content.global-container) .code .codetable .ss, body#top:has(> #content.global-container) .highlight pre .ss { color: var(--ctp-flamingo) }
+	body#top:has(> #content.global-container) pre.code .bp, body#top:has(> #content.global-container) .code .codetable .bp, body#top:has(> #content.global-container) .highlight pre .bp { color: var(--ctp-red) }
+	body#top:has(> #content.global-container) pre.code .fm, body#top:has(> #content.global-container) .code .codetable .fm, body#top:has(> #content.global-container) .highlight pre .fm { color: var(--ctp-blue) }
+	body#top:has(> #content.global-container) pre.code .vc, body#top:has(> #content.global-container) .code .codetable .vc, body#top:has(> #content.global-container) .highlight pre .vc { color: var(--ctp-flamingo) }
+	body#top:has(> #content.global-container) pre.code .vg, body#top:has(> #content.global-container) .code .codetable .vg, body#top:has(> #content.global-container) .highlight pre .vg { color: var(--ctp-flamingo) }
+	body#top:has(> #content.global-container) pre.code .vi, body#top:has(> #content.global-container) .code .codetable .vi, body#top:has(> #content.global-container) .highlight pre .vi { color: var(--ctp-flamingo) }
+	body#top:has(> #content.global-container) pre.code .vm, body#top:has(> #content.global-container) .code .codetable .vm, body#top:has(> #content.global-container) .highlight pre .vm { color: var(--ctp-flamingo) }
+	body#top:has(> #content.global-container) pre.code .il, body#top:has(> #content.global-container) .code .codetable .il, body#top:has(> #content.global-container) .highlight pre .il { color: var(--ctp-peach) }
+
+	/* ===================================================================
+		 3. MkDocs Material docs
+		 =================================================================== */
+
+	body[data-md-color-scheme] {
+		--md-hue: 240deg;
+		--md-default-fg-color: var(--ctp-text);
+		--md-default-fg-color--light: var(--ctp-subtext0);
+		--md-default-fg-color--lighter: var(--ctp-overlay1);
+		--md-default-fg-color--lightest: var(--ctp-surface1);
+		--md-default-bg-color: var(--ctp-base);
+		--md-default-bg-color--light: color-mix(in srgb, var(--ctp-base) 54%, transparent);
+		--md-default-bg-color--lighter: color-mix(in srgb, var(--ctp-base) 26%, transparent);
+		--md-default-bg-color--lightest: color-mix(in srgb, var(--ctp-base) 7%, transparent);
+
+		--md-primary-fg-color: var(--ctp-mantle);
+		--md-primary-fg-color--light: var(--ctp-surface0);
+		--md-primary-fg-color--dark: var(--ctp-crust);
+		--md-primary-bg-color: var(--ctp-text);
+		--md-primary-bg-color--light: var(--ctp-subtext0);
+		--md-accent-fg-color: var(--ctp-accent-hover);
+		--md-accent-fg-color--transparent: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--md-accent-bg-color: var(--ctp-base);
+		--md-accent-bg-color--light: color-mix(in srgb, var(--ctp-base) 70%, transparent);
+
+		--md-typeset-color: var(--ctp-text);
+		--md-typeset-a-color: var(--ctp-accent);
+		--md-typeset-mark-color: color-mix(in srgb, var(--ctp-yellow) 25%, transparent);
+		--md-typeset-table-color: var(--ctp-surface1);
+		--md-typeset-table-color--light: var(--ctp-mantle);
+		--md-typeset-kbd-color: var(--ctp-surface0);
+		--md-typeset-kbd-accent-color: var(--ctp-surface1);
+		--md-typeset-kbd-border-color: var(--ctp-crust);
+		--md-admonition-fg-color: var(--ctp-text);
+		--md-admonition-bg-color: var(--ctp-base);
+		--md-footer-fg-color: var(--ctp-text);
+		--md-footer-fg-color--light: var(--ctp-subtext0);
+		--md-footer-fg-color--lighter: var(--ctp-overlay1);
+		--md-footer-bg-color: var(--ctp-mantle);
+		--md-footer-bg-color--dark: var(--ctp-crust);
+		--md-shadow-z1: 0 0.2rem 0.5rem color-mix(in srgb, var(--ctp-crust) 30%, transparent), 0 0 0.05rem color-mix(in srgb, var(--ctp-crust) 40%, transparent);
+		--md-shadow-z2: 0 0.2rem 0.5rem color-mix(in srgb, var(--ctp-crust) 50%, transparent), 0 0 0.05rem color-mix(in srgb, var(--ctp-crust) 50%, transparent);
+		--md-shadow-z3: 0 0.2rem 0.5rem color-mix(in srgb, var(--ctp-crust) 60%, transparent), 0 0 0.05rem color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+
+		--md-code-fg-color: var(--ctp-text);
+		--md-code-bg-color: var(--ctp-mantle);
+		--md-code-bg-color--light: color-mix(in srgb, var(--ctp-mantle) 90%, transparent);
+		--md-code-bg-color--lighter: color-mix(in srgb, var(--ctp-mantle) 54%, transparent);
+		--md-code-hl-color: var(--ctp-accent);
+		--md-code-hl-color--light: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--md-code-hl-number-color: var(--ctp-peach);
+		--md-code-hl-special-color: var(--ctp-pink);
+		--md-code-hl-function-color: var(--ctp-blue);
+		--md-code-hl-constant-color: var(--ctp-peach);
+		--md-code-hl-keyword-color: var(--ctp-mauve);
+		--md-code-hl-string-color: var(--ctp-green);
+		--md-code-hl-name-color: var(--ctp-text);
+		--md-code-hl-operator-color: var(--ctp-sky);
+		--md-code-hl-punctuation-color: var(--ctp-overlay2);
+		--md-code-hl-comment-color: var(--ctp-overlay2);
+		--md-code-hl-generic-color: var(--ctp-subtext0);
+		--md-code-hl-variable-color: var(--ctp-flamingo);
+
+		scrollbar-color: var(--ctp-surface2) var(--ctp-mantle);
+	}
+
+	body[data-md-color-scheme] ::selection {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+
+	/* The logo's "A" is an inline white fill on a circle in the text color.
+		 Cut it out in the header color, so it reads in every flavor. */
+	body[data-md-color-scheme] .md-logo svg path[style*="fill:white"] {
+		fill: var(--md-primary-fg-color) !important;
+	}
+
+	/* The header search field is translucent black in both schemes */
+	body[data-md-color-scheme] .md-search__form {
+		background-color: var(--ctp-surface0);
+	}
+	body[data-md-color-scheme] .md-search__form:hover {
+		background-color: var(--ctp-surface1);
+	}
+
+
+	body[data-md-color-scheme] .md-typeset .admonition.note,
+	body[data-md-color-scheme] .md-typeset details.note,
+	body[data-md-color-scheme] .md-typeset .admonition.seealso,
+	body[data-md-color-scheme] .md-typeset details.seealso {
+		border-color: var(--ctp-blue);
+	}
+	body[data-md-color-scheme] .md-typeset .note > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .note > summary,
+	body[data-md-color-scheme] .md-typeset .seealso > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .seealso > summary {
+		background-color: color-mix(in srgb, var(--ctp-blue) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .note > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .note > summary::before,
+	body[data-md-color-scheme] .md-typeset .seealso > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .seealso > summary::before {
+		background-color: var(--ctp-blue);
+	}
+	body[data-md-color-scheme] .md-typeset .note > summary::after,
+	body[data-md-color-scheme] .md-typeset .seealso > summary::after {
+		color: var(--ctp-blue);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.abstract,
+	body[data-md-color-scheme] .md-typeset details.abstract,
+	body[data-md-color-scheme] .md-typeset .admonition.summary,
+	body[data-md-color-scheme] .md-typeset details.summary,
+	body[data-md-color-scheme] .md-typeset .admonition.tldr,
+	body[data-md-color-scheme] .md-typeset details.tldr {
+		border-color: var(--ctp-sapphire);
+	}
+	body[data-md-color-scheme] .md-typeset .abstract > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .abstract > summary,
+	body[data-md-color-scheme] .md-typeset .summary > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .summary > summary,
+	body[data-md-color-scheme] .md-typeset .tldr > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .tldr > summary {
+		background-color: color-mix(in srgb, var(--ctp-sapphire) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .abstract > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .abstract > summary::before,
+	body[data-md-color-scheme] .md-typeset .summary > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .summary > summary::before,
+	body[data-md-color-scheme] .md-typeset .tldr > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .tldr > summary::before {
+		background-color: var(--ctp-sapphire);
+	}
+	body[data-md-color-scheme] .md-typeset .abstract > summary::after,
+	body[data-md-color-scheme] .md-typeset .summary > summary::after,
+	body[data-md-color-scheme] .md-typeset .tldr > summary::after {
+		color: var(--ctp-sapphire);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.info,
+	body[data-md-color-scheme] .md-typeset details.info,
+	body[data-md-color-scheme] .md-typeset .admonition.todo,
+	body[data-md-color-scheme] .md-typeset details.todo {
+		border-color: var(--ctp-sky);
+	}
+	body[data-md-color-scheme] .md-typeset .info > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .info > summary,
+	body[data-md-color-scheme] .md-typeset .todo > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .todo > summary {
+		background-color: color-mix(in srgb, var(--ctp-sky) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .info > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .info > summary::before,
+	body[data-md-color-scheme] .md-typeset .todo > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .todo > summary::before {
+		background-color: var(--ctp-sky);
+	}
+	body[data-md-color-scheme] .md-typeset .info > summary::after,
+	body[data-md-color-scheme] .md-typeset .todo > summary::after {
+		color: var(--ctp-sky);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.tip,
+	body[data-md-color-scheme] .md-typeset details.tip,
+	body[data-md-color-scheme] .md-typeset .admonition.hint,
+	body[data-md-color-scheme] .md-typeset details.hint,
+	body[data-md-color-scheme] .md-typeset .admonition.important,
+	body[data-md-color-scheme] .md-typeset details.important {
+		border-color: var(--ctp-teal);
+	}
+	body[data-md-color-scheme] .md-typeset .tip > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .tip > summary,
+	body[data-md-color-scheme] .md-typeset .hint > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .hint > summary,
+	body[data-md-color-scheme] .md-typeset .important > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .important > summary {
+		background-color: color-mix(in srgb, var(--ctp-teal) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .tip > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .tip > summary::before,
+	body[data-md-color-scheme] .md-typeset .hint > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .hint > summary::before,
+	body[data-md-color-scheme] .md-typeset .important > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .important > summary::before {
+		background-color: var(--ctp-teal);
+	}
+	body[data-md-color-scheme] .md-typeset .tip > summary::after,
+	body[data-md-color-scheme] .md-typeset .hint > summary::after,
+	body[data-md-color-scheme] .md-typeset .important > summary::after {
+		color: var(--ctp-teal);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.success,
+	body[data-md-color-scheme] .md-typeset details.success,
+	body[data-md-color-scheme] .md-typeset .admonition.check,
+	body[data-md-color-scheme] .md-typeset details.check,
+	body[data-md-color-scheme] .md-typeset .admonition.done,
+	body[data-md-color-scheme] .md-typeset details.done {
+		border-color: var(--ctp-green);
+	}
+	body[data-md-color-scheme] .md-typeset .success > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .success > summary,
+	body[data-md-color-scheme] .md-typeset .check > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .check > summary,
+	body[data-md-color-scheme] .md-typeset .done > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .done > summary {
+		background-color: color-mix(in srgb, var(--ctp-green) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .success > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .success > summary::before,
+	body[data-md-color-scheme] .md-typeset .check > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .check > summary::before,
+	body[data-md-color-scheme] .md-typeset .done > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .done > summary::before {
+		background-color: var(--ctp-green);
+	}
+	body[data-md-color-scheme] .md-typeset .success > summary::after,
+	body[data-md-color-scheme] .md-typeset .check > summary::after,
+	body[data-md-color-scheme] .md-typeset .done > summary::after {
+		color: var(--ctp-green);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.question,
+	body[data-md-color-scheme] .md-typeset details.question,
+	body[data-md-color-scheme] .md-typeset .admonition.help,
+	body[data-md-color-scheme] .md-typeset details.help,
+	body[data-md-color-scheme] .md-typeset .admonition.faq,
+	body[data-md-color-scheme] .md-typeset details.faq {
+		border-color: var(--ctp-green);
+	}
+	body[data-md-color-scheme] .md-typeset .question > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .question > summary,
+	body[data-md-color-scheme] .md-typeset .help > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .help > summary,
+	body[data-md-color-scheme] .md-typeset .faq > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .faq > summary {
+		background-color: color-mix(in srgb, var(--ctp-green) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .question > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .question > summary::before,
+	body[data-md-color-scheme] .md-typeset .help > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .help > summary::before,
+	body[data-md-color-scheme] .md-typeset .faq > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .faq > summary::before {
+		background-color: var(--ctp-green);
+	}
+	body[data-md-color-scheme] .md-typeset .question > summary::after,
+	body[data-md-color-scheme] .md-typeset .help > summary::after,
+	body[data-md-color-scheme] .md-typeset .faq > summary::after {
+		color: var(--ctp-green);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.warning,
+	body[data-md-color-scheme] .md-typeset details.warning,
+	body[data-md-color-scheme] .md-typeset .admonition.caution,
+	body[data-md-color-scheme] .md-typeset details.caution,
+	body[data-md-color-scheme] .md-typeset .admonition.attention,
+	body[data-md-color-scheme] .md-typeset details.attention {
+		border-color: var(--ctp-peach);
+	}
+	body[data-md-color-scheme] .md-typeset .warning > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .warning > summary,
+	body[data-md-color-scheme] .md-typeset .caution > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .caution > summary,
+	body[data-md-color-scheme] .md-typeset .attention > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .attention > summary {
+		background-color: color-mix(in srgb, var(--ctp-peach) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .warning > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .warning > summary::before,
+	body[data-md-color-scheme] .md-typeset .caution > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .caution > summary::before,
+	body[data-md-color-scheme] .md-typeset .attention > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .attention > summary::before {
+		background-color: var(--ctp-peach);
+	}
+	body[data-md-color-scheme] .md-typeset .warning > summary::after,
+	body[data-md-color-scheme] .md-typeset .caution > summary::after,
+	body[data-md-color-scheme] .md-typeset .attention > summary::after {
+		color: var(--ctp-peach);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.failure,
+	body[data-md-color-scheme] .md-typeset details.failure,
+	body[data-md-color-scheme] .md-typeset .admonition.fail,
+	body[data-md-color-scheme] .md-typeset details.fail,
+	body[data-md-color-scheme] .md-typeset .admonition.missing,
+	body[data-md-color-scheme] .md-typeset details.missing {
+		border-color: var(--ctp-red);
+	}
+	body[data-md-color-scheme] .md-typeset .failure > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .failure > summary,
+	body[data-md-color-scheme] .md-typeset .fail > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .fail > summary,
+	body[data-md-color-scheme] .md-typeset .missing > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .missing > summary {
+		background-color: color-mix(in srgb, var(--ctp-red) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .failure > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .failure > summary::before,
+	body[data-md-color-scheme] .md-typeset .fail > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .fail > summary::before,
+	body[data-md-color-scheme] .md-typeset .missing > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .missing > summary::before {
+		background-color: var(--ctp-red);
+	}
+	body[data-md-color-scheme] .md-typeset .failure > summary::after,
+	body[data-md-color-scheme] .md-typeset .fail > summary::after,
+	body[data-md-color-scheme] .md-typeset .missing > summary::after {
+		color: var(--ctp-red);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.danger,
+	body[data-md-color-scheme] .md-typeset details.danger,
+	body[data-md-color-scheme] .md-typeset .admonition.error,
+	body[data-md-color-scheme] .md-typeset details.error {
+		border-color: var(--ctp-red);
+	}
+	body[data-md-color-scheme] .md-typeset .danger > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .danger > summary,
+	body[data-md-color-scheme] .md-typeset .error > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .error > summary {
+		background-color: color-mix(in srgb, var(--ctp-red) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .danger > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .danger > summary::before,
+	body[data-md-color-scheme] .md-typeset .error > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .error > summary::before {
+		background-color: var(--ctp-red);
+	}
+	body[data-md-color-scheme] .md-typeset .danger > summary::after,
+	body[data-md-color-scheme] .md-typeset .error > summary::after {
+		color: var(--ctp-red);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.bug,
+	body[data-md-color-scheme] .md-typeset details.bug {
+		border-color: var(--ctp-maroon);
+	}
+	body[data-md-color-scheme] .md-typeset .bug > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .bug > summary {
+		background-color: color-mix(in srgb, var(--ctp-maroon) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .bug > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .bug > summary::before {
+		background-color: var(--ctp-maroon);
+	}
+	body[data-md-color-scheme] .md-typeset .bug > summary::after {
+		color: var(--ctp-maroon);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.example,
+	body[data-md-color-scheme] .md-typeset details.example {
+		border-color: var(--ctp-mauve);
+	}
+	body[data-md-color-scheme] .md-typeset .example > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .example > summary {
+		background-color: color-mix(in srgb, var(--ctp-mauve) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .example > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .example > summary::before {
+		background-color: var(--ctp-mauve);
+	}
+	body[data-md-color-scheme] .md-typeset .example > summary::after {
+		color: var(--ctp-mauve);
+	}
+
+	body[data-md-color-scheme] .md-typeset .admonition.quote,
+	body[data-md-color-scheme] .md-typeset details.quote,
+	body[data-md-color-scheme] .md-typeset .admonition.cite,
+	body[data-md-color-scheme] .md-typeset details.cite {
+		border-color: var(--ctp-overlay2);
+	}
+	body[data-md-color-scheme] .md-typeset .quote > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .quote > summary,
+	body[data-md-color-scheme] .md-typeset .cite > .admonition-title,
+	body[data-md-color-scheme] .md-typeset .cite > summary {
+		background-color: color-mix(in srgb, var(--ctp-overlay2) 12%, transparent);
+	}
+	body[data-md-color-scheme] .md-typeset .quote > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .quote > summary::before,
+	body[data-md-color-scheme] .md-typeset .cite > .admonition-title::before,
+	body[data-md-color-scheme] .md-typeset .cite > summary::before {
+		background-color: var(--ctp-overlay2);
+	}
+	body[data-md-color-scheme] .md-typeset .quote > summary::after,
+	body[data-md-color-scheme] .md-typeset .cite > summary::after {
+		color: var(--ctp-overlay2);
+	}
+
+}
