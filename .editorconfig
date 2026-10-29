@@ -5,5 +5,11 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+# npm rewrites these with two spaces; Markdown and YAML don't take tabs well.
+[{package.json,package-lock.json,*.md,*.yml,*.yaml}]
 indent_style = space
 indent_size = 2
