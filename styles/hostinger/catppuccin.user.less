@@ -1,0 +1,2223 @@
+/* ==UserStyle==
+@name Hostinger Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/hostinger
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/hostinger
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/hostinger/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for Hostinger's hPanel
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * How it works: hPanel draws its colors from design tokens that point at a
+ * set of primitive colors (--h-color-neutral-900, --h-color-primary-600 and
+ * so on). This style sets the primitives again, one set for hPanel's light
+ * mode and one for its dark mode, so the flavor follows hPanel's own theme
+ * setting. Each primitive is mapped by its distance from the mode's
+ * background: grays onto the ladder from base to text, Hostinger's purple
+ * to the accent, the other hues to their palette color. The rules after the
+ * tokens are generated from hPanel's stylesheets and cover the colors it
+ * writes as literals.
+ */
+
+@-moz-document domain("hpanel.hostinger.com") {
+	html.mode-light:not(#ctp),
+	.mode-light :is(.theme-base, .theme-hWebsites, .theme-hBuilder, .theme-hHorizons):not(#ctp) {
+		#hp.vars(@lightFlavor);
+		--h-color-neutral-0: var(--ctp-base);
+		--h-color-neutral-50: var(--ctp-mantle);
+		--h-color-neutral-100: var(--ctp-mantle);
+		--h-color-neutral-150: var(--ctp-crust);
+		--h-color-neutral-200: var(--ctp-surface0);
+		--h-color-neutral-300: var(--ctp-overlay1);
+		--h-color-neutral-400: var(--ctp-overlay2);
+		--h-color-neutral-500: var(--ctp-overlay2);
+		--h-color-neutral-600: var(--ctp-subtext1);
+		--h-color-neutral-700: var(--ctp-text);
+		--h-color-neutral-800: var(--ctp-text);
+		--h-color-neutral-900: var(--ctp-text);
+		--h-color-neutral-950: var(--ctp-text);
+		--h-color-neutral-1000: var(--ctp-text);
+		--h-color-primary-50: var(--ctp-mantle);
+		--h-color-primary-100: var(--ctp-crust);
+		--h-color-primary-200: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+		--h-color-primary-300: color-mix(in srgb, var(--ctp-accent) 26%, var(--ctp-base));
+		--h-color-primary-400: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base));
+		--h-color-primary-500: var(--ctp-accent);
+		--h-color-primary-600: var(--ctp-accent);
+		--h-color-primary-700: var(--ctp-accent);
+		--h-color-primary-800: var(--ctp-accent);
+		--h-color-primary-900: color-mix(in srgb, var(--ctp-accent) 74%, var(--ctp-text));
+		--h-color-primary-950: color-mix(in srgb, var(--ctp-accent) 37%, var(--ctp-text));
+		--h-color-meteorite-50: var(--ctp-mantle);
+		--h-color-meteorite-100: var(--ctp-mantle);
+		--h-color-meteorite-200: color-mix(in srgb, var(--ctp-accent) 22%, var(--ctp-base));
+		--h-color-meteorite-300: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		--h-color-meteorite-400: color-mix(in srgb, var(--ctp-accent) 39%, var(--ctp-base));
+		--h-color-meteorite-500: color-mix(in srgb, var(--ctp-accent) 48%, var(--ctp-base));
+		--h-color-light-blue-50: var(--ctp-base);
+		--h-color-light-blue-100: var(--ctp-mantle);
+		--h-color-light-blue-200: color-mix(in srgb, var(--ctp-accent) 16%, var(--ctp-base));
+		--h-color-light-blue-300: color-mix(in srgb, var(--ctp-accent) 32%, var(--ctp-base));
+		--h-color-light-blue-400: color-mix(in srgb, var(--ctp-accent) 48%, var(--ctp-base));
+		--h-color-light-blue-500: var(--ctp-accent);
+		--h-color-neon-500: var(--ctp-green);
+		--h-color-neon-600: var(--ctp-green);
+		--h-color-peridot-500: var(--ctp-green);
+		--h-color-peridot-600: var(--ctp-green);
+		--h-color-warning-50: var(--ctp-crust);
+		--h-color-warning-100: color-mix(in srgb, var(--ctp-peach) 22%, var(--ctp-base));
+		--h-color-warning-200: color-mix(in srgb, var(--ctp-peach) 40%, var(--ctp-base));
+		--h-color-warning-300: var(--ctp-peach);
+		--h-color-warning-400: var(--ctp-peach);
+		--h-color-warning-500: var(--ctp-peach);
+		--h-color-warning-600: var(--ctp-peach);
+		--h-color-warning-700: var(--ctp-peach);
+		--h-color-warning-800: color-mix(in srgb, var(--ctp-peach) 75%, var(--ctp-text));
+		--h-color-warning-900: color-mix(in srgb, var(--ctp-peach) 52%, var(--ctp-text));
+		--h-color-warning-950: color-mix(in srgb, var(--ctp-peach) 25%, var(--ctp-text));
+		--h-color-success-50: var(--ctp-mantle);
+		--h-color-success-100: color-mix(in srgb, var(--ctp-green) 16%, var(--ctp-base));
+		--h-color-success-200: color-mix(in srgb, var(--ctp-green) 33%, var(--ctp-base));
+		--h-color-success-300: var(--ctp-green);
+		--h-color-success-400: var(--ctp-green);
+		--h-color-success-500: var(--ctp-green);
+		--h-color-success-600: color-mix(in srgb, var(--ctp-green) 85%, var(--ctp-text));
+		--h-color-success-700: color-mix(in srgb, var(--ctp-green) 59%, var(--ctp-text));
+		--h-color-success-800: color-mix(in srgb, var(--ctp-green) 43%, var(--ctp-text));
+		--h-color-success-900: color-mix(in srgb, var(--ctp-green) 32%, var(--ctp-text));
+		--h-color-success-950: var(--ctp-text);
+		--h-color-danger-50: var(--ctp-mantle);
+		--h-color-danger-100: var(--ctp-mantle);
+		--h-color-danger-200: color-mix(in srgb, var(--ctp-red) 17%, var(--ctp-base));
+		--h-color-danger-300: color-mix(in srgb, var(--ctp-red) 30%, var(--ctp-base));
+		--h-color-danger-400: color-mix(in srgb, var(--ctp-red) 49%, var(--ctp-base));
+		--h-color-danger-500: var(--ctp-red);
+		--h-color-danger-600: var(--ctp-red);
+		--h-color-danger-700: color-mix(in srgb, var(--ctp-red) 92%, var(--ctp-text));
+		--h-color-danger-800: color-mix(in srgb, var(--ctp-red) 75%, var(--ctp-text));
+		--h-color-danger-900: color-mix(in srgb, var(--ctp-red) 59%, var(--ctp-text));
+		--h-color-danger-950: color-mix(in srgb, var(--ctp-red) 29%, var(--ctp-text));
+		--h-color-blue-50: var(--ctp-mantle);
+		--h-color-blue-100: var(--ctp-crust);
+		--h-color-blue-200: color-mix(in srgb, var(--ctp-accent) 17%, var(--ctp-base));
+		--h-color-blue-300: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		--h-color-blue-400: color-mix(in srgb, var(--ctp-accent) 49%, var(--ctp-base));
+		--h-color-blue-500: var(--ctp-accent);
+		--h-color-blue-600: var(--ctp-accent);
+		--h-color-blue-700: var(--ctp-accent);
+		--h-color-blue-800: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--h-color-blue-900: color-mix(in srgb, var(--ctp-accent) 71%, var(--ctp-text));
+		--h-color-blue-950: color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-text));
+		--h-color-chart-1: var(--ctp-accent);
+		--h-color-chart-2: var(--ctp-teal);
+		--h-color-chart-3: var(--ctp-accent);
+		--h-color-chart-4: var(--ctp-green);
+		--h-color-chart-5: var(--ctp-pink);
+		--h-color-chart-6: var(--ctp-peach);
+		--h-color-chart-other: var(--ctp-subtext0);
+		--h-color-light-a0: transparent;
+		--h-color-light-a2: color-mix(in srgb, var(--ctp-base) 2%, transparent);
+		--h-color-light-a5: color-mix(in srgb, var(--ctp-base) 5%, transparent);
+		--h-color-light-a10: color-mix(in srgb, var(--ctp-base) 10%, transparent);
+		--h-color-light-a15: color-mix(in srgb, var(--ctp-base) 15%, transparent);
+		--h-color-light-a20: color-mix(in srgb, var(--ctp-base) 20%, transparent);
+		--h-color-light-a25: color-mix(in srgb, var(--ctp-base) 25%, transparent);
+		--h-color-light-a50: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+		--h-color-light-a75: color-mix(in srgb, var(--ctp-base) 75%, transparent);
+		--h-color-light-a80: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		--h-color-light-a90: color-mix(in srgb, var(--ctp-base) 90%, transparent);
+		--h-color-dark-a0: transparent;
+		--h-color-dark-a2: color-mix(in srgb, var(--ctp-text) 2%, transparent);
+		--h-color-dark-a5: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+		--h-color-dark-a10: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		--h-color-dark-a15: color-mix(in srgb, var(--ctp-text) 15%, transparent);
+		--h-color-dark-a20: color-mix(in srgb, var(--ctp-text) 20%, transparent);
+		--h-color-dark-a25: color-mix(in srgb, var(--ctp-text) 25%, transparent);
+		--h-color-dark-a50: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+		--h-color-dark-a75: color-mix(in srgb, var(--ctp-text) 75%, transparent);
+		--h-color-dark-a80: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		--h-color-dark-a90: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+		--h-color-primary-a0: transparent;
+		--h-color-primary-a2: color-mix(in srgb, var(--ctp-accent) 2%, transparent);
+		--h-color-primary-a5: color-mix(in srgb, var(--ctp-accent) 5%, transparent);
+		--h-color-primary-a10: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--h-color-primary-a15: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--h-color-primary-a20: color-mix(in srgb, var(--ctp-accent) 20%, transparent);
+		--h-color-primary-a25: color-mix(in srgb, var(--ctp-accent) 25%, transparent);
+		--h-color-primary-a50: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+		--h-color-primary-a75: color-mix(in srgb, var(--ctp-accent) 75%, transparent);
+		--h-color-primary-a80: color-mix(in srgb, var(--ctp-accent) 80%, transparent);
+		--h-color-primary-a90: color-mix(in srgb, var(--ctp-accent) 90%, transparent);
+		--h-color-danger-a0: transparent;
+		--h-color-danger-a2: color-mix(in srgb, var(--ctp-red) 2%, transparent);
+		--h-color-danger-a5: color-mix(in srgb, var(--ctp-red) 5%, transparent);
+		--h-color-danger-a10: color-mix(in srgb, var(--ctp-red) 10%, transparent);
+		--h-color-danger-a15: color-mix(in srgb, var(--ctp-red) 15%, transparent);
+		--h-color-danger-a20: color-mix(in srgb, var(--ctp-red) 20%, transparent);
+		--h-color-danger-a25: color-mix(in srgb, var(--ctp-red) 25%, transparent);
+		--h-color-danger-a50: color-mix(in srgb, var(--ctp-red) 50%, transparent);
+		--h-color-danger-a75: color-mix(in srgb, var(--ctp-red) 75%, transparent);
+		--h-color-danger-a80: color-mix(in srgb, var(--ctp-red) 80%, transparent);
+		--h-color-danger-a90: color-mix(in srgb, var(--ctp-red) 90%, transparent);
+		--h-color-warning-a0: transparent;
+		--h-color-warning-a2: color-mix(in srgb, var(--ctp-peach) 2%, transparent);
+		--h-color-warning-a5: color-mix(in srgb, var(--ctp-peach) 5%, transparent);
+		--h-color-warning-a10: color-mix(in srgb, var(--ctp-peach) 10%, transparent);
+		--h-color-warning-a15: color-mix(in srgb, var(--ctp-peach) 15%, transparent);
+		--h-color-warning-a20: color-mix(in srgb, var(--ctp-peach) 20%, transparent);
+		--h-color-warning-a25: color-mix(in srgb, var(--ctp-peach) 25%, transparent);
+		--h-color-warning-a50: color-mix(in srgb, var(--ctp-peach) 50%, transparent);
+		--h-color-warning-a75: color-mix(in srgb, var(--ctp-peach) 75%, transparent);
+		--h-color-warning-a80: color-mix(in srgb, var(--ctp-peach) 80%, transparent);
+		--h-color-warning-a90: color-mix(in srgb, var(--ctp-peach) 90%, transparent);
+		--h-color-success-a0: transparent;
+		--h-color-success-a2: color-mix(in srgb, var(--ctp-green) 2%, transparent);
+		--h-color-success-a5: color-mix(in srgb, var(--ctp-green) 5%, transparent);
+		--h-color-success-a10: color-mix(in srgb, var(--ctp-green) 10%, transparent);
+		--h-color-success-a15: color-mix(in srgb, var(--ctp-green) 15%, transparent);
+		--h-color-success-a20: color-mix(in srgb, var(--ctp-green) 20%, transparent);
+		--h-color-success-a25: color-mix(in srgb, var(--ctp-green) 25%, transparent);
+		--h-color-success-a50: color-mix(in srgb, var(--ctp-green) 50%, transparent);
+		--h-color-success-a75: color-mix(in srgb, var(--ctp-green) 75%, transparent);
+		--h-color-success-a80: color-mix(in srgb, var(--ctp-green) 80%, transparent);
+		--h-color-success-a90: color-mix(in srgb, var(--ctp-green) 90%, transparent);
+		--h-color-blue-a0: transparent;
+		--h-color-blue-a2: color-mix(in srgb, var(--ctp-accent) 2%, transparent);
+		--h-color-blue-a5: color-mix(in srgb, var(--ctp-accent) 5%, transparent);
+		--h-color-blue-a10: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--h-color-blue-a15: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--h-color-blue-a20: color-mix(in srgb, var(--ctp-accent) 20%, transparent);
+		--h-color-blue-a25: color-mix(in srgb, var(--ctp-accent) 25%, transparent);
+		--h-color-blue-a50: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+		--h-color-blue-a75: color-mix(in srgb, var(--ctp-accent) 75%, transparent);
+		--h-color-blue-a80: color-mix(in srgb, var(--ctp-accent) 80%, transparent);
+		--h-color-blue-a90: color-mix(in srgb, var(--ctp-accent) 90%, transparent);
+		--neutral--0: var(--ctp-base);
+		--neutral--50: var(--ctp-mantle);
+		--neutral--100: var(--ctp-mantle);
+		--neutral--200: var(--ctp-surface0);
+		--neutral--300: var(--ctp-overlay2);
+		--neutral--400: var(--ctp-text);
+		--neutral--500: var(--ctp-text);
+		--neutral--600: var(--ctp-text);
+		--neutral--700: var(--ctp-text);
+		--neutral--800: var(--ctp-text);
+		--primary--50: var(--ctp-mantle);
+		--primary--100: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+		--primary--200: color-mix(in srgb, var(--ctp-accent) 31%, var(--ctp-base));
+		--primary--300: color-mix(in srgb, var(--ctp-accent) 43%, var(--ctp-base));
+		--primary--400: var(--ctp-accent);
+		--primary--500: var(--ctp-accent);
+		--primary--600: var(--ctp-accent);
+		--primary--700: var(--ctp-accent);
+		--primary--800: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--primary--900: color-mix(in srgb, var(--ctp-accent) 77%, var(--ctp-text));
+		--primary--1000: color-mix(in srgb, var(--ctp-accent) 62%, var(--ctp-text));
+		--meteorite--50: var(--ctp-mantle);
+		--meteorite--100: var(--ctp-mantle);
+		--meteorite--200: color-mix(in srgb, var(--ctp-accent) 22%, var(--ctp-base));
+		--meteorite--300: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-base));
+		--meteorite--400: color-mix(in srgb, var(--ctp-accent) 39%, var(--ctp-base));
+		--meteorite--500: color-mix(in srgb, var(--ctp-accent) 48%, var(--ctp-base));
+		--light-blue--50: var(--ctp-base);
+		--light-blue--100: var(--ctp-mantle);
+		--light-blue--200: color-mix(in srgb, var(--ctp-accent) 16%, var(--ctp-base));
+		--light-blue--300: color-mix(in srgb, var(--ctp-accent) 32%, var(--ctp-base));
+		--light-blue--400: color-mix(in srgb, var(--ctp-accent) 48%, var(--ctp-base));
+		--light-blue--500: var(--ctp-accent);
+		--danger--50: var(--ctp-mantle);
+		--danger--100: var(--ctp-crust);
+		--danger--200: color-mix(in srgb, var(--ctp-pink) 35%, var(--ctp-base));
+		--danger--300: color-mix(in srgb, var(--ctp-pink) 46%, var(--ctp-base));
+		--danger--400: color-mix(in srgb, var(--ctp-pink) 58%, var(--ctp-base));
+		--danger--500: var(--ctp-pink);
+		--danger--600: var(--ctp-pink);
+		--danger--700: var(--ctp-pink);
+		--warning--100: color-mix(in srgb, var(--ctp-yellow) 11%, var(--ctp-base));
+		--warning--200: color-mix(in srgb, var(--ctp-peach) 45%, var(--ctp-base));
+		--warning--500: var(--ctp-yellow);
+		--warning--600: var(--ctp-peach);
+		--warning--700: var(--ctp-peach);
+		--success--100: var(--ctp-surface0);
+		--success--200: var(--ctp-teal);
+		--success--500: var(--ctp-teal);
+		--success--600: color-mix(in srgb, var(--ctp-green) 92%, var(--ctp-text));
+		--neon--500: var(--ctp-green);
+		--neon--600: var(--ctp-green);
+		--peridot--500: var(--ctp-green);
+		--peridot--600: var(--ctp-green);
+		--niaga-primary: var(--ctp-accent);
+		--niaga-primary-dark: var(--ctp-accent);
+		--niaga-primary-light: color-mix(in srgb, var(--ctp-accent) 12%, var(--ctp-base));
+		--niaga-primary-lightest: var(--ctp-mantle);
+		--niaga-primary-chart: color-mix(in srgb, var(--ctp-accent) 50%, var(--ctp-base));
+		--niaga-meteorite: var(--ctp-sky);
+		--niaga-meteorite-dark: color-mix(in srgb, var(--ctp-accent) 33%, var(--ctp-text));
+		--niaga-meteorite-light: var(--ctp-mantle);
+		--niaga-warning: var(--ctp-peach);
+		--niaga-warning-dark: var(--ctp-peach);
+		--niaga-warning-chart: color-mix(in srgb, var(--ctp-peach) 50%, var(--ctp-base));
+		--niaga-white-blue: var(--ctp-mantle);
+		--niaga-darken-light: color-mix(in srgb, var(--ctp-accent) 12%, var(--ctp-base));
+		--niaga-blue-dark: var(--ctp-accent);
+		--h-color-periwinkle-50: var(--ctp-base);
+		--h-color-periwinkle-100: var(--ctp-mantle);
+		--h-color-periwinkle-200: color-mix(in srgb, var(--ctp-accent) 16%, var(--ctp-base));
+		--h-color-periwinkle-300: color-mix(in srgb, var(--ctp-accent) 32%, var(--ctp-base));
+		--h-color-periwinkle-400: color-mix(in srgb, var(--ctp-accent) 48%, var(--ctp-base));
+		--h-color-periwinkle-500: var(--ctp-accent);
+		--h-color-periwinkle-600: var(--ctp-accent);
+		--h-color-periwinkle-700: color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text));
+		--h-color-periwinkle-800: var(--ctp-text);
+		--h-color-citrine-50: color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base));
+		--h-color-citrine-100: var(--ctp-yellow);
+		--h-color-citrine-200: var(--ctp-green);
+		--h-color-citrine-300: var(--ctp-yellow);
+		--h-color-citrine-400: var(--ctp-yellow);
+		--h-color-citrine-500: var(--ctp-yellow);
+		--h-color-citrine-600: color-mix(in srgb, var(--ctp-yellow) 92%, var(--ctp-text));
+		--h-color-citrine-700: color-mix(in srgb, var(--ctp-yellow) 53%, var(--ctp-text));
+		--h-color-citrine-800: color-mix(in srgb, var(--ctp-yellow) 36%, var(--ctp-text));
+		--h-color-citrine-a0: transparent;
+		--h-color-citrine-a2: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 2%, transparent);
+		--h-color-citrine-a5: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 5%, transparent);
+		--h-color-citrine-a10: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 10%, transparent);
+		--h-color-citrine-a15: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 15%, transparent);
+		--h-color-citrine-a20: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 20%, transparent);
+		--h-color-citrine-a25: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 25%, transparent);
+		--h-color-citrine-a50: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 50%, transparent);
+		--h-color-citrine-a75: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 75%, transparent);
+		--h-color-citrine-a80: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 80%, transparent);
+		--h-color-citrine-a90: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 38%, var(--ctp-base)) 90%, transparent);
+		--h-color-periwinkle-a0: transparent;
+		--h-color-periwinkle-a2: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 2%, transparent);
+		--h-color-periwinkle-a5: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 5%, transparent);
+		--h-color-periwinkle-a10: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 10%, transparent);
+		--h-color-periwinkle-a15: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 15%, transparent);
+		--h-color-periwinkle-a20: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 20%, transparent);
+		--h-color-periwinkle-a25: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 25%, transparent);
+		--h-color-periwinkle-a50: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 50%, transparent);
+		--h-color-periwinkle-a75: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 75%, transparent);
+		--h-color-periwinkle-a80: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 80%, transparent);
+		--h-color-periwinkle-a90: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 90%, var(--ctp-text)) 90%, transparent);
+		--primary: var(--ctp-accent);
+		--primary-light: color-mix(in srgb, var(--ctp-accent) 11%, var(--ctp-base));
+		--primary-lightest: color-mix(in srgb, var(--ctp-accent) 8%, transparent);
+		--primary-dark: var(--ctp-accent);
+		--primary-charts: color-mix(in srgb, var(--ctp-accent) 43%, var(--ctp-base));
+		--white: var(--ctp-base);
+		--gray: var(--ctp-overlay2);
+		--gray-light: var(--ctp-mantle);
+		--gray-dark: var(--ctp-text);
+		--gray-border: var(--ctp-surface0);
+		--success: var(--ctp-teal);
+		--success-light: var(--ctp-surface0);
+		--success-dark: color-mix(in srgb, var(--ctp-green) 92%, var(--ctp-text));
+		--info-light: color-mix(in srgb, var(--ctp-teal) 12%, var(--ctp-base));
+		--danger: var(--ctp-pink);
+		--danger-light: var(--ctp-crust);
+		--danger-dark: var(--ctp-pink);
+		--warning: var(--ctp-yellow);
+		--warning-light: color-mix(in srgb, var(--ctp-yellow) 11%, var(--ctp-base));
+		--warning-dark: var(--ctp-peach);
+		--meteorite: color-mix(in srgb, var(--ctp-accent) 48%, var(--ctp-base));
+		--meteorite-light: color-mix(in srgb, var(--ctp-accent) 16%, var(--ctp-base));
+		--meteorite-gray: color-mix(in srgb, var(--ctp-surface0) 24%, transparent);
+		--meteorite-dark: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--light: var(--ctp-base);
+		--dark: var(--ctp-text);
+		--white-blue: var(--ctp-mantle);
+		--primary-timer: var(--ctp-accent);
+		--black-timer: var(--ctp-text);
+		--periwinkle: color-mix(in srgb, var(--ctp-accent) 31%, var(--ctp-base));
+		--ghost-white: var(--ctp-base);
+		--backdrop: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+		--placeholder: color-mix(in srgb, var(--ctp-text) 60%, transparent);
+		--primary-dark-hover: color-mix(in srgb, var(--ctp-surface0) 24%, transparent);
+		--agent-quill-bg: color-mix(in srgb, var(--ctp-green) 15%, var(--ctp-base));
+		--agent-quill-text: color-mix(in srgb, var(--ctp-green) 86%, var(--ctp-text));
+		--agent-quill-border: color-mix(in srgb, var(--ctp-green) 30%, var(--ctp-base));
+		--agent-quill-bg-light: var(--ctp-mantle);
+		--agent-quill-dot: var(--ctp-green);
+		--agent-scout-bg: var(--ctp-crust);
+		--agent-scout-text: var(--ctp-accent);
+		--agent-scout-border: color-mix(in srgb, var(--ctp-accent) 17%, var(--ctp-base));
+		--agent-scout-bg-light: var(--ctp-mantle);
+		--agent-scout-dot: var(--ctp-accent);
+		--agent-buzz-bg: color-mix(in srgb, var(--ctp-peach) 16%, var(--ctp-base));
+		--agent-buzz-text: var(--ctp-peach);
+		--agent-buzz-border: color-mix(in srgb, var(--ctp-peach) 34%, var(--ctp-base));
+		--agent-buzz-bg-light: var(--ctp-mantle);
+		--agent-buzz-dot: var(--ctp-peach);
+		--agent-north-bg: var(--ctp-mantle);
+		--agent-north-text: var(--ctp-accent);
+		--agent-north-border: color-mix(in srgb, var(--ctp-accent) 15%, var(--ctp-base));
+		--agent-north-bg-light: var(--ctp-mantle);
+		--agent-north-dot: var(--ctp-accent);
+		--agent-shield-bg: var(--ctp-mantle);
+		--agent-shield-text: var(--ctp-text);
+		--agent-shield-border: var(--ctp-surface0);
+		--agent-shield-bg-light: var(--ctp-mantle);
+		--agent-shield-dot: var(--ctp-overlay2);
+		--agent-ally-bg: color-mix(in srgb, var(--ctp-sky) 13%, var(--ctp-base));
+		--agent-ally-text: color-mix(in srgb, var(--ctp-sky) 92%, var(--ctp-text));
+		--agent-ally-border: color-mix(in srgb, var(--ctp-sky) 28%, var(--ctp-base));
+		--agent-ally-bg-light: var(--ctp-mantle);
+		--agent-ally-dot: var(--ctp-sky);
+		--agent-arrow-bg: var(--ctp-mantle);
+		--agent-arrow-text: color-mix(in srgb, var(--ctp-red) 92%, var(--ctp-text));
+		--agent-arrow-border: color-mix(in srgb, var(--ctp-red) 17%, var(--ctp-base));
+		--agent-arrow-bg-light: var(--ctp-mantle);
+		--agent-arrow-dot: var(--ctp-red);
+		/* Hand-written: text on filled colors takes the palette's dark text. */
+		--h-fg-brand-inverse-default: var(--ctp-on-accent);
+		--h-fg-brand-inverse-hover: var(--ctp-on-accent);
+		--h-fg-success-inverse-default: var(--ctp-on-accent);
+		--h-fg-success-inverse-hover: var(--ctp-on-accent);
+		--h-fg-danger-inverse-default: var(--ctp-on-accent);
+		--h-fg-danger-inverse-hover: var(--ctp-on-accent);
+		--h-fg-warning-inverse-default: var(--ctp-on-accent);
+		--h-fg-warning-inverse-hover: var(--ctp-on-accent);
+		--h-notification-badge-color: var(--ctp-on-accent);
+	}
+	html.mode-dark:not(#ctp),
+	.mode-dark :is(.theme-base, .theme-hWebsites, .theme-hBuilder, .theme-hHorizons):not(#ctp) {
+		#hp.vars(@darkFlavor);
+		--h-color-neutral-0: var(--ctp-text);
+		--h-color-neutral-50: var(--ctp-text);
+		--h-color-neutral-100: var(--ctp-text);
+		--h-color-neutral-150: var(--ctp-text);
+		--h-color-neutral-200: var(--ctp-text);
+		--h-color-neutral-300: var(--ctp-subtext1);
+		--h-color-neutral-400: var(--ctp-subtext0);
+		--h-color-neutral-500: var(--ctp-subtext0);
+		--h-color-neutral-600: var(--ctp-overlay2);
+		--h-color-neutral-700: var(--ctp-surface1);
+		--h-color-neutral-800: var(--ctp-surface0);
+		--h-color-neutral-900: var(--ctp-base);
+		--h-color-neutral-950: var(--ctp-mantle);
+		--h-color-neutral-1000: var(--ctp-crust);
+		--h-color-primary-50: var(--ctp-text);
+		--h-color-primary-100: var(--ctp-text);
+		--h-color-primary-200: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-text));
+		--h-color-primary-300: color-mix(in srgb, var(--ctp-accent) 52%, var(--ctp-text));
+		--h-color-primary-400: color-mix(in srgb, var(--ctp-accent) 79%, var(--ctp-text));
+		--h-color-primary-500: var(--ctp-accent);
+		--h-color-primary-600: var(--ctp-accent);
+		--h-color-primary-700: var(--ctp-accent);
+		--h-color-primary-800: color-mix(in srgb, var(--ctp-accent) 41%, var(--ctp-base));
+		--h-color-primary-900: color-mix(in srgb, var(--ctp-accent) 24%, var(--ctp-base));
+		--h-color-primary-950: color-mix(in srgb, var(--ctp-accent) 8%, var(--ctp-base));
+		--h-color-meteorite-50: var(--ctp-text);
+		--h-color-meteorite-100: var(--ctp-text);
+		--h-color-meteorite-200: color-mix(in srgb, var(--ctp-accent) 43%, var(--ctp-text));
+		--h-color-meteorite-300: color-mix(in srgb, var(--ctp-accent) 60%, var(--ctp-text));
+		--h-color-meteorite-400: color-mix(in srgb, var(--ctp-accent) 78%, var(--ctp-text));
+		--h-color-meteorite-500: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--h-color-light-blue-50: var(--ctp-text);
+		--h-color-light-blue-100: var(--ctp-text);
+		--h-color-light-blue-200: color-mix(in srgb, var(--ctp-accent) 33%, var(--ctp-text));
+		--h-color-light-blue-300: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-text));
+		--h-color-light-blue-400: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--h-color-light-blue-500: var(--ctp-accent);
+		--h-color-neon-500: var(--ctp-green);
+		--h-color-neon-600: var(--ctp-green);
+		--h-color-peridot-500: var(--ctp-green);
+		--h-color-peridot-600: var(--ctp-green);
+		--h-color-warning-50: var(--ctp-text);
+		--h-color-warning-100: color-mix(in srgb, var(--ctp-peach) 43%, var(--ctp-text));
+		--h-color-warning-200: color-mix(in srgb, var(--ctp-peach) 79%, var(--ctp-text));
+		--h-color-warning-300: var(--ctp-peach);
+		--h-color-warning-400: var(--ctp-peach);
+		--h-color-warning-500: var(--ctp-peach);
+		--h-color-warning-600: var(--ctp-peach);
+		--h-color-warning-700: color-mix(in srgb, var(--ctp-peach) 46%, var(--ctp-base));
+		--h-color-warning-800: color-mix(in srgb, var(--ctp-peach) 25%, var(--ctp-base));
+		--h-color-warning-900: color-mix(in srgb, var(--ctp-peach) 10%, var(--ctp-base));
+		--h-color-warning-950: color-mix(in srgb, var(--ctp-peach) 8%, var(--ctp-base));
+		--h-color-success-50: var(--ctp-text);
+		--h-color-success-100: color-mix(in srgb, var(--ctp-green) 33%, var(--ctp-text));
+		--h-color-success-200: color-mix(in srgb, var(--ctp-green) 66%, var(--ctp-text));
+		--h-color-success-300: var(--ctp-green);
+		--h-color-success-400: var(--ctp-green);
+		--h-color-success-500: color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base));
+		--h-color-success-600: color-mix(in srgb, var(--ctp-green) 31%, var(--ctp-base));
+		--h-color-success-700: color-mix(in srgb, var(--ctp-green) 15%, var(--ctp-base));
+		--h-color-success-800: color-mix(in srgb, var(--ctp-green) 8%, var(--ctp-base));
+		--h-color-success-900: color-mix(in srgb, var(--ctp-green) 8%, var(--ctp-base));
+		--h-color-success-950: var(--ctp-crust);
+		--h-color-danger-50: var(--ctp-text);
+		--h-color-danger-100: var(--ctp-text);
+		--h-color-danger-200: color-mix(in srgb, var(--ctp-red) 34%, var(--ctp-text));
+		--h-color-danger-300: color-mix(in srgb, var(--ctp-red) 59%, var(--ctp-text));
+		--h-color-danger-400: color-mix(in srgb, var(--ctp-red) 92%, var(--ctp-text));
+		--h-color-danger-500: var(--ctp-red);
+		--h-color-danger-600: var(--ctp-red);
+		--h-color-danger-700: color-mix(in srgb, var(--ctp-red) 37%, var(--ctp-base));
+		--h-color-danger-800: color-mix(in srgb, var(--ctp-red) 25%, var(--ctp-base));
+		--h-color-danger-900: color-mix(in srgb, var(--ctp-red) 15%, var(--ctp-base));
+		--h-color-danger-950: color-mix(in srgb, var(--ctp-red) 8%, var(--ctp-base));
+		--h-color-blue-50: var(--ctp-text);
+		--h-color-blue-100: var(--ctp-text);
+		--h-color-blue-200: color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-text));
+		--h-color-blue-300: color-mix(in srgb, var(--ctp-accent) 59%, var(--ctp-text));
+		--h-color-blue-400: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--h-color-blue-500: var(--ctp-accent);
+		--h-color-blue-600: var(--ctp-accent);
+		--h-color-blue-700: var(--ctp-accent);
+		--h-color-blue-800: color-mix(in srgb, var(--ctp-accent) 40%, var(--ctp-base));
+		--h-color-blue-900: color-mix(in srgb, var(--ctp-accent) 22%, var(--ctp-base));
+		--h-color-blue-950: color-mix(in srgb, var(--ctp-accent) 8%, var(--ctp-base));
+		--h-color-chart-1: var(--ctp-accent);
+		--h-color-chart-2: color-mix(in srgb, var(--ctp-teal) 57%, var(--ctp-base));
+		--h-color-chart-3: var(--ctp-accent);
+		--h-color-chart-4: color-mix(in srgb, var(--ctp-green) 44%, var(--ctp-base));
+		--h-color-chart-5: var(--ctp-pink);
+		--h-color-chart-6: var(--ctp-peach);
+		--h-color-chart-other: var(--ctp-overlay2);
+		--h-color-light-a0: transparent;
+		--h-color-light-a2: color-mix(in srgb, var(--ctp-text) 2%, transparent);
+		--h-color-light-a5: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+		--h-color-light-a10: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		--h-color-light-a15: color-mix(in srgb, var(--ctp-text) 15%, transparent);
+		--h-color-light-a20: color-mix(in srgb, var(--ctp-text) 20%, transparent);
+		--h-color-light-a25: color-mix(in srgb, var(--ctp-text) 25%, transparent);
+		--h-color-light-a50: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+		--h-color-light-a75: color-mix(in srgb, var(--ctp-text) 75%, transparent);
+		--h-color-light-a80: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		--h-color-light-a90: color-mix(in srgb, var(--ctp-text) 90%, transparent);
+		--h-color-dark-a0: transparent;
+		--h-color-dark-a2: color-mix(in srgb, var(--ctp-crust) 2%, transparent);
+		--h-color-dark-a5: color-mix(in srgb, var(--ctp-crust) 5%, transparent);
+		--h-color-dark-a10: color-mix(in srgb, var(--ctp-crust) 10%, transparent);
+		--h-color-dark-a15: color-mix(in srgb, var(--ctp-crust) 15%, transparent);
+		--h-color-dark-a20: color-mix(in srgb, var(--ctp-crust) 20%, transparent);
+		--h-color-dark-a25: color-mix(in srgb, var(--ctp-crust) 25%, transparent);
+		--h-color-dark-a50: color-mix(in srgb, var(--ctp-crust) 50%, transparent);
+		--h-color-dark-a75: color-mix(in srgb, var(--ctp-crust) 75%, transparent);
+		--h-color-dark-a80: color-mix(in srgb, var(--ctp-crust) 80%, transparent);
+		--h-color-dark-a90: color-mix(in srgb, var(--ctp-crust) 90%, transparent);
+		--h-color-primary-a0: transparent;
+		--h-color-primary-a2: color-mix(in srgb, var(--ctp-accent) 2%, transparent);
+		--h-color-primary-a5: color-mix(in srgb, var(--ctp-accent) 5%, transparent);
+		--h-color-primary-a10: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--h-color-primary-a15: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--h-color-primary-a20: color-mix(in srgb, var(--ctp-accent) 20%, transparent);
+		--h-color-primary-a25: color-mix(in srgb, var(--ctp-accent) 25%, transparent);
+		--h-color-primary-a50: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+		--h-color-primary-a75: color-mix(in srgb, var(--ctp-accent) 75%, transparent);
+		--h-color-primary-a80: color-mix(in srgb, var(--ctp-accent) 80%, transparent);
+		--h-color-primary-a90: color-mix(in srgb, var(--ctp-accent) 90%, transparent);
+		--h-color-danger-a0: transparent;
+		--h-color-danger-a2: color-mix(in srgb, var(--ctp-red) 2%, transparent);
+		--h-color-danger-a5: color-mix(in srgb, var(--ctp-red) 5%, transparent);
+		--h-color-danger-a10: color-mix(in srgb, var(--ctp-red) 10%, transparent);
+		--h-color-danger-a15: color-mix(in srgb, var(--ctp-red) 15%, transparent);
+		--h-color-danger-a20: color-mix(in srgb, var(--ctp-red) 20%, transparent);
+		--h-color-danger-a25: color-mix(in srgb, var(--ctp-red) 25%, transparent);
+		--h-color-danger-a50: color-mix(in srgb, var(--ctp-red) 50%, transparent);
+		--h-color-danger-a75: color-mix(in srgb, var(--ctp-red) 75%, transparent);
+		--h-color-danger-a80: color-mix(in srgb, var(--ctp-red) 80%, transparent);
+		--h-color-danger-a90: color-mix(in srgb, var(--ctp-red) 90%, transparent);
+		--h-color-warning-a0: transparent;
+		--h-color-warning-a2: color-mix(in srgb, var(--ctp-peach) 2%, transparent);
+		--h-color-warning-a5: color-mix(in srgb, var(--ctp-peach) 5%, transparent);
+		--h-color-warning-a10: color-mix(in srgb, var(--ctp-peach) 10%, transparent);
+		--h-color-warning-a15: color-mix(in srgb, var(--ctp-peach) 15%, transparent);
+		--h-color-warning-a20: color-mix(in srgb, var(--ctp-peach) 20%, transparent);
+		--h-color-warning-a25: color-mix(in srgb, var(--ctp-peach) 25%, transparent);
+		--h-color-warning-a50: color-mix(in srgb, var(--ctp-peach) 50%, transparent);
+		--h-color-warning-a75: color-mix(in srgb, var(--ctp-peach) 75%, transparent);
+		--h-color-warning-a80: color-mix(in srgb, var(--ctp-peach) 80%, transparent);
+		--h-color-warning-a90: color-mix(in srgb, var(--ctp-peach) 90%, transparent);
+		--h-color-success-a0: transparent;
+		--h-color-success-a2: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 2%, transparent);
+		--h-color-success-a5: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 5%, transparent);
+		--h-color-success-a10: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 10%, transparent);
+		--h-color-success-a15: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 15%, transparent);
+		--h-color-success-a20: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 20%, transparent);
+		--h-color-success-a25: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 25%, transparent);
+		--h-color-success-a50: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 50%, transparent);
+		--h-color-success-a75: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 75%, transparent);
+		--h-color-success-a80: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 80%, transparent);
+		--h-color-success-a90: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 90%, transparent);
+		--h-color-blue-a0: transparent;
+		--h-color-blue-a2: color-mix(in srgb, var(--ctp-accent) 2%, transparent);
+		--h-color-blue-a5: color-mix(in srgb, var(--ctp-accent) 5%, transparent);
+		--h-color-blue-a10: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--h-color-blue-a15: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--h-color-blue-a20: color-mix(in srgb, var(--ctp-accent) 20%, transparent);
+		--h-color-blue-a25: color-mix(in srgb, var(--ctp-accent) 25%, transparent);
+		--h-color-blue-a50: color-mix(in srgb, var(--ctp-accent) 50%, transparent);
+		--h-color-blue-a75: color-mix(in srgb, var(--ctp-accent) 75%, transparent);
+		--h-color-blue-a80: color-mix(in srgb, var(--ctp-accent) 80%, transparent);
+		--h-color-blue-a90: color-mix(in srgb, var(--ctp-accent) 90%, transparent);
+		--neutral--0: var(--ctp-text);
+		--neutral--50: var(--ctp-text);
+		--neutral--100: var(--ctp-text);
+		--neutral--200: var(--ctp-text);
+		--neutral--300: var(--ctp-overlay1);
+		--neutral--400: var(--ctp-surface1);
+		--neutral--500: var(--ctp-surface0);
+		--neutral--600: var(--ctp-base);
+		--neutral--700: var(--ctp-base);
+		--neutral--800: var(--ctp-crust);
+		--primary--50: var(--ctp-text);
+		--primary--100: color-mix(in srgb, var(--ctp-accent) 30%, var(--ctp-text));
+		--primary--200: color-mix(in srgb, var(--ctp-accent) 61%, var(--ctp-text));
+		--primary--300: color-mix(in srgb, var(--ctp-accent) 85%, var(--ctp-text));
+		--primary--400: var(--ctp-accent);
+		--primary--500: var(--ctp-accent);
+		--primary--600: var(--ctp-accent);
+		--primary--700: var(--ctp-accent);
+		--primary--800: color-mix(in srgb, var(--ctp-accent) 37%, var(--ctp-base));
+		--primary--900: color-mix(in srgb, var(--ctp-accent) 26%, var(--ctp-base));
+		--primary--1000: color-mix(in srgb, var(--ctp-accent) 17%, var(--ctp-base));
+		--meteorite--50: var(--ctp-text);
+		--meteorite--100: var(--ctp-text);
+		--meteorite--200: color-mix(in srgb, var(--ctp-accent) 43%, var(--ctp-text));
+		--meteorite--300: color-mix(in srgb, var(--ctp-accent) 60%, var(--ctp-text));
+		--meteorite--400: color-mix(in srgb, var(--ctp-accent) 78%, var(--ctp-text));
+		--meteorite--500: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--light-blue--50: var(--ctp-text);
+		--light-blue--100: var(--ctp-text);
+		--light-blue--200: color-mix(in srgb, var(--ctp-accent) 33%, var(--ctp-text));
+		--light-blue--300: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-text));
+		--light-blue--400: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--light-blue--500: var(--ctp-accent);
+		--danger--50: var(--ctp-text);
+		--danger--100: var(--ctp-text);
+		--danger--200: color-mix(in srgb, var(--ctp-pink) 68%, var(--ctp-text));
+		--danger--300: color-mix(in srgb, var(--ctp-pink) 92%, var(--ctp-text));
+		--danger--400: var(--ctp-pink);
+		--danger--500: var(--ctp-pink);
+		--danger--600: var(--ctp-pink);
+		--danger--700: var(--ctp-pink);
+		--warning--100: color-mix(in srgb, var(--ctp-yellow) 23%, var(--ctp-text));
+		--warning--200: color-mix(in srgb, var(--ctp-peach) 89%, var(--ctp-text));
+		--warning--500: var(--ctp-yellow);
+		--warning--600: var(--ctp-peach);
+		--warning--700: color-mix(in srgb, var(--ctp-peach) 47%, var(--ctp-base));
+		--success--100: var(--ctp-text);
+		--success--200: var(--ctp-teal);
+		--success--500: color-mix(in srgb, var(--ctp-teal) 55%, var(--ctp-base));
+		--success--600: color-mix(in srgb, var(--ctp-green) 35%, var(--ctp-base));
+		--neon--500: var(--ctp-green);
+		--neon--600: var(--ctp-green);
+		--peridot--500: var(--ctp-green);
+		--peridot--600: var(--ctp-green);
+		--niaga-primary: var(--ctp-accent);
+		--niaga-primary-dark: color-mix(in srgb, var(--ctp-accent) 45%, var(--ctp-base));
+		--niaga-primary-light: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		--niaga-primary-lightest: var(--ctp-text);
+		--niaga-primary-chart: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--niaga-meteorite: var(--ctp-sky);
+		--niaga-meteorite-dark: color-mix(in srgb, var(--ctp-accent) 8%, var(--ctp-base));
+		--niaga-meteorite-light: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		--niaga-warning: var(--ctp-peach);
+		--niaga-warning-dark: var(--ctp-peach);
+		--niaga-warning-chart: color-mix(in srgb, var(--ctp-peach) 92%, var(--ctp-text));
+		--niaga-white-blue: var(--ctp-text);
+		--niaga-darken-light: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		--niaga-blue-dark: var(--ctp-accent);
+		--h-color-periwinkle-50: var(--ctp-text);
+		--h-color-periwinkle-100: var(--ctp-text);
+		--h-color-periwinkle-200: color-mix(in srgb, var(--ctp-accent) 33%, var(--ctp-text));
+		--h-color-periwinkle-300: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-text));
+		--h-color-periwinkle-400: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--h-color-periwinkle-500: var(--ctp-accent);
+		--h-color-periwinkle-600: color-mix(in srgb, var(--ctp-accent) 56%, var(--ctp-base));
+		--h-color-periwinkle-700: color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base));
+		--h-color-periwinkle-800: var(--ctp-surface0);
+		--h-color-citrine-50: color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text));
+		--h-color-citrine-100: var(--ctp-yellow);
+		--h-color-citrine-200: var(--ctp-green);
+		--h-color-citrine-300: var(--ctp-yellow);
+		--h-color-citrine-400: var(--ctp-yellow);
+		--h-color-citrine-500: var(--ctp-yellow);
+		--h-color-citrine-600: color-mix(in srgb, var(--ctp-yellow) 37%, var(--ctp-base));
+		--h-color-citrine-700: color-mix(in srgb, var(--ctp-yellow) 11%, var(--ctp-base));
+		--h-color-citrine-800: color-mix(in srgb, var(--ctp-yellow) 8%, var(--ctp-base));
+		--h-color-citrine-a0: transparent;
+		--h-color-citrine-a2: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 2%, transparent);
+		--h-color-citrine-a5: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 5%, transparent);
+		--h-color-citrine-a10: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 10%, transparent);
+		--h-color-citrine-a15: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 15%, transparent);
+		--h-color-citrine-a20: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 20%, transparent);
+		--h-color-citrine-a25: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 25%, transparent);
+		--h-color-citrine-a50: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 50%, transparent);
+		--h-color-citrine-a75: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 75%, transparent);
+		--h-color-citrine-a80: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 80%, transparent);
+		--h-color-citrine-a90: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 76%, var(--ctp-text)) 90%, transparent);
+		--h-color-periwinkle-a0: transparent;
+		--h-color-periwinkle-a2: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 2%, transparent);
+		--h-color-periwinkle-a5: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 5%, transparent);
+		--h-color-periwinkle-a10: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 10%, transparent);
+		--h-color-periwinkle-a15: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 15%, transparent);
+		--h-color-periwinkle-a20: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 20%, transparent);
+		--h-color-periwinkle-a25: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 25%, transparent);
+		--h-color-periwinkle-a50: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 50%, transparent);
+		--h-color-periwinkle-a75: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 75%, transparent);
+		--h-color-periwinkle-a80: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 80%, transparent);
+		--h-color-periwinkle-a90: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 34%, var(--ctp-base)) 90%, transparent);
+		--primary: var(--ctp-accent);
+		--primary-light: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		--primary-lightest: color-mix(in srgb, var(--ctp-accent) 8%, transparent);
+		--primary-dark: var(--ctp-accent);
+		--primary-charts: color-mix(in srgb, var(--ctp-accent) 85%, var(--ctp-text));
+		--white: var(--ctp-text);
+		--gray: var(--ctp-overlay1);
+		--gray-light: var(--ctp-surface0);
+		--gray-dark: var(--ctp-surface1);
+		--gray-border: var(--ctp-text);
+		--success: color-mix(in srgb, var(--ctp-teal) 55%, var(--ctp-base));
+		--success-light: color-mix(in srgb, var(--ctp-green) 20%, var(--ctp-base));
+		--success-dark: color-mix(in srgb, var(--ctp-green) 35%, var(--ctp-base));
+		--info-light: color-mix(in srgb, var(--ctp-teal) 20%, var(--ctp-base));
+		--danger: var(--ctp-pink);
+		--danger-light: color-mix(in srgb, var(--ctp-red) 20%, var(--ctp-base));
+		--danger-dark: var(--ctp-pink);
+		--warning: var(--ctp-yellow);
+		--warning-light: color-mix(in srgb, var(--ctp-yellow) 20%, var(--ctp-base));
+		--warning-dark: var(--ctp-peach);
+		--meteorite: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--meteorite-light: color-mix(in srgb, var(--ctp-accent) 20%, var(--ctp-base));
+		--meteorite-gray: color-mix(in srgb, var(--ctp-text) 24%, transparent);
+		--meteorite-dark: color-mix(in srgb, var(--ctp-accent) 37%, var(--ctp-base));
+		--light: var(--ctp-text);
+		--dark: var(--ctp-base);
+		--white-blue: var(--ctp-text);
+		--primary-timer: var(--ctp-accent);
+		--black-timer: var(--ctp-surface1);
+		--periwinkle: color-mix(in srgb, var(--ctp-accent) 62%, var(--ctp-text));
+		--ghost-white: var(--ctp-text);
+		--backdrop: color-mix(in srgb, var(--ctp-crust) 50%, transparent);
+		--placeholder: color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+		--primary-dark-hover: color-mix(in srgb, var(--ctp-text) 24%, transparent);
+		--agent-quill-bg: color-mix(in srgb, var(--ctp-green) 16%, var(--ctp-base));
+		--agent-quill-text: color-mix(in srgb, var(--ctp-green) 92%, var(--ctp-text));
+		--agent-quill-border: color-mix(in srgb, var(--ctp-green) 31%, var(--ctp-base));
+		--agent-quill-bg-light: var(--ctp-base);
+		--agent-quill-dot: var(--ctp-green);
+		--agent-scout-bg: color-mix(in srgb, var(--ctp-accent) 31%, var(--ctp-base));
+		--agent-scout-text: color-mix(in srgb, var(--ctp-accent) 68%, var(--ctp-text));
+		--agent-scout-border: color-mix(in srgb, var(--ctp-accent) 49%, var(--ctp-base));
+		--agent-scout-bg-light: var(--ctp-surface0);
+		--agent-scout-dot: color-mix(in srgb, var(--ctp-accent) 92%, var(--ctp-text));
+		--agent-buzz-bg: color-mix(in srgb, var(--ctp-peach) 23%, var(--ctp-base));
+		--agent-buzz-text: color-mix(in srgb, var(--ctp-peach) 92%, var(--ctp-text));
+		--agent-buzz-border: color-mix(in srgb, var(--ctp-peach) 37%, var(--ctp-base));
+		--agent-buzz-bg-light: var(--ctp-base);
+		--agent-buzz-dot: var(--ctp-peach);
+		--agent-north-bg: color-mix(in srgb, var(--ctp-mauve) 30%, var(--ctp-base));
+		--agent-north-text: color-mix(in srgb, var(--ctp-mauve) 63%, var(--ctp-text));
+		--agent-north-border: color-mix(in srgb, var(--ctp-mauve) 46%, var(--ctp-base));
+		--agent-north-bg-light: var(--ctp-surface0);
+		--agent-north-dot: color-mix(in srgb, var(--ctp-accent) 78%, var(--ctp-text));
+		--agent-shield-bg: var(--ctp-surface0);
+		--agent-shield-text: var(--ctp-subtext1);
+		--agent-shield-border: var(--ctp-surface2);
+		--agent-shield-bg-light: var(--ctp-base);
+		--agent-shield-dot: var(--ctp-subtext0);
+		--agent-ally-bg: color-mix(in srgb, var(--ctp-sky) 24%, var(--ctp-base));
+		--agent-ally-text: color-mix(in srgb, var(--ctp-sky) 89%, var(--ctp-text));
+		--agent-ally-border: color-mix(in srgb, var(--ctp-sky) 40%, var(--ctp-base));
+		--agent-ally-bg-light: var(--ctp-surface0);
+		--agent-ally-dot: var(--ctp-sky);
+		--agent-arrow-bg: color-mix(in srgb, var(--ctp-red) 23%, var(--ctp-base));
+		--agent-arrow-text: color-mix(in srgb, var(--ctp-red) 76%, var(--ctp-text));
+		--agent-arrow-border: color-mix(in srgb, var(--ctp-red) 39%, var(--ctp-base));
+		--agent-arrow-bg-light: var(--ctp-base);
+		--agent-arrow-dot: color-mix(in srgb, var(--ctp-red) 92%, var(--ctp-text));
+		/* Hand-written: text on filled colors takes the palette's dark text. */
+		--h-fg-brand-inverse-default: var(--ctp-on-accent);
+		--h-fg-brand-inverse-hover: var(--ctp-on-accent);
+		--h-fg-success-inverse-default: var(--ctp-on-accent);
+		--h-fg-success-inverse-hover: var(--ctp-on-accent);
+		--h-fg-danger-inverse-default: var(--ctp-on-accent);
+		--h-fg-danger-inverse-hover: var(--ctp-on-accent);
+		--h-fg-warning-inverse-default: var(--ctp-on-accent);
+		--h-fg-warning-inverse-hover: var(--ctp-on-accent);
+		--h-notification-badge-color: var(--ctp-on-accent);
+	}
+
+	::selection {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+
+	/* Generated from hPanel's stylesheets. */
+	:where(.mode-dark) .theme-hHorizons {
+		--h-segmented-control-segment-active-shadow: 0 0 4px 0 color-mix(in srgb, var(--ctp-crust) 12%, transparent);
+	}
+	:where(.mode-light) .theme-hHorizons {
+		--h-segmented-control-segment-active-shadow: 0 0 4px 0 color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	:where(.mode-dark) .h-circle-loader__track[data-v-3a48eb05] {
+		-webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--h-circle-loader-stroke) - .5px), var(--ctp-crust) calc(100% - var(--h-circle-loader-stroke)));
+		-webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--h-circle-loader-stroke) - .5px), var(--ctp-crust) calc(100% - var(--h-circle-loader-stroke)));
+		mask: radial-gradient(closest-side, transparent calc(100% - var(--h-circle-loader-stroke) - .5px), var(--ctp-crust) calc(100% - var(--h-circle-loader-stroke)));
+	}
+	:where(.mode-light) .h-circle-loader__track[data-v-3a48eb05] {
+		-webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--h-circle-loader-stroke) - .5px), var(--ctp-text) calc(100% - var(--h-circle-loader-stroke)));
+		-webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--h-circle-loader-stroke) - .5px), var(--ctp-text) calc(100% - var(--h-circle-loader-stroke)));
+		mask: radial-gradient(closest-side, transparent calc(100% - var(--h-circle-loader-stroke) - .5px), var(--ctp-text) calc(100% - var(--h-circle-loader-stroke)));
+	}
+	:where(.mode-dark) .h-button-v2--shine[data-v-1f51ec73]:before {
+		background: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+	}
+	:where(.mode-light) .h-button-v2--shine[data-v-1f51ec73]:before {
+		background: color-mix(in srgb, var(--ctp-base) 30%, transparent);
+	}
+	:where(.mode-dark) .h-popover[data-v-fb3d6a8b] {
+		box-shadow: 0 8px 16px color-mix(in srgb, var(--ctp-crust) 12%, transparent);
+	}
+	:where(.mode-light) .h-popover[data-v-fb3d6a8b] {
+		box-shadow: 0 8px 16px color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	:where(.mode-dark) .h-split-button--contain-primary[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+	}
+	:where(.mode-light) .h-split-button--contain-primary[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-base) 30%, transparent);
+	}
+	.h-split-button--contain-light[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-text) 15%, transparent);
+	}
+	:where(.mode-dark) .h-split-button--contain-danger[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+	}
+	:where(.mode-light) .h-split-button--contain-danger[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-base) 30%, transparent);
+	}
+	:where(.mode-dark) .h-split-button--contain-neon[data-v-0797911f],
+	:where(.mode-dark) .h-split-button--contain-warning[data-v-0797911f],
+	:where(.mode-dark) .h-split-button--contain-neutral[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-crust) 15%, transparent);
+	}
+	:where(.mode-light) .h-split-button--contain-neon[data-v-0797911f],
+	:where(.mode-light) .h-split-button--contain-warning[data-v-0797911f],
+	:where(.mode-light) .h-split-button--contain-neutral[data-v-0797911f] {
+		--h-split-button-divider-color: color-mix(in srgb, var(--ctp-text) 15%, transparent);
+	}
+	:where(.mode-dark) .h-label--ai[data-v-d891fcec] {
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .h-label--ai[data-v-d891fcec] {
+		border: 1px solid transparent;
+	}
+	:where(.mode-dark) .h-input-border__ai-glow[data-v-c65c473a] {
+		background: linear-gradient(104deg, var(--h-border-ai-color-cyan,var(--ctp-teal)) -11.2%, var(--h-border-ai-color-start,var(--ctp-accent)) 40.18%, var(--ctp-accent) 68.43%, var(--h-border-ai-color-end,var(--ctp-pink)) 107.85%);
+	}
+	:where(.mode-light) .h-input-border__ai-glow[data-v-c65c473a] {
+		background: linear-gradient(104deg, var(--h-border-ai-color-cyan,color-mix(in srgb, var(--ctp-teal) 58%, var(--ctp-base))) -11.2%, var(--h-border-ai-color-start,var(--ctp-accent)) 40.18%, var(--ctp-accent) 68.43%, var(--h-border-ai-color-end,var(--ctp-pink)) 107.85%);
+	}
+	:where(.mode-dark) .h-input-border--ai[data-v-c65c473a]:after {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0 0),linear-gradient(var(--ctp-text) 0 0);
+	}
+	:where(.mode-light) .h-input-border--ai[data-v-c65c473a]:after {
+		-webkit-mask-image: linear-gradient(var(--ctp-base) 0 0),linear-gradient(var(--ctp-base) 0 0);
+	}
+	:where(.mode-dark) .h-input-border--ai[data-v-c65c473a]:focus-within:not(.h-input-border--disabled):not(.h-input-border--loading):before,
+	:where(.mode-dark) .h-input-border--ai.h-input-border--focused[data-v-c65c473a]:not(.h-input-border--disabled):not(.h-input-border--loading):before {
+		background: conic-gradient(from var(--h-border-ai-angle), transparent 40%, var(--ctp-teal) 70%, var(--ctp-accent) 85%, var(--ctp-pink) 95%, transparent 100%);
+	}
+	:where(.mode-light) .h-input-border--ai[data-v-c65c473a]:focus-within:not(.h-input-border--disabled):not(.h-input-border--loading):before,
+	:where(.mode-light) .h-input-border--ai.h-input-border--focused[data-v-c65c473a]:not(.h-input-border--disabled):not(.h-input-border--loading):before {
+		background: conic-gradient(from var(--h-border-ai-angle), transparent 40%, color-mix(in srgb, var(--ctp-teal) 58%, var(--ctp-base)) 70%, var(--ctp-accent) 85%, var(--ctp-pink) 95%, transparent 100%);
+	}
+	:where(.mode-dark) .h-donut-chart__row-label[data-v-ed5340b6] {
+		-webkit-text-decoration: line-through transparent;
+		text-decoration: line-through transparent;
+	}
+	:where(.mode-light) .h-donut-chart__row-label[data-v-ed5340b6] {
+		-webkit-text-decoration: line-through transparent;
+		text-decoration: line-through transparent;
+	}
+	:where(.mode-dark) .h-price-rolling-amount__window[data-v-8e6395f8] {
+		-webkit-mask-image: linear-gradient(to bottom, transparent, var(--ctp-crust) var(--h-price-rolling-amount-fade), var(--ctp-crust) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+		-webkit-mask-image: linear-gradient(to bottom, transparent, var(--ctp-crust) var(--h-price-rolling-amount-fade), var(--ctp-crust) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+		mask-image: linear-gradient(to bottom, transparent, var(--ctp-crust) var(--h-price-rolling-amount-fade), var(--ctp-crust) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+		-webkit-mask-image: linear-gradient(to bottom, transparent, var(--ctp-crust) var(--h-price-rolling-amount-fade), var(--ctp-crust) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+	}
+	:where(.mode-light) .h-price-rolling-amount__window[data-v-8e6395f8] {
+		-webkit-mask-image: linear-gradient(to bottom, transparent, var(--ctp-text) var(--h-price-rolling-amount-fade), var(--ctp-text) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+		-webkit-mask-image: linear-gradient(to bottom, transparent, var(--ctp-text) var(--h-price-rolling-amount-fade), var(--ctp-text) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+		mask-image: linear-gradient(to bottom, transparent, var(--ctp-text) var(--h-price-rolling-amount-fade), var(--ctp-text) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+		-webkit-mask-image: linear-gradient(to bottom, transparent, var(--ctp-text) var(--h-price-rolling-amount-fade), var(--ctp-text) calc(100% - var(--h-price-rolling-amount-fade)), transparent);
+	}
+	:where(.mode-dark) .h-input__field[data-v-a0f9f67d]:-webkit-autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input__field[data-v-a0f9f67d]:-webkit-autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input__field[data-v-a0f9f67d]:autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input__field[data-v-a0f9f67d]:autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input__field[data-v-a0f9f67d]:-webkit-autofill:hover {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input__field[data-v-a0f9f67d]:-webkit-autofill:hover {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input__field[data-v-a0f9f67d]:-webkit-autofill:focus {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input__field[data-v-a0f9f67d]:-webkit-autofill:focus {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input__field[data-v-a0f9f67d]:-webkit-autofill:active {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input__field[data-v-a0f9f67d]:-webkit-autofill:active {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-guidance-tooltip--floating[data-v-cae88bb3] {
+		box-shadow: 0 8px 24px color-mix(in srgb, var(--ctp-crust) 16%, transparent);
+	}
+	:where(.mode-light) .h-guidance-tooltip--floating[data-v-cae88bb3] {
+		box-shadow: 0 8px 24px color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	:where(.mode-dark) .h-hotspot__indicator--pulsing[data-v-9c7298f9] {
+		background-color: color-mix(in srgb, var(--ctp-pink) 30%, transparent);
+	}
+	:where(.mode-light) .h-hotspot__indicator--pulsing[data-v-9c7298f9] {
+		background-color: color-mix(in srgb, var(--ctp-pink) 30%, transparent);
+	}
+	:where(.mode-dark) .h-hotspot__indicator--static[data-v-9c7298f9] {
+		background-color: color-mix(in srgb, var(--ctp-pink) 30%, transparent);
+	}
+	:where(.mode-light) .h-hotspot__indicator--static[data-v-9c7298f9] {
+		background-color: color-mix(in srgb, var(--ctp-pink) 30%, transparent);
+	}
+	:where(.mode-dark) .h-progress-circle__background[data-v-7c030b28] {
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-crust) calc(73% - var(--stroke-width)));
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-crust) calc(73% - var(--stroke-width)));
+		mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-crust) calc(73% - var(--stroke-width)));
+	}
+	:where(.mode-light) .h-progress-circle__background[data-v-7c030b28] {
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-text) calc(73% - var(--stroke-width)));
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-text) calc(73% - var(--stroke-width)));
+		mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-text) calc(73% - var(--stroke-width)));
+	}
+	:where(.mode-dark) .h-progress-circle__ring[data-v-7c030b28] {
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-crust) calc(73% - var(--stroke-width)));
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-crust) calc(73% - var(--stroke-width)));
+		mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-crust) calc(73% - var(--stroke-width)));
+	}
+	:where(.mode-light) .h-progress-circle__ring[data-v-7c030b28] {
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-text) calc(73% - var(--stroke-width)));
+		-webkit-mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-text) calc(73% - var(--stroke-width)));
+		mask: radial-gradient(transparent calc(73% - var(--stroke-width)), var(--ctp-text) calc(73% - var(--stroke-width)));
+	}
+	:where(.mode-dark) .h-input-area__field[data-v-cad30214]:-webkit-autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input-area__field[data-v-cad30214]:-webkit-autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input-area__field[data-v-cad30214]:autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input-area__field[data-v-cad30214]:autofill {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input-area__field[data-v-cad30214]:-webkit-autofill:hover {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input-area__field[data-v-cad30214]:-webkit-autofill:hover {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input-area__field[data-v-cad30214]:-webkit-autofill:focus {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input-area__field[data-v-cad30214]:-webkit-autofill:focus {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-input-area__field[data-v-cad30214]:-webkit-autofill:active {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-light) .h-input-area__field[data-v-cad30214]:-webkit-autofill:active {
+		box-shadow: inset 0 0 0 1000px transparent!important;
+	}
+	:where(.mode-dark) .h-chat-input .h-chat-input__border--ai[data-v-16cdbc01]:after {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0 0),linear-gradient(var(--ctp-text) 0 0);
+	}
+	:where(.mode-light) .h-chat-input .h-chat-input__border--ai[data-v-16cdbc01]:after {
+		-webkit-mask-image: linear-gradient(var(--ctp-base) 0 0),linear-gradient(var(--ctp-base) 0 0);
+	}
+	:where(.mode-dark) .h-chat-input .h-chat-input__border--ai[data-v-16cdbc01]:focus-within:before {
+		background: conic-gradient(from var(--h-chat-input-ai-angle), transparent 40%, var(--ctp-teal) 70%, var(--ctp-accent) 85%, var(--ctp-pink) 95%, transparent 100%);
+	}
+	:where(.mode-light) .h-chat-input .h-chat-input__border--ai[data-v-16cdbc01]:focus-within:before {
+		background: conic-gradient(from var(--h-chat-input-ai-angle), transparent 40%, color-mix(in srgb, var(--ctp-teal) 58%, var(--ctp-base)) 70%, var(--ctp-accent) 85%, var(--ctp-pink) 95%, transparent 100%);
+	}
+	:where(.mode-dark) .h-chat-input .h-chat-input__ai-glow[data-v-16cdbc01] {
+		background: linear-gradient(104deg, var(--h-border-ai-color-cyan,var(--ctp-teal)) -11.2%, var(--h-border-ai-color-start,var(--ctp-accent)) 40.18%, var(--ctp-accent) 68.43%, var(--h-border-ai-color-end,var(--ctp-pink)) 107.85%);
+	}
+	:where(.mode-light) .h-chat-input .h-chat-input__ai-glow[data-v-16cdbc01] {
+		background: linear-gradient(104deg, var(--h-border-ai-color-cyan,color-mix(in srgb, var(--ctp-teal) 58%, var(--ctp-base))) -11.2%, var(--h-border-ai-color-start,var(--ctp-accent)) 40.18%, var(--ctp-accent) 68.43%, var(--h-border-ai-color-end,var(--ctp-pink)) 107.85%);
+	}
+	:where(.mode-dark) .dp__menu_disabled {
+		background: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	:where(.mode-light) .dp__menu_disabled {
+		background: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+	}
+	:where(.mode-dark) .dp-menu-loading {
+		background: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	:where(.mode-light) .dp-menu-loading {
+		background: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+	}
+	:where(.mode-dark) .dp__cell_inner {
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .dp__cell_inner {
+		border: 1px solid transparent;
+	}
+	:where(.mode-dark) .dp__action_button {
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .dp__action_button {
+		border: 1px solid transparent;
+	}
+	.dp__theme_dark {
+		--dp-background-color: var(--ctp-base);
+		--dp-text-color: var(--ctp-text);
+		--dp-hover-color: var(--ctp-overlay1);
+		--dp-hover-text-color: var(--ctp-text);
+		--dp-hover-icon-color: var(--ctp-overlay2);
+		--dp-primary-color: color-mix(in srgb, var(--ctp-accent) 56%, var(--ctp-base));
+		--dp-primary-disabled-color: var(--ctp-accent);
+		--dp-primary-text-color: var(--ctp-text);
+		--dp-secondary-color: var(--ctp-subtext0);
+		--dp-border-color: var(--ctp-surface0);
+		--dp-menu-border-color: var(--ctp-surface0);
+		--dp-border-color-hover: var(--ctp-subtext0);
+		--dp-border-color-focus: var(--ctp-subtext0);
+		--dp-disabled-color: var(--ctp-overlay1);
+		--dp-disabled-color-text: var(--ctp-subtext1);
+		--dp-scroll-bar-background: var(--ctp-base);
+		--dp-scroll-bar-color: var(--ctp-overlay1);
+		--dp-success-color: color-mix(in srgb, var(--ctp-green) 27%, var(--ctp-base));
+		--dp-success-color-disabled: var(--ctp-green);
+		--dp-icon-color: var(--ctp-overlay2);
+		--dp-danger-color: var(--ctp-red);
+		--dp-marker-color: var(--ctp-red);
+		--dp-tooltip-color: var(--ctp-surface1);
+		--dp-highlight-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 56%, var(--ctp-base)) 20%, transparent);
+		--dp-range-between-dates-background-color: var(--dp-hover-color,var(--ctp-overlay1));
+		--dp-range-between-dates-text-color: var(--dp-hover-text-color,var(--ctp-text));
+		--dp-range-between-border-color: var(--dp-hover-color,var(--ctp-text));
+		--dp-loader: 5px solid color-mix(in srgb, var(--ctp-accent) 56%, var(--ctp-base));
+	}
+	.dp__theme_light {
+		--dp-background-color: var(--ctp-base);
+		--dp-text-color: var(--ctp-text);
+		--dp-hover-color: var(--ctp-crust);
+		--dp-hover-text-color: var(--ctp-text);
+		--dp-hover-icon-color: var(--ctp-subtext0);
+		--dp-primary-color: var(--ctp-accent);
+		--dp-primary-disabled-color: var(--ctp-accent);
+		--dp-primary-text-color: var(--ctp-base);
+		--dp-secondary-color: var(--ctp-overlay1);
+		--dp-border-color: var(--ctp-surface0);
+		--dp-menu-border-color: var(--ctp-surface0);
+		--dp-border-color-hover: var(--ctp-overlay2);
+		--dp-border-color-focus: var(--ctp-overlay2);
+		--dp-disabled-color: var(--ctp-mantle);
+		--dp-scroll-bar-background: var(--ctp-crust);
+		--dp-scroll-bar-color: var(--ctp-subtext0);
+		--dp-success-color: var(--ctp-green);
+		--dp-success-color-disabled: color-mix(in srgb, var(--ctp-green) 51%, var(--ctp-base));
+		--dp-icon-color: var(--ctp-subtext0);
+		--dp-danger-color: var(--ctp-red);
+		--dp-marker-color: var(--ctp-red);
+		--dp-tooltip-color: var(--ctp-mantle);
+		--dp-disabled-color-text: var(--ctp-overlay1);
+		--dp-highlight-color: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--dp-range-between-dates-background-color: var(--dp-hover-color,var(--ctp-crust));
+		--dp-range-between-dates-text-color: var(--dp-hover-text-color,var(--ctp-text));
+		--dp-range-between-border-color: var(--dp-hover-color,var(--ctp-crust));
+		--dp-loader: 5px solid var(--ctp-accent);
+	}
+	:where(.mode-dark) .h-time-panel__wheel-col[data-v-42c18324] {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 15%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 50%, transparent) 25%,var(--ctp-crust) 40% 60%,color-mix(in srgb, var(--ctp-crust) 50%, transparent) 75%,color-mix(in srgb, var(--ctp-crust) 15%, transparent) 90%,transparent 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 15%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 50%, transparent) 25%,var(--ctp-crust) 40% 60%,color-mix(in srgb, var(--ctp-crust) 50%, transparent) 75%,color-mix(in srgb, var(--ctp-crust) 15%, transparent) 90%,transparent 100%);
+	}
+	:where(.mode-light) .h-time-panel__wheel-col[data-v-42c18324] {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 15%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 50%, transparent) 25%,var(--ctp-text) 40% 60%,color-mix(in srgb, var(--ctp-text) 50%, transparent) 75%,color-mix(in srgb, var(--ctp-text) 15%, transparent) 90%,transparent 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 15%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 50%, transparent) 25%,var(--ctp-text) 40% 60%,color-mix(in srgb, var(--ctp-text) 50%, transparent) 75%,color-mix(in srgb, var(--ctp-text) 15%, transparent) 90%,transparent 100%);
+	}
+	:where(.mode-dark) .list-loader[data-v-db35dade],
+	:where(.mode-dark) .hp-list[data-v-db35dade] {
+		filter: drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-base) 16%, transparent));
+	}
+	:where(.mode-light) .list-loader[data-v-db35dade],
+	:where(.mode-light) .hp-list[data-v-db35dade] {
+		filter: drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-text) 16%, transparent));
+	}
+	:where(.mode-dark) .hp-list::-webkit-scrollbar-thumb {
+		border: 4px solid transparent;
+	}
+	:where(.mode-light) .hp-list::-webkit-scrollbar-thumb {
+		border: 4px solid transparent;
+	}
+	:where(.mode-dark) .field-button[data-v-edfbd9ab]:hover {
+		background-color: color-mix(in srgb, var(--ctp-crust) 5%, transparent);
+	}
+	:where(.mode-light) .field-button[data-v-edfbd9ab]:hover {
+		background-color: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+	}
+	:where(.mode-dark) .h-base-table-cell[data-v-8a0bbd4f] {
+		color: var(--neutral--400,var(--ctp-surface1));
+	}
+	:where(.mode-light) .h-base-table-cell[data-v-8a0bbd4f] {
+		color: var(--neutral--400,var(--ctp-text));
+	}
+	:where(.mode-dark) .h-base-table__th[data-v-98940ed8] {
+		border-bottom: 1px solid var(--neutral--200,var(--ctp-text));
+	}
+	:where(.mode-light) .h-base-table__th[data-v-98940ed8] {
+		border-bottom: 1px solid var(--neutral--200,var(--ctp-surface0));
+	}
+	:where(.mode-dark) .h-base-table__label[data-v-98940ed8] {
+		color: var(--neutral--600,var(--ctp-base));
+	}
+	:where(.mode-light) .h-base-table__label[data-v-98940ed8] {
+		color: var(--neutral--600,var(--ctp-text));
+	}
+	:where(.mode-dark) .h-table-container[data-v-5e09f1de] {
+		background: var(--ctp-text);
+	}
+	:where(.mode-light) .h-table-container[data-v-5e09f1de] {
+		background: var(--ctp-base);
+	}
+	:where(.mode-dark) .h-progress-indicator[data-v-66dbf9a1]:hover {
+		box-shadow: 0 0 8px color-mix(in srgb, var(--ctp-crust) 10%, transparent);
+	}
+	:where(.mode-light) .h-progress-indicator[data-v-66dbf9a1]:hover {
+		box-shadow: 0 0 8px color-mix(in srgb, var(--ctp-text) 10%, transparent);
+	}
+	:where(.mode-dark) .report-bug-btn[data-v-17940327] {
+		color: var(--ctp-text);
+	}
+	:where(.mode-light) .report-bug-btn[data-v-17940327] {
+		color: var(--ctp-base);
+	}
+	.mode-dark .sticky-renewal-banner[data-v-e8b7b8c3] {
+		--h-notification-row-warning-bg: var(--ctp-base);
+		--h-notification-row-danger-bg: color-mix(in srgb, var(--ctp-red) 20%, var(--ctp-base));
+		--h-notification-row-success-bg: color-mix(in srgb, var(--ctp-green) 9%, var(--ctp-base));
+	}
+	:where(.mode-dark) .h-drawer-overlay[data-v-d7ca85b8] {
+		background: color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+	}
+	:where(.mode-light) .h-drawer-overlay[data-v-d7ca85b8] {
+		background: color-mix(in srgb, var(--ctp-text) 60%, transparent);
+	}
+	:where(.mode-dark) .vnc-terminal__gradient-border[data-v-73e9c11c]:before {
+		background: linear-gradient(var(--h-bg-neutral-default), var(--h-bg-neutral-default)) padding-box, linear-gradient(158deg, var(--ctp-sky) 0%, var(--ctp-accent) 61%, var(--ctp-pink) 100%) border-box;
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .vnc-terminal__gradient-border[data-v-73e9c11c]:before {
+		background: linear-gradient(var(--h-bg-neutral-default), var(--h-bg-neutral-default)) padding-box, linear-gradient(158deg, var(--ctp-sky) 0%, var(--ctp-accent) 61%, var(--ctp-pink) 100%) border-box;
+		border: 1px solid transparent;
+	}
+	@media only screen and (max-width:992px) {
+	:where(.mode-dark) .table-md-responsive table,
+	:where(.mode-dark) .table-md-responsive tbody {
+		background-color: var(--ctp-crust);
+	}
+	}
+	@media only screen and (max-width:992px) {
+	:where(.mode-light) .table-md-responsive table,
+	:where(.mode-light) .table-md-responsive tbody {
+		background-color: var(--ctp-text);
+	}
+	}
+	:where(.mode-dark) .app-wrapper--uplift {
+		--uplift-sidebar-bg: var(--ctp-text);
+	}
+	:where(.mode-light) .app-wrapper--uplift {
+		--uplift-sidebar-bg: var(--ctp-crust);
+	}
+	@media only screen and (max-width:992px) {
+	:where(.mode-dark) .table-md-responsive table,
+	:where(.mode-dark) .table-md-responsive tbody {
+		background-color: var(--ctp-crust);
+	}
+	}
+	@media only screen and (max-width:992px) {
+	:where(.mode-light) .table-md-responsive table,
+	:where(.mode-light) .table-md-responsive tbody {
+		background-color: var(--ctp-text);
+	}
+	}
+	@media only screen and (max-width:767px) {
+	:where(.mode-dark) .h-action-menu__list[data-v-0acd0a93] {
+		background-color: color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+	}
+	}
+	@media only screen and (max-width:767px) {
+	:where(.mode-light) .h-action-menu__list[data-v-0acd0a93] {
+		background-color: color-mix(in srgb, var(--ctp-text) 60%, transparent);
+	}
+	}
+	:where(.mode-dark) .checkbox__checkmark[data-v-8faa14ee]:after {
+		border: 2px solid var(--ctp-text);
+	}
+	:where(.mode-light) .checkbox__checkmark[data-v-8faa14ee]:after {
+		border: 2px solid var(--ctp-base);
+	}
+	:where(.mode-dark) .inactive {
+		fill: var(--ctp-subtext1);
+	}
+	:where(.mode-light) .inactive {
+		fill: var(--ctp-surface2);
+	}
+	:where(.mode-dark) .disabled-view {
+		background-color: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+	}
+	:where(.mode-light) .disabled-view {
+		background-color: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+	}
+	@layer kodee.base {
+	:where(.mode-dark) .sales-chatbot-widget,
+	:where(.mode-dark) .career-chatbot-widget,
+	:where(.mode-dark) .sales-float-widget,
+	:where(.mode-dark) .sales-float-widget__chatbox,
+	:where(.mode-dark) .sales-agent-chat-bar {
+		--kodee-surface-2: color-mix(in srgb, var(--ctp-base) 5%, transparent);
+		--kodee-surface-brand-soft: color-mix(in srgb, var(--ctp-accent) 12%, transparent);
+		--kodee-stroke: color-mix(in srgb, var(--ctp-base) 8%, transparent);
+		--kodee-stroke-2: color-mix(in srgb, var(--ctp-base) 12%, transparent);
+		--kodee-fg-on-brand: var(--ctp-text);
+		--kodee-inverse-bg: var(--ctp-base);
+		--kodee-inverse-bg-hover: var(--ctp-surface0);
+		--kodee-inverse-fg: var(--ctp-text);
+		--kodee-brand-inset: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 8%, var(--ctp-base)) 30%, transparent);
+		--kodee-brand-inset-hover: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 8%, var(--ctp-base)) 42%, transparent);
+		--kodee-brand-inset-stroke: color-mix(in srgb, var(--ctp-text) 14%, transparent);
+		--kodee-success-tint: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 12%, transparent);
+		--kodee-danger-tint: color-mix(in srgb, var(--ctp-red) 10%, transparent);
+		--kodee-hover: color-mix(in srgb, var(--ctp-base) 5%, transparent);
+		--kodee-hover-strong: color-mix(in srgb, var(--ctp-base) 10%, transparent);
+		--kodee-liquid-1: color-mix(in srgb, var(--ctp-accent) 55%, var(--ctp-text));
+		--kodee-liquid-2: color-mix(in srgb, var(--ctp-accent) 23%, var(--ctp-text));
+		--kodee-liquid-3: var(--ctp-text);
+		--kodee-liquid-4: color-mix(in srgb, var(--ctp-accent) 27%, var(--ctp-text));
+		--kodee-gradient-h1: linear-gradient(90deg, var(--ctp-accent), var(--ctp-accent), var(--ctp-red));
+		--kodee-gradient-agent: linear-gradient(-45deg, var(--ctp-pink), var(--h-color-primary-600), var(--ctp-sky));
+		--kodee-best-value-from: color-mix(in srgb, var(--ctp-yellow) 55%, var(--ctp-text));
+		--kodee-best-value-to: var(--ctp-peach);
+		--kodee-best-value-from-hover: color-mix(in srgb, var(--ctp-yellow) 36%, var(--ctp-text));
+		--kodee-best-value-to-hover: var(--ctp-peach);
+		--kodee-best-value-ink: color-mix(in srgb, var(--ctp-peach) 17%, var(--ctp-base));
+		--kodee-best-value-selected-from: var(--ctp-yellow);
+		--kodee-best-value-selected-to: var(--ctp-peach);
+		--kodee-best-value-glow: color-mix(in srgb, var(--ctp-yellow) 40%, var(--ctp-text));
+		--kodee-best-value-sparkle: var(--ctp-text);
+		--kodee-focus-ring: color-mix(in srgb, var(--ctp-accent) 12%, transparent);
+		--kodee-header-gradient: linear-gradient(180deg, color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 21%, var(--ctp-text)) 90%, transparent), transparent);
+		--kodee-scrim: color-mix(in srgb, var(--ctp-base) 45%, transparent);
+		--kodee-shadow: color-mix(in srgb, var(--ctp-crust) 25%, transparent);
+		--kodee-surface-translucent: color-mix(in srgb, var(--ctp-text) 55%, transparent);
+		--kodee-surface-translucent-hover: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		--kodee-stroke-faint: color-mix(in srgb, var(--ctp-base) 6%, transparent);
+		--kodee-stroke-brand-hover: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-brand-glow-soft: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--kodee-brand-glow-hover: color-mix(in srgb, var(--ctp-accent) 16%, transparent);
+		--kodee-brand-tile-shadow: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-rec-gradient: radial-gradient(130% 120% at 100% 0%, color-mix(in srgb, var(--ctp-accent) 10%, transparent) 0%, transparent 55%);
+		--kodee-rec-border: color-mix(in srgb, var(--ctp-accent) 24%, transparent);
+		--kodee-rec-shadow: 0 12px 30px -18px color-mix(in srgb, var(--ctp-accent) 35%, transparent);
+		--kodee-alt-hover-shadow: 0 6px 16px -10px color-mix(in srgb, var(--ctp-accent) 40%, transparent);
+		--kodee-cta-border: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--kodee-cta-shimmer: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+		--kodee-cta-inset-highlight: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		--kodee-banner-bg: linear-gradient(90deg, var(--ctp-text) 0%, var(--ctp-text) 100%);
+		--kodee-banner-bg-hover: linear-gradient(90deg, var(--ctp-text) 0%, color-mix(in srgb, var(--ctp-accent) 35%, var(--ctp-text)) 100%);
+		--kodee-banner-border: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--kodee-banner-dot-halo: color-mix(in srgb, color-mix(in srgb, var(--ctp-green) 47%, var(--ctp-base)) 18%, transparent);
+		--kodee-csat-star: var(--ctp-peach);
+		--kodee-csat-star-empty: var(--ctp-subtext1);
+		--kodee-csat-card-bg: linear-gradient(180deg, var(--ctp-text) 0%, var(--ctp-text) 100%);
+		--kodee-csat-card-border: color-mix(in srgb, var(--ctp-accent) 14%, transparent);
+		--kodee-csat-comment-bg: color-mix(in srgb, var(--ctp-text) 70%, transparent);
+		--kodee-toast-bg: var(--ctp-surface0);
+		--kodee-toast-bg-hover: var(--ctp-surface0);
+		--kodee-toast-stroke: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+		--kodee-toast-shadow: 0 14px 30px -10px color-mix(in srgb, var(--ctp-crust) 45%, transparent), 0 4px 10px -4px color-mix(in srgb, var(--ctp-crust) 25%, transparent);
+		--kodee-toast-action-bg: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+	}
+	}
+	@layer kodee.base {
+	:where(.mode-light) .sales-chatbot-widget,
+	:where(.mode-light) .career-chatbot-widget,
+	:where(.mode-light) .sales-float-widget,
+	:where(.mode-light) .sales-float-widget__chatbox,
+	:where(.mode-light) .sales-agent-chat-bar {
+		--kodee-surface-2: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+		--kodee-surface-brand-soft: color-mix(in srgb, var(--ctp-accent) 12%, transparent);
+		--kodee-stroke: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+		--kodee-stroke-2: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		--kodee-fg-on-brand: var(--ctp-base);
+		--kodee-inverse-bg: var(--ctp-text);
+		--kodee-inverse-bg-hover: var(--ctp-text);
+		--kodee-inverse-fg: var(--ctp-mantle);
+		--kodee-brand-inset: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 37%, var(--ctp-text)) 30%, transparent);
+		--kodee-brand-inset-hover: color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 37%, var(--ctp-text)) 42%, transparent);
+		--kodee-brand-inset-stroke: color-mix(in srgb, var(--ctp-base) 14%, transparent);
+		--kodee-success-tint: color-mix(in srgb, var(--ctp-green) 12%, transparent);
+		--kodee-danger-tint: color-mix(in srgb, var(--ctp-red) 10%, transparent);
+		--kodee-hover: color-mix(in srgb, var(--ctp-text) 5%, transparent);
+		--kodee-hover-strong: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		--kodee-liquid-1: color-mix(in srgb, var(--ctp-accent) 28%, var(--ctp-base));
+		--kodee-liquid-2: color-mix(in srgb, var(--ctp-accent) 12%, var(--ctp-base));
+		--kodee-liquid-3: var(--ctp-mantle);
+		--kodee-liquid-4: color-mix(in srgb, var(--ctp-accent) 14%, var(--ctp-base));
+		--kodee-gradient-h1: linear-gradient(90deg, var(--ctp-accent), var(--ctp-accent), var(--ctp-red));
+		--kodee-gradient-agent: linear-gradient(-45deg, var(--ctp-pink), var(--h-color-primary-600), var(--ctp-sky));
+		--kodee-best-value-from: color-mix(in srgb, var(--ctp-yellow) 28%, var(--ctp-base));
+		--kodee-best-value-to: var(--ctp-peach);
+		--kodee-best-value-from-hover: color-mix(in srgb, var(--ctp-yellow) 18%, var(--ctp-base));
+		--kodee-best-value-to-hover: var(--ctp-peach);
+		--kodee-best-value-ink: color-mix(in srgb, var(--ctp-peach) 63%, var(--ctp-text));
+		--kodee-best-value-selected-from: var(--ctp-yellow);
+		--kodee-best-value-selected-to: var(--ctp-peach);
+		--kodee-best-value-glow: color-mix(in srgb, var(--ctp-yellow) 20%, var(--ctp-base));
+		--kodee-best-value-sparkle: var(--ctp-base);
+		--kodee-focus-ring: color-mix(in srgb, var(--ctp-accent) 12%, transparent);
+		--kodee-header-gradient: linear-gradient(180deg, color-mix(in srgb, color-mix(in srgb, var(--ctp-accent) 11%, var(--ctp-base)) 90%, transparent), transparent);
+		--kodee-scrim: color-mix(in srgb, var(--ctp-text) 45%, transparent);
+		--kodee-shadow: color-mix(in srgb, var(--ctp-text) 25%, transparent);
+		--kodee-surface-translucent: color-mix(in srgb, var(--ctp-base) 55%, transparent);
+		--kodee-surface-translucent-hover: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		--kodee-stroke-faint: color-mix(in srgb, var(--ctp-text) 6%, transparent);
+		--kodee-stroke-brand-hover: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-brand-glow-soft: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--kodee-brand-glow-hover: color-mix(in srgb, var(--ctp-accent) 16%, transparent);
+		--kodee-brand-tile-shadow: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-rec-gradient: radial-gradient(130% 120% at 100% 0%, color-mix(in srgb, var(--ctp-accent) 10%, transparent) 0%, transparent 55%);
+		--kodee-rec-border: color-mix(in srgb, var(--ctp-accent) 24%, transparent);
+		--kodee-rec-shadow: 0 12px 30px -18px color-mix(in srgb, var(--ctp-accent) 35%, transparent);
+		--kodee-alt-hover-shadow: 0 6px 16px -10px color-mix(in srgb, var(--ctp-accent) 40%, transparent);
+		--kodee-cta-border: color-mix(in srgb, var(--ctp-accent) 15%, transparent);
+		--kodee-cta-shimmer: color-mix(in srgb, var(--ctp-base) 50%, transparent);
+		--kodee-cta-inset-highlight: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		--kodee-banner-bg: linear-gradient(90deg, var(--ctp-mantle) 0%, var(--ctp-crust) 100%);
+		--kodee-banner-bg-hover: linear-gradient(90deg, var(--ctp-crust) 0%, color-mix(in srgb, var(--ctp-accent) 18%, var(--ctp-base)) 100%);
+		--kodee-banner-border: color-mix(in srgb, var(--ctp-accent) 10%, transparent);
+		--kodee-banner-dot-halo: color-mix(in srgb, var(--ctp-green) 18%, transparent);
+		--kodee-csat-star: var(--ctp-peach);
+		--kodee-csat-star-empty: var(--ctp-surface1);
+		--kodee-csat-card-bg: linear-gradient(180deg, var(--ctp-crust) 0%, var(--ctp-base) 100%);
+		--kodee-csat-card-border: color-mix(in srgb, var(--ctp-accent) 14%, transparent);
+		--kodee-csat-comment-bg: color-mix(in srgb, var(--ctp-base) 70%, transparent);
+		--kodee-toast-bg: var(--ctp-text);
+		--kodee-toast-bg-hover: var(--ctp-text);
+		--kodee-toast-stroke: color-mix(in srgb, var(--ctp-base) 8%, transparent);
+		--kodee-toast-shadow: 0 14px 30px -10px color-mix(in srgb, var(--ctp-text) 45%, transparent), 0 4px 10px -4px color-mix(in srgb, var(--ctp-text) 25%, transparent);
+		--kodee-toast-action-bg: color-mix(in srgb, var(--ctp-base) 10%, transparent);
+	}
+	}
+	@layer kodee.dark {
+	.kodee-theme-dark .sales-chatbot-widget,
+	.kodee-theme-dark.sales-chatbot-widget,
+	.kodee-theme-dark .career-chatbot-widget,
+	.kodee-theme-dark.career-chatbot-widget,
+	.kodee-theme-dark .sales-float-widget,
+	.kodee-theme-dark.sales-float-widget,
+	.kodee-theme-dark .sales-float-widget__chatbox,
+	.kodee-theme-dark.sales-float-widget__chatbox,
+	.kodee-theme-dark.sales-agent-chat-bar {
+		--kodee-bg: var(--ctp-base);
+		--kodee-surface-2: var(--ctp-surface0);
+		--kodee-surface-3: var(--ctp-surface0);
+		--kodee-surface-brand-soft: color-mix(in srgb, var(--ctp-accent) 16%, transparent);
+		--kodee-stroke: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+		--kodee-stroke-2: color-mix(in srgb, var(--ctp-text) 14%, transparent);
+		--kodee-stroke-brand: var(--ctp-accent);
+		--kodee-fg: var(--ctp-text);
+		--kodee-fg-2: color-mix(in srgb, var(--ctp-mauve) 92%, var(--ctp-text));
+		--kodee-fg-3: var(--ctp-subtext0);
+		--kodee-fg-on-brand: var(--ctp-text);
+		--kodee-brand: var(--ctp-accent);
+		--kodee-brand-hover: color-mix(in srgb, var(--ctp-accent) 85%, var(--ctp-text));
+		--kodee-brand-2: color-mix(in srgb, var(--ctp-accent) 85%, var(--ctp-text));
+		--kodee-success: var(--ctp-green);
+		--kodee-success-icon: var(--ctp-green);
+		--kodee-success-tint: color-mix(in srgb, var(--ctp-green) 18%, transparent);
+		--kodee-danger: var(--ctp-red);
+		--kodee-danger-tint: color-mix(in srgb, var(--ctp-red) 18%, transparent);
+		--kodee-hover: color-mix(in srgb, var(--ctp-text) 6%, transparent);
+		--kodee-hover-strong: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+		--kodee-gradient-h1: linear-gradient(90deg, color-mix(in srgb, var(--ctp-accent) 85%, var(--ctp-text)), color-mix(in srgb, var(--ctp-accent) 55%, var(--ctp-text)), color-mix(in srgb, var(--ctp-red) 82%, var(--ctp-text)));
+		--kodee-best-value-from: color-mix(in srgb, var(--ctp-peach) 91%, var(--ctp-text));
+		--kodee-best-value-to: var(--ctp-peach);
+		--kodee-best-value-from-hover: color-mix(in srgb, var(--ctp-peach) 68%, var(--ctp-text));
+		--kodee-best-value-to-hover: var(--ctp-peach);
+		--kodee-best-value-ink: color-mix(in srgb, var(--ctp-peach) 8%, var(--ctp-base));
+		--kodee-best-value-selected-from: var(--ctp-yellow);
+		--kodee-best-value-selected-to: var(--ctp-peach);
+		--kodee-best-value-glow: color-mix(in srgb, var(--ctp-yellow) 47%, var(--ctp-text));
+		--kodee-best-value-sparkle: var(--ctp-text);
+		--kodee-focus-ring: color-mix(in srgb, var(--ctp-accent) 18%, transparent);
+		--kodee-header-gradient: linear-gradient(180deg, color-mix(in srgb, color-mix(in srgb, var(--ctp-mauve) 37%, var(--ctp-base)) 70%, transparent), transparent);
+		--kodee-scrim: color-mix(in srgb, var(--ctp-crust) 60%, transparent);
+		--kodee-shadow: color-mix(in srgb, var(--ctp-crust) 70%, transparent);
+		--kodee-surface-translucent: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--kodee-surface-translucent-hover: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+		--kodee-stroke-faint: color-mix(in srgb, var(--ctp-text) 7%, transparent);
+		--kodee-stroke-brand-hover: color-mix(in srgb, var(--ctp-accent) 40%, transparent);
+		--kodee-brand-glow-soft: color-mix(in srgb, var(--ctp-accent) 18%, transparent);
+		--kodee-brand-glow-hover: color-mix(in srgb, var(--ctp-accent) 25%, transparent);
+		--kodee-rec-gradient: radial-gradient(130% 120% at 100% 0%, color-mix(in srgb, var(--ctp-accent) 14%, transparent) 0%, transparent 55%);
+		--kodee-rec-border: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-rec-shadow: 0 12px 30px -18px color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-alt-hover-shadow: 0 6px 16px -10px color-mix(in srgb, var(--ctp-accent) 40%, transparent);
+		--kodee-brand-tile-shadow: color-mix(in srgb, var(--ctp-accent) 35%, transparent);
+		--kodee-cta-border: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+		--kodee-cta-shimmer: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+		--kodee-cta-inset-highlight: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+		--kodee-banner-bg: linear-gradient(90deg, color-mix(in srgb, var(--ctp-mauve) 21%, var(--ctp-base)) 0%, var(--ctp-surface0) 100%);
+		--kodee-banner-bg-hover: linear-gradient(90deg, color-mix(in srgb, var(--ctp-mauve) 30%, var(--ctp-base)) 0%, color-mix(in srgb, var(--ctp-mauve) 20%, var(--ctp-base)) 100%);
+		--kodee-banner-border: color-mix(in srgb, var(--ctp-accent) 18%, transparent);
+		--kodee-banner-dot: var(--ctp-green);
+		--kodee-banner-dot-halo: color-mix(in srgb, var(--ctp-green) 28%, transparent);
+		--kodee-csat-star: var(--ctp-peach);
+		--kodee-csat-star-empty: color-mix(in srgb, var(--ctp-text) 20%, transparent);
+		--kodee-csat-card-bg: linear-gradient(180deg, color-mix(in srgb, var(--ctp-mauve) 21%, var(--ctp-base)) 0%, var(--ctp-surface0) 100%);
+		--kodee-csat-card-border: color-mix(in srgb, var(--ctp-accent) 18%, transparent);
+		--kodee-csat-comment-bg: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--kodee-toast-bg: var(--ctp-surface0);
+		--kodee-toast-bg-hover: color-mix(in srgb, var(--ctp-mauve) 29%, var(--ctp-base));
+		--kodee-toast-stroke: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		--kodee-toast-shadow: 0 14px 30px -10px color-mix(in srgb, var(--ctp-crust) 60%, transparent), 0 4px 10px -4px color-mix(in srgb, var(--ctp-crust) 40%, transparent);
+		--kodee-toast-action-bg: color-mix(in srgb, var(--ctp-text) 12%, transparent);
+	}
+	}
+	:where(.mode-dark) .sales-toast--neutral[data-v-55ed4188] {
+		--sales-toast-chip-bg: color-mix(in srgb, var(--ctp-text) 14%, transparent);
+	}
+	:where(.mode-light) .sales-toast--neutral[data-v-55ed4188] {
+		--sales-toast-chip-bg: color-mix(in srgb, var(--ctp-base) 14%, transparent);
+	}
+	:where(.mode-dark) .sales-website-frame__document[data-v-08310b27] {
+		background: var(--ctp-text);
+	}
+	:where(.mode-light) .sales-website-frame__document[data-v-08310b27] {
+		background: var(--ctp-base);
+	}
+	:where(.mode-dark) .career-matching-progress__orbit[data-v-6d3dbaad] {
+		border: 2px solid transparent;
+	}
+	:where(.mode-light) .career-matching-progress__orbit[data-v-6d3dbaad] {
+		border: 2px solid transparent;
+	}
+	:where(.mode-dark) .career-matching-progress__role[data-v-6d3dbaad] {
+		border: 1.5px solid transparent;
+	}
+	:where(.mode-light) .career-matching-progress__role[data-v-6d3dbaad] {
+		border: 1.5px solid transparent;
+	}
+	:where(.mode-dark) .chatbot-modal-backdrop[data-v-4bba8def] {
+		background-color: color-mix(in srgb, var(--ctp-base) 35%, transparent);
+	}
+	:where(.mode-light) .chatbot-modal-backdrop[data-v-4bba8def] {
+		background-color: color-mix(in srgb, var(--ctp-text) 35%, transparent);
+	}
+	:where(.mode-dark) .form-card[data-v-a009f8e7] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-crust) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-crust) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-crust) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	:where(.mode-light) .form-card[data-v-a009f8e7] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-text) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-text) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	.mode-dark .form-card[data-v-a009f8e7] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+	}
+	:where(.mode-dark) .chatbot-wrapper {
+		filter: drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-base) 16%, transparent));
+	}
+	:where(.mode-light) .chatbot-wrapper {
+		filter: drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-text) 16%, transparent));
+	}
+	:where(.mode-dark) .chatbot .chatbot-footer__input--previewing {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) 80%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 97.6%,transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) 80%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 97.6%,transparent 100%);
+	}
+	:where(.mode-light) .chatbot .chatbot-footer__input--previewing {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) 80%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 97.6%,transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) 80%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 97.6%,transparent 100%);
+	}
+	:where(.mode-dark) .chatbot .chatbot-footer__input--previewing[dir=rtl] {
+		-webkit-mask-image: linear-gradient(270deg,var(--ctp-crust) 80%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 97.6%,transparent 100%);
+		mask-image: linear-gradient(270deg,var(--ctp-crust) 80%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 97.6%,transparent 100%);
+	}
+	:where(.mode-light) .chatbot .chatbot-footer__input--previewing[dir=rtl] {
+		-webkit-mask-image: linear-gradient(270deg,var(--ctp-text) 80%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 97.6%,transparent 100%);
+		mask-image: linear-gradient(270deg,var(--ctp-text) 80%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 82%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 84.8%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 88%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 91.4%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 94.6%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 97.6%,transparent 100%);
+	}
+	.chatbot.chatbot-light .hljs {
+		color: var(--ctp-text);
+		background: var(--ctp-mantle);
+	}
+	.chatbot.chatbot-light .hljs-comment,
+	.chatbot.chatbot-light .hljs-quote {
+		color: var(--ctp-overlay2);
+	}
+	.chatbot.chatbot-light .hljs-doctag,
+	.chatbot.chatbot-light .hljs-keyword,
+	.chatbot.chatbot-light .hljs-formula {
+		color: var(--ctp-pink);
+	}
+	.chatbot.chatbot-light .hljs-section,
+	.chatbot.chatbot-light .hljs-name,
+	.chatbot.chatbot-light .hljs-selector-tag,
+	.chatbot.chatbot-light .hljs-deletion,
+	.chatbot.chatbot-light .hljs-subst {
+		color: var(--ctp-red);
+	}
+	.chatbot.chatbot-light .hljs-literal {
+		color: var(--ctp-sky);
+	}
+	.chatbot.chatbot-light .hljs-string,
+	.chatbot.chatbot-light .hljs-regexp,
+	.chatbot.chatbot-light .hljs-addition,
+	.chatbot.chatbot-light .hljs-attribute,
+	.chatbot.chatbot-light .hljs-meta .hljs-string {
+		color: var(--ctp-green);
+	}
+	.chatbot.chatbot-light .hljs-attr,
+	.chatbot.chatbot-light .hljs-variable,
+	.chatbot.chatbot-light .hljs-template-variable,
+	.chatbot.chatbot-light .hljs-type,
+	.chatbot.chatbot-light .hljs-selector-class,
+	.chatbot.chatbot-light .hljs-selector-attr,
+	.chatbot.chatbot-light .hljs-selector-pseudo,
+	.chatbot.chatbot-light .hljs-number {
+		color: var(--ctp-peach);
+	}
+	.chatbot.chatbot-light .hljs-symbol,
+	.chatbot.chatbot-light .hljs-bullet,
+	.chatbot.chatbot-light .hljs-link,
+	.chatbot.chatbot-light .hljs-meta,
+	.chatbot.chatbot-light .hljs-selector-id,
+	.chatbot.chatbot-light .hljs-title {
+		color: var(--ctp-accent);
+	}
+	.chatbot.chatbot-light .hljs-built_in,
+	.chatbot.chatbot-light .hljs-title.class_,
+	.chatbot.chatbot-light .hljs-class .hljs-title {
+		color: var(--ctp-peach);
+	}
+	.chatbot.chatbot-dark .hljs {
+		color: var(--ctp-subtext0);
+		background: var(--ctp-surface0);
+	}
+	.chatbot.chatbot-dark .hljs-comment,
+	.chatbot.chatbot-dark .hljs-quote {
+		color: var(--ctp-overlay2);
+	}
+	.chatbot.chatbot-dark .hljs-doctag,
+	.chatbot.chatbot-dark .hljs-keyword,
+	.chatbot.chatbot-dark .hljs-formula {
+		color: var(--ctp-mauve);
+	}
+	.chatbot.chatbot-dark .hljs-section,
+	.chatbot.chatbot-dark .hljs-name,
+	.chatbot.chatbot-dark .hljs-selector-tag,
+	.chatbot.chatbot-dark .hljs-deletion,
+	.chatbot.chatbot-dark .hljs-subst {
+		color: var(--ctp-red);
+	}
+	.chatbot.chatbot-dark .hljs-literal {
+		color: var(--ctp-teal);
+	}
+	.chatbot.chatbot-dark .hljs-string,
+	.chatbot.chatbot-dark .hljs-regexp,
+	.chatbot.chatbot-dark .hljs-addition,
+	.chatbot.chatbot-dark .hljs-attribute,
+	.chatbot.chatbot-dark .hljs-meta .hljs-string {
+		color: var(--ctp-green);
+	}
+	.chatbot.chatbot-dark .hljs-attr,
+	.chatbot.chatbot-dark .hljs-variable,
+	.chatbot.chatbot-dark .hljs-template-variable,
+	.chatbot.chatbot-dark .hljs-type,
+	.chatbot.chatbot-dark .hljs-selector-class,
+	.chatbot.chatbot-dark .hljs-selector-attr,
+	.chatbot.chatbot-dark .hljs-selector-pseudo,
+	.chatbot.chatbot-dark .hljs-number {
+		color: var(--ctp-peach);
+	}
+	.chatbot.chatbot-dark .hljs-symbol,
+	.chatbot.chatbot-dark .hljs-bullet,
+	.chatbot.chatbot-dark .hljs-link,
+	.chatbot.chatbot-dark .hljs-meta,
+	.chatbot.chatbot-dark .hljs-selector-id,
+	.chatbot.chatbot-dark .hljs-title {
+		color: var(--ctp-accent);
+	}
+	.chatbot.chatbot-dark .hljs-built_in,
+	.chatbot.chatbot-dark .hljs-title.class_,
+	.chatbot.chatbot-dark .hljs-class .hljs-title {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-dark) .chatbot-btn__gradient-border[data-v-76b6c87c]:before {
+		background: linear-gradient(var(--gradient-angle), var(--ctp-pink) 0%, var(--ctp-accent) 33%, var(--ctp-sky) 100%);
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0 0),linear-gradient(var(--ctp-text) 0 0);
+		mask-image: linear-gradient(var(--ctp-text) 0 0),linear-gradient(var(--ctp-text) 0 0);
+	}
+	:where(.mode-light) .chatbot-btn__gradient-border[data-v-76b6c87c]:before {
+		background: linear-gradient(var(--gradient-angle), var(--ctp-pink) 0%, var(--ctp-accent) 33%, var(--ctp-sky) 100%);
+		-webkit-mask-image: linear-gradient(var(--ctp-base) 0 0),linear-gradient(var(--ctp-base) 0 0);
+		mask-image: linear-gradient(var(--ctp-base) 0 0),linear-gradient(var(--ctp-base) 0 0);
+	}
+	:where(.mode-dark) .onboarding-showcase__agent[data-v-e8f59c51] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-crust) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-crust) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-crust) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	:where(.mode-light) .onboarding-showcase__agent[data-v-e8f59c51] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-text) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-text) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	.mode-dark .onboarding-showcase__agent[data-v-e8f59c51] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+	}
+	:where(.mode-dark) .input-panel-onboarding[data-v-1911d079] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-crust) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-crust) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-crust) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	:where(.mode-light) .input-panel-onboarding[data-v-1911d079] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-text) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-text) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	.mode-dark .input-panel-onboarding[data-v-1911d079] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+	}
+	:where(.mode-dark) .v2-message-panel[data-v-9f2e533b]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .v2-message-panel[data-v-9f2e533b]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .v2-message-panel[data-v-9f2e533b]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .v2-message-panel[data-v-9f2e533b]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .v2-message-panel--edge-masked.has-scroll-fade-top .v2-message-panel__scroll[data-v-9f2e533b] {
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-crust) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)));
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-crust) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)));
+		mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-crust) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)));
+	}
+	:where(.mode-light) .v2-message-panel--edge-masked.has-scroll-fade-top .v2-message-panel__scroll[data-v-9f2e533b] {
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-text) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)));
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-text) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)));
+		mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-text) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)));
+	}
+	:where(.mode-dark) .v2-message-panel--edge-masked.has-scroll-fade-bottom .v2-message-panel__scroll[data-v-9f2e533b] {
+		-webkit-mask-image: linear-gradient(to top, transparent, var(--ctp-crust) var(--h-spacing-xl));
+		-webkit-mask-image: linear-gradient(to top, transparent, var(--ctp-crust) var(--h-spacing-xl));
+		mask-image: linear-gradient(to top, transparent, var(--ctp-crust) var(--h-spacing-xl));
+	}
+	:where(.mode-light) .v2-message-panel--edge-masked.has-scroll-fade-bottom .v2-message-panel__scroll[data-v-9f2e533b] {
+		-webkit-mask-image: linear-gradient(to top, transparent, var(--ctp-text) var(--h-spacing-xl));
+		-webkit-mask-image: linear-gradient(to top, transparent, var(--ctp-text) var(--h-spacing-xl));
+		mask-image: linear-gradient(to top, transparent, var(--ctp-text) var(--h-spacing-xl));
+	}
+	:where(.mode-dark) .v2-message-panel--edge-masked.has-scroll-fade-top.has-scroll-fade-bottom .v2-message-panel__scroll[data-v-9f2e533b] {
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-crust) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)), var(--ctp-crust) calc(100% - var(--h-spacing-xl)), transparent);
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-crust) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)), var(--ctp-crust) calc(100% - var(--h-spacing-xl)), transparent);
+		mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-crust) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)), var(--ctp-crust) calc(100% - var(--h-spacing-xl)), transparent);
+	}
+	:where(.mode-light) .v2-message-panel--edge-masked.has-scroll-fade-top.has-scroll-fade-bottom .v2-message-panel__scroll[data-v-9f2e533b] {
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-text) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)), var(--ctp-text) calc(100% - var(--h-spacing-xl)), transparent);
+		-webkit-mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-text) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)), var(--ctp-text) calc(100% - var(--h-spacing-xl)), transparent);
+		mask-image: linear-gradient(to bottom, transparent var(--chatbot-message-panel-header-offset,0px), var(--ctp-text) calc(var(--chatbot-message-panel-header-offset,0px) + var(--h-spacing-xl)), var(--ctp-text) calc(100% - var(--h-spacing-xl)), transparent);
+	}
+	:where(.mode-dark) .black-friday-step-list__step--start[data-v-1b518174] {
+		animation: 1.6s ease-in-out .8s 4 var(--ctp-crust)-friday-step-list-pulse-1b518174;
+	}
+	:where(.mode-light) .black-friday-step-list__step--start[data-v-1b518174] {
+		animation: 1.6s ease-in-out .8s 4 var(--ctp-text)-friday-step-list-pulse-1b518174;
+	}
+	:where(.mode-dark) .black-friday-checklist-panel[data-v-078f9fdc] {
+		width: var(--chatbot-var(--ctp-crust)-friday-panel-width,320px);
+	}
+	:where(.mode-light) .black-friday-checklist-panel[data-v-078f9fdc] {
+		width: var(--chatbot-var(--ctp-text)-friday-panel-width,320px);
+	}
+	:where(.mode-dark) .conversation-rail-row-wrapper--has-actions:hover .conversation-rail-row__label[data-v-55da139d],
+	:where(.mode-dark) .conversation-rail-row-wrapper--has-actions:focus-within .conversation-rail-row__label[data-v-55da139d],
+	:where(.mode-dark) .conversation-rail-row-wrapper--actions-held .conversation-rail-row__label[data-v-55da139d],
+	:where(.mode-dark) .conversation-rail-row-wrapper--has-status .conversation-rail-row__label[data-v-55da139d] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	:where(.mode-light) .conversation-rail-row-wrapper--has-actions:hover .conversation-rail-row__label[data-v-55da139d],
+	:where(.mode-light) .conversation-rail-row-wrapper--has-actions:focus-within .conversation-rail-row__label[data-v-55da139d],
+	:where(.mode-light) .conversation-rail-row-wrapper--actions-held .conversation-rail-row__label[data-v-55da139d],
+	:where(.mode-light) .conversation-rail-row-wrapper--has-status .conversation-rail-row__label[data-v-55da139d] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	@media (hover:none) {
+	:where(.mode-dark) .conversation-rail-row-wrapper--has-actions .conversation-rail-row__label[data-v-55da139d] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	}
+	@media (hover:none) {
+	:where(.mode-light) .conversation-rail-row-wrapper--has-actions .conversation-rail-row__label[data-v-55da139d] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	}
+	:where(.mode-dark) .conversation-rail-row__label[data-v-55da139d] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2rem),color-mix(in srgb, var(--ctp-crust) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-crust) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-crust) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-crust) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-crust) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-crust) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-crust) 35%, transparent) 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2rem),color-mix(in srgb, var(--ctp-crust) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-crust) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-crust) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-crust) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-crust) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-crust) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-crust) 35%, transparent) 100%);
+	}
+	:where(.mode-light) .conversation-rail-row__label[data-v-55da139d] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2rem),color-mix(in srgb, var(--ctp-text) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-text) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-text) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-text) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-text) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-text) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-text) 35%, transparent) 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2rem),color-mix(in srgb, var(--ctp-text) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-text) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-text) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-text) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-text) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-text) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-text) 35%, transparent) 100%);
+	}
+	:where(.mode-dark) .fullscreen-overlay .fullscreen-action:hover {
+		background-color: color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	:where(.mode-light) .fullscreen-overlay .fullscreen-action:hover {
+		background-color: color-mix(in srgb, var(--ctp-base) 16%, transparent);
+	}
+	:where(.mode-dark) .history-row .history-row__label[data-v-fd201552] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2rem),color-mix(in srgb, var(--ctp-crust) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-crust) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-crust) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-crust) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-crust) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-crust) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-crust) 35%, transparent) 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2rem),color-mix(in srgb, var(--ctp-crust) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-crust) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-crust) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-crust) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-crust) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-crust) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-crust) 35%, transparent) 100%);
+	}
+	:where(.mode-light) .history-row .history-row__label[data-v-fd201552] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2rem),color-mix(in srgb, var(--ctp-text) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-text) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-text) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-text) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-text) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-text) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-text) 35%, transparent) 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2rem),color-mix(in srgb, var(--ctp-text) 97%, transparent) calc(100% - 1.8rem),color-mix(in srgb, var(--ctp-text) 90%, transparent) calc(100% - 1.52rem),color-mix(in srgb, var(--ctp-text) 78%, transparent) calc(100% - 1.2rem),color-mix(in srgb, var(--ctp-text) 63%, transparent) calc(100% - .86rem),color-mix(in srgb, var(--ctp-text) 49%, transparent) calc(100% - .54rem),color-mix(in srgb, var(--ctp-text) 40%, transparent) calc(100% - .24rem),color-mix(in srgb, var(--ctp-text) 35%, transparent) 100%);
+	}
+	:where(.mode-dark) .history-row--has-actions:hover .history-row__label[data-v-fd201552],
+	:where(.mode-dark) .history-row--has-actions:focus-within .history-row__label[data-v-fd201552],
+	:where(.mode-dark) .history-row--actions-held .history-row__label[data-v-fd201552],
+	:where(.mode-dark) .history-row--has-status .history-row__label[data-v-fd201552] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	:where(.mode-light) .history-row--has-actions:hover .history-row__label[data-v-fd201552],
+	:where(.mode-light) .history-row--has-actions:focus-within .history-row__label[data-v-fd201552],
+	:where(.mode-light) .history-row--actions-held .history-row__label[data-v-fd201552],
+	:where(.mode-light) .history-row--has-status .history-row__label[data-v-fd201552] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	@media (hover:none) {
+	:where(.mode-dark) .history-row--has-actions .history-row__label[data-v-fd201552] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-crust) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-crust) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-crust) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-crust) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-crust) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-crust) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-crust) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	}
+	@media (hover:none) {
+	:where(.mode-light) .history-row--has-actions .history-row__label[data-v-fd201552] {
+		-webkit-mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+		mask-image: linear-gradient(90deg,var(--ctp-text) calc(100% - 2.5rem),color-mix(in srgb, var(--ctp-text) 96%, transparent) calc(100% - 2.25rem),color-mix(in srgb, var(--ctp-text) 85%, transparent) calc(100% - 1.9rem),color-mix(in srgb, var(--ctp-text) 66%, transparent) calc(100% - 1.5rem),color-mix(in srgb, var(--ctp-text) 43%, transparent) calc(100% - 1.075rem),color-mix(in srgb, var(--ctp-text) 22%, transparent) calc(100% - .675rem),color-mix(in srgb, var(--ctp-text) 7%, transparent) calc(100% - .3rem),transparent 100%);
+	}
+	}
+	:where(.mode-dark) .history-panel[data-v-16b5b01c]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .history-panel[data-v-16b5b01c]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .history-panel[data-v-16b5b01c]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .history-panel[data-v-16b5b01c]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .input-panel--glass[data-v-7e9925f4] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-crust) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-crust) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-crust) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	:where(.mode-light) .input-panel--glass[data-v-7e9925f4] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		box-shadow: 0 4px 16px -8px color-mix(in srgb, var(--ctp-text) 6%, transparent), 0 12px 48px -16px color-mix(in srgb, var(--ctp-text) 6%, transparent), inset 0 0 0 1px var(--onboarding-glass-edge);
+	}
+	.mode-dark .input-panel--glass[data-v-7e9925f4] {
+		--onboarding-glass-fill: color-mix(in srgb, var(--ctp-text) 4%, transparent);
+		--onboarding-glass-edge: color-mix(in srgb, var(--ctp-text) 8%, transparent);
+	}
+	:where(.mode-dark) .skill-family-nav__tab[data-v-d3e8d28a] {
+		border-bottom: 2px solid transparent;
+	}
+	:where(.mode-light) .skill-family-nav__tab[data-v-d3e8d28a] {
+		border-bottom: 2px solid transparent;
+	}
+	:where(.mode-dark) .skills-page[data-v-9572a0af]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .skills-page[data-v-9572a0af]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .skills-page[data-v-9572a0af]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .skills-page[data-v-9572a0af]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .gradient-border[data-v-dafda93f]:before {
+		background: linear-gradient(var(--gradient-angle), var(--ctp-pink) 0%, var(--ctp-accent) 33%, var(--ctp-sky) 66%, var(--ctp-text) 100%);
+		filter: drop-shadow(0 0 4px color-mix(in srgb, var(--ctp-pink) 90%, transparent))drop-shadow(0 0 8px color-mix(in srgb, var(--ctp-accent) 70%, transparent))drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-sky) 50%, transparent));
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0 0),linear-gradient(var(--ctp-text) 0 0);
+		mask-image: linear-gradient(var(--ctp-text) 0 0),linear-gradient(var(--ctp-text) 0 0);
+	}
+	:where(.mode-light) .gradient-border[data-v-dafda93f]:before {
+		background: linear-gradient(var(--gradient-angle), var(--ctp-pink) 0%, var(--ctp-accent) 33%, var(--ctp-sky) 66%, var(--ctp-base) 100%);
+		filter: drop-shadow(0 0 4px color-mix(in srgb, var(--ctp-pink) 90%, transparent))drop-shadow(0 0 8px color-mix(in srgb, var(--ctp-accent) 70%, transparent))drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-sky) 50%, transparent));
+		-webkit-mask-image: linear-gradient(var(--ctp-base) 0 0),linear-gradient(var(--ctp-base) 0 0);
+		mask-image: linear-gradient(var(--ctp-base) 0 0),linear-gradient(var(--ctp-base) 0 0);
+	}
+	:where(.mode-dark) .float-box[data-v-109c74f4] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-crust) 16%, transparent);
+	}
+	:where(.mode-light) .float-box[data-v-109c74f4] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	:where(.mode-dark) .floating-chat-overlay__bubble[data-v-d205d03b] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-crust) 16%, transparent);
+	}
+	:where(.mode-light) .floating-chat-overlay__bubble[data-v-d205d03b] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	:where(.mode-dark) .float-box[data-v-ad406922] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-crust) 16%, transparent);
+	}
+	:where(.mode-light) .float-box[data-v-ad406922] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	:where(.mode-dark) .float-box[data-v-2f458439] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-crust) 16%, transparent);
+	}
+	:where(.mode-light) .float-box[data-v-2f458439] {
+		box-shadow: 0 0 12px color-mix(in srgb, var(--ctp-text) 16%, transparent);
+	}
+	:where(.mode-dark) .sales-agent-chat-bar__pill[data-v-b54b62e4] {
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .sales-agent-chat-bar__pill[data-v-b54b62e4] {
+		border: 1px solid transparent;
+	}
+	:where(.mode-dark) .sales-code-block .hljs {
+		color: var(--ctp-subtext0);
+		background: var(--ctp-surface0);
+	}
+	:where(.mode-light) .sales-code-block .hljs {
+		color: var(--ctp-overlay2);
+		background: var(--ctp-text);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-comment,
+	:where(.mode-dark) .sales-code-block .hljs-quote {
+		color: var(--ctp-overlay2);
+	}
+	:where(.mode-light) .sales-code-block .hljs-comment,
+	:where(.mode-light) .sales-code-block .hljs-quote {
+		color: var(--ctp-subtext0);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-doctag,
+	:where(.mode-dark) .sales-code-block .hljs-keyword,
+	:where(.mode-dark) .sales-code-block .hljs-formula {
+		color: var(--ctp-mauve);
+	}
+	:where(.mode-light) .sales-code-block .hljs-doctag,
+	:where(.mode-light) .sales-code-block .hljs-keyword,
+	:where(.mode-light) .sales-code-block .hljs-formula {
+		color: var(--ctp-mauve);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-section,
+	:where(.mode-dark) .sales-code-block .hljs-name,
+	:where(.mode-dark) .sales-code-block .hljs-selector-tag,
+	:where(.mode-dark) .sales-code-block .hljs-deletion,
+	:where(.mode-dark) .sales-code-block .hljs-subst {
+		color: var(--ctp-red);
+	}
+	:where(.mode-light) .sales-code-block .hljs-section,
+	:where(.mode-light) .sales-code-block .hljs-name,
+	:where(.mode-light) .sales-code-block .hljs-selector-tag,
+	:where(.mode-light) .sales-code-block .hljs-deletion,
+	:where(.mode-light) .sales-code-block .hljs-subst {
+		color: var(--ctp-red);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-literal {
+		color: var(--ctp-teal);
+	}
+	:where(.mode-light) .sales-code-block .hljs-literal {
+		color: var(--ctp-teal);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-string,
+	:where(.mode-dark) .sales-code-block .hljs-regexp,
+	:where(.mode-dark) .sales-code-block .hljs-addition,
+	:where(.mode-dark) .sales-code-block .hljs-attribute,
+	:where(.mode-dark) .sales-code-block .hljs-meta .hljs-string {
+		color: var(--ctp-green);
+	}
+	:where(.mode-light) .sales-code-block .hljs-string,
+	:where(.mode-light) .sales-code-block .hljs-regexp,
+	:where(.mode-light) .sales-code-block .hljs-addition,
+	:where(.mode-light) .sales-code-block .hljs-attribute,
+	:where(.mode-light) .sales-code-block .hljs-meta .hljs-string {
+		color: var(--ctp-green);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-attr,
+	:where(.mode-dark) .sales-code-block .hljs-variable,
+	:where(.mode-dark) .sales-code-block .hljs-template-variable,
+	:where(.mode-dark) .sales-code-block .hljs-type,
+	:where(.mode-dark) .sales-code-block .hljs-selector-class,
+	:where(.mode-dark) .sales-code-block .hljs-selector-attr,
+	:where(.mode-dark) .sales-code-block .hljs-selector-pseudo,
+	:where(.mode-dark) .sales-code-block .hljs-number {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-light) .sales-code-block .hljs-attr,
+	:where(.mode-light) .sales-code-block .hljs-variable,
+	:where(.mode-light) .sales-code-block .hljs-template-variable,
+	:where(.mode-light) .sales-code-block .hljs-type,
+	:where(.mode-light) .sales-code-block .hljs-selector-class,
+	:where(.mode-light) .sales-code-block .hljs-selector-attr,
+	:where(.mode-light) .sales-code-block .hljs-selector-pseudo,
+	:where(.mode-light) .sales-code-block .hljs-number {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-symbol,
+	:where(.mode-dark) .sales-code-block .hljs-bullet,
+	:where(.mode-dark) .sales-code-block .hljs-link,
+	:where(.mode-dark) .sales-code-block .hljs-meta,
+	:where(.mode-dark) .sales-code-block .hljs-selector-id,
+	:where(.mode-dark) .sales-code-block .hljs-title {
+		color: var(--ctp-accent);
+	}
+	:where(.mode-light) .sales-code-block .hljs-symbol,
+	:where(.mode-light) .sales-code-block .hljs-bullet,
+	:where(.mode-light) .sales-code-block .hljs-link,
+	:where(.mode-light) .sales-code-block .hljs-meta,
+	:where(.mode-light) .sales-code-block .hljs-selector-id,
+	:where(.mode-light) .sales-code-block .hljs-title {
+		color: var(--ctp-accent);
+	}
+	:where(.mode-dark) .sales-code-block .hljs-built_in,
+	:where(.mode-dark) .sales-code-block .hljs-title.class_,
+	:where(.mode-dark) .sales-code-block .hljs-class .hljs-title {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-light) .sales-code-block .hljs-built_in,
+	:where(.mode-light) .sales-code-block .hljs-title.class_,
+	:where(.mode-light) .sales-code-block .hljs-class .hljs-title {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-dark) .connections-panel[data-v-a7a420cb]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .connections-panel[data-v-a7a420cb]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .connections-panel[data-v-a7a420cb]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .connections-panel[data-v-a7a420cb]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .files-view[data-v-40f2691d]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .files-view[data-v-40f2691d]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .files-view[data-v-40f2691d]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .files-view[data-v-40f2691d]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .job-run-list__scroll[data-v-49dd5be0]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .job-run-list__scroll[data-v-49dd5be0]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .job-run-list__scroll[data-v-49dd5be0]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .job-run-list__scroll[data-v-49dd5be0]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .job-run-transcript__scroll[data-v-48cf4e28]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .job-run-transcript__scroll[data-v-48cf4e28]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .job-run-transcript__scroll[data-v-48cf4e28]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .job-run-transcript__scroll[data-v-48cf4e28]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .jobs-view[data-v-5c40d1ad]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .jobs-view[data-v-5c40d1ad]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .jobs-view[data-v-5c40d1ad]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .jobs-view[data-v-5c40d1ad]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .project-detail[data-v-dfe8b156]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .project-detail[data-v-dfe8b156]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .project-detail[data-v-dfe8b156]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .project-detail[data-v-dfe8b156]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) .projects-view[data-v-5a031c13]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-crust) 0%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-light) .projects-view[data-v-5a031c13]:before {
+		-webkit-mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+		mask-image: linear-gradient(var(--ctp-text) 0%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 10%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 24%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 40%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 57%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 73%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 88%,transparent 100%);
+	}
+	:where(.mode-dark) .projects-view[data-v-5a031c13]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-crust) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-crust) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-crust) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-crust) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-crust) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-crust) 96%, transparent) 90%,var(--ctp-crust) 100%);
+	}
+	:where(.mode-light) .projects-view[data-v-5a031c13]:after {
+		-webkit-mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+		mask-image: linear-gradient(transparent 0%,color-mix(in srgb, var(--ctp-text) 7%, transparent) 12%,color-mix(in srgb, var(--ctp-text) 22%, transparent) 27%,color-mix(in srgb, var(--ctp-text) 43%, transparent) 43%,color-mix(in srgb, var(--ctp-text) 66%, transparent) 60%,color-mix(in srgb, var(--ctp-text) 85%, transparent) 76%,color-mix(in srgb, var(--ctp-text) 96%, transparent) 90%,var(--ctp-text) 100%);
+	}
+	:where(.mode-dark) code[class*=language-],
+	:where(.mode-dark) pre[class*=language-] {
+		color: var(--ctp-subtext1);
+	}
+	:where(.mode-light) code[class*=language-],
+	:where(.mode-light) pre[class*=language-] {
+		color: var(--ctp-surface1);
+	}
+	:where(.mode-dark) :not(pre)>code[class*=language-],
+	:where(.mode-dark) pre[class*=language-] {
+		background: var(--ctp-surface0);
+	}
+	:where(.mode-light) :not(pre)>code[class*=language-],
+	:where(.mode-light) pre[class*=language-] {
+		background: var(--ctp-text);
+	}
+	:where(.mode-dark) .token.comment,
+	:where(.mode-dark) .token.block-comment,
+	:where(.mode-dark) .token.prolog,
+	:where(.mode-dark) .token.doctype,
+	:where(.mode-dark) .token.cdata {
+		color: var(--ctp-overlay2);
+	}
+	:where(.mode-light) .token.comment,
+	:where(.mode-light) .token.block-comment,
+	:where(.mode-light) .token.prolog,
+	:where(.mode-light) .token.doctype,
+	:where(.mode-light) .token.cdata {
+		color: var(--ctp-subtext0);
+	}
+	:where(.mode-dark) .token.punctuation {
+		color: var(--ctp-subtext1);
+	}
+	:where(.mode-light) .token.punctuation {
+		color: var(--ctp-surface1);
+	}
+	:where(.mode-dark) .token.tag,
+	:where(.mode-dark) .token.attr-name,
+	:where(.mode-dark) .token.namespace,
+	:where(.mode-dark) .token.deleted {
+		color: var(--ctp-red);
+	}
+	:where(.mode-light) .token.tag,
+	:where(.mode-light) .token.attr-name,
+	:where(.mode-light) .token.namespace,
+	:where(.mode-light) .token.deleted {
+		color: var(--ctp-red);
+	}
+	:where(.mode-dark) .token.function-name {
+		color: var(--ctp-accent);
+	}
+	:where(.mode-light) .token.function-name {
+		color: var(--ctp-accent);
+	}
+	:where(.mode-dark) .token.boolean,
+	:where(.mode-dark) .token.number,
+	:where(.mode-dark) .token.function {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-light) .token.boolean,
+	:where(.mode-light) .token.number,
+	:where(.mode-light) .token.function {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-dark) .token.property,
+	:where(.mode-dark) .token.class-name,
+	:where(.mode-dark) .token.constant,
+	:where(.mode-dark) .token.symbol {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-light) .token.property,
+	:where(.mode-light) .token.class-name,
+	:where(.mode-light) .token.constant,
+	:where(.mode-light) .token.symbol {
+		color: var(--ctp-peach);
+	}
+	:where(.mode-dark) .token.selector,
+	:where(.mode-dark) .token.important,
+	:where(.mode-dark) .token.atrule,
+	:where(.mode-dark) .token.keyword,
+	:where(.mode-dark) .token.builtin {
+		color: var(--ctp-mauve);
+	}
+	:where(.mode-light) .token.selector,
+	:where(.mode-light) .token.important,
+	:where(.mode-light) .token.atrule,
+	:where(.mode-light) .token.keyword,
+	:where(.mode-light) .token.builtin {
+		color: color-mix(in srgb, var(--ctp-mauve) 60%, var(--ctp-base));
+	}
+	:where(.mode-dark) .token.string,
+	:where(.mode-dark) .token.char,
+	:where(.mode-dark) .token.attr-value,
+	:where(.mode-dark) .token.regex,
+	:where(.mode-dark) .token.variable {
+		color: var(--ctp-green);
+	}
+	:where(.mode-light) .token.string,
+	:where(.mode-light) .token.char,
+	:where(.mode-light) .token.attr-value,
+	:where(.mode-light) .token.regex,
+	:where(.mode-light) .token.variable {
+		color: var(--ctp-green);
+	}
+	:where(.mode-dark) .token.operator,
+	:where(.mode-dark) .token.entity,
+	:where(.mode-dark) .token.url {
+		color: var(--ctp-teal);
+	}
+	:where(.mode-light) .token.operator,
+	:where(.mode-light) .token.entity,
+	:where(.mode-light) .token.url {
+		color: var(--ctp-teal);
+	}
+	:where(.mode-dark) .btn {
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .btn {
+		border: 1px solid transparent;
+	}
+	:where(.mode-dark) .alert {
+		border: 1px solid transparent;
+	}
+	:where(.mode-light) .alert {
+		border: 1px solid transparent;
+	}
+	:where(.mode-dark) ::-webkit-scrollbar-thumb {
+		border: 0 solid transparent!important;
+	}
+	:where(.mode-light) ::-webkit-scrollbar-thumb {
+		border: 0 solid transparent!important;
+	}
+	:where(.mode-dark) .u-shadow {
+		box-shadow: 0 1px 4px color-mix(in srgb, var(--ctp-crust) 26%, transparent);
+	}
+	:where(.mode-light) .u-shadow {
+		box-shadow: 0 1px 4px color-mix(in srgb, var(--ctp-text) 26%, transparent);
+	}
+	.mode-dark .hp-list,
+	.mode-dark .list-loader {
+		filter: drop-shadow(0 0 12px color-mix(in srgb, var(--ctp-crust) 40%, transparent));
+	}
+}
+
+/* Mixins live outside @-moz-document and are called by their full path, so
+	 the variables one call returns cannot leak into the next. */
+#hp {
+	.vars(@flavor) {
+		#lib.palette();
+		#lib.css-variables();
+		color-scheme: if(@flavor = latte, light, dark);
+		--ctp-accent: @accent;
+		--ctp-on-accent: if(@flavor = latte, @base, @crust);
+	}
+}
