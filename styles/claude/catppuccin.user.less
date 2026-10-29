@@ -1,0 +1,579 @@
+/* ==UserStyle==
+@name Claude Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/claude
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/claude
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/claude/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for Claude and Claude Design. Follows Claude's appearance setting (Light, Dark, System).
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * Built against claude.ai as of 2026-09-17 (build ee2b219377), updated for
+ * 2026-10-29 (build c06301b817), and extended to light mode on 2026-10-29.
+ *
+ * How it works: Claude's design system (CDS) derives its older surfaces, text,
+ * borders and overlays from one gray scale (--cds-gray-*, plus the same steps
+ * as HSL channels in --cds-hsl-gray-*) and its accent from a blue scale. The
+ * scale always runs from light (0) to dark (900); the modes pick different
+ * steps from it. Dark mode puts the page on gray-850 and text on gray-20,
+ * light mode puts the page on gray-20 and text on gray-860. So this style
+ * fills the scale twice: for dark mode from text down to crust, for light mode
+ * from base down to text, each with its own flavor.
+ *
+ * Since 2026-10, html carries data-cds-fizzy-lake="color" and Claude's newer
+ * color tokens (--cds-surface-*, --cds-fill-*, --cds-text-*) are literal hex
+ * per mode instead of steps on the scale. They name roles (surface, text,
+ * fill), so one block of role mappings serves both modes.
+ *
+ * Claude Design (claude.ai/design) marks its mode differently: html carries
+ * data-theme="dark" or "light", the CDS scale is redeclared on a nested
+ * div.cds-root, and the app chrome uses its own --om-* variables. Both are
+ * covered below.
+ *
+ * Which flavor shows follows Claude's appearance setting (Settings >
+ * Appearance): Dark uses your Dark Flavor, Light your Light Flavor, and
+ * System follows your OS.
+ *
+ * Structure and the code-block colors are derived from catppuccin/userstyles,
+ * styles/claude (MIT, (c) Catppuccin Org).
+ */
+
+@-moz-document domain("claude.ai") {
+	#claude.mode(dark; light; system; @darkFlavor; dark);
+	#claude.mode(light; dark; system; @lightFlavor; light);
+	@media (prefers-color-scheme: dark) {
+		#claude.mode(system; light; dark; @darkFlavor; dark);
+	}
+	@media (prefers-color-scheme: light) {
+		#claude.mode(system; light; dark; @lightFlavor; light);
+	}
+	#claude.design(dark; light; @darkFlavor; dark);
+	#claude.design(light; dark; @lightFlavor; light);
+}
+
+/* The mixins live in a namespace outside @-moz-document. Mixins return
+   their variables to the scope they are called from, so calling them at
+   the top of @-moz-document while they were defined there let the first
+   flavor's palette shadow every later one. */
+#claude {
+	/* Colors derived from the palette, shared by every block below.
+	   Hover shades get lighter on dark flavors and darker on Latte. */
+	.colors() {
+		#lib.palette();
+		@hv: if(@flavor = latte, -8%, 5%);
+		@hv2: if(@flavor = latte, -14%, 11%);
+		@on-accent: if(@flavor = latte, @base, @crust);
+		@accent-hover: lighten(@accent, @hv);
+		@accent-active: lighten(@accent, @hv2);
+		@red-hover: lighten(@red, @hv);
+		@red-active: lighten(@red, @hv2);
+		@green-hover: lighten(@green, @hv);
+		@yellow-hover: lighten(@yellow, @hv);
+		@blue-hover: lighten(@blue, @hv);
+		@blue-active: lighten(@blue, @hv2);
+		@lavender-hover: lighten(@lavender, @hv);
+	}
+
+	/* One scale step as hex and as HSL channels ("h s% l%") */
+	.step(@n; @c) {
+		--cds-gray-@{n}: @c;
+		--cds-hsl-gray-@{n}: e(%("%s %s %s", round(hue(@c), 1), round(saturation(@c), 1), round(lightness(@c), 1)));
+	}
+	.hsl(@name; @c) {
+		@{name}: e(%("%s %s %s", round(hue(@c), 1), round(saturation(@c), 1), round(lightness(@c), 1)));
+	}
+
+	/* The gray scale for dark mode: lighter than text at the top, crust at
+	   the bottom. In-between steps are mixes of their neighbors. */
+	.scale(dark) {
+		#claude.step(0; lighten(@text, 4.5%));
+		#claude.step(10; lighten(@text, 3.6%));
+		#claude.step(20; lighten(@text, 2.8%));
+		#claude.step(30; lighten(@text, 1.8%));
+		#claude.step(40; lighten(@text, 1%));
+		#claude.step(50; @text);
+		#claude.step(60; mix(@subtext1, @text, 6.7%));
+		#claude.step(70; mix(@subtext1, @text, 13.3%));
+		#claude.step(80; mix(@subtext1, @text, 20%));
+		#claude.step(90; mix(@subtext1, @text, 26.7%));
+		#claude.step(100; mix(@subtext1, @text, 33.3%));
+		#claude.step(150; mix(@subtext1, @text, 66.7%));
+		#claude.step(200; @subtext1);
+		#claude.step(250; @subtext0);
+		#claude.step(300; @overlay2);
+		#claude.step(350; mix(@overlay2, @overlay1, 50%));
+		#claude.step(400; @overlay1);
+		#claude.step(450; mix(@overlay1, @overlay0, 50%));
+		#claude.step(500; @overlay0);
+		#claude.step(550; mix(@overlay0, @surface2, 50%));
+		#claude.step(600; @surface2);
+		#claude.step(650; mix(@surface2, @surface1, 50%));
+		#claude.step(700; @surface1);
+		#claude.step(750; mix(@surface1, @surface0, 50%));
+		#claude.step(800; @surface0);
+		#claude.step(810; mix(@base, @surface0, 20%));
+		#claude.step(820; mix(@base, @surface0, 40%));
+		#claude.step(830; mix(@base, @surface0, 60%));
+		#claude.step(840; mix(@base, @surface0, 80%));
+		#claude.step(850; @base);
+		#claude.step(860; mix(@mantle, @base, 50%));
+		#claude.step(870; @mantle);
+		#claude.step(880; mix(@crust, @mantle, 30%));
+		#claude.step(890; mix(@crust, @mantle, 70%));
+		#claude.step(900; @crust);
+	}
+
+	/* The gray scale for light mode, by the steps light mode uses: page on
+	   20, sidebar on 40, raised surfaces on 0, text on 860, 700 and 450,
+	   borders on 810. */
+	.scale(light) {
+		#claude.step(0; @base);
+		#claude.step(10; @base);
+		#claude.step(20; @base);
+		#claude.step(30; mix(@mantle, @base, 50%));
+		#claude.step(40; @mantle);
+		#claude.step(50; mix(@crust, @mantle, 50%));
+		#claude.step(60; mix(@crust, @mantle, 75%));
+		#claude.step(70; @crust);
+		#claude.step(80; @crust);
+		#claude.step(90; mix(@surface0, @crust, 50%));
+		#claude.step(100; @surface0);
+		#claude.step(150; mix(@surface1, @surface0, 50%));
+		#claude.step(200; @surface1);
+		#claude.step(250; mix(@surface2, @surface1, 50%));
+		#claude.step(300; @surface2);
+		#claude.step(350; mix(@overlay0, @surface2, 50%));
+		#claude.step(400; @overlay0);
+		#claude.step(450; @overlay1);
+		#claude.step(500; @overlay2);
+		#claude.step(550; mix(@subtext0, @overlay2, 50%));
+		#claude.step(600; @subtext0);
+		#claude.step(650; mix(@subtext1, @subtext0, 50%));
+		#claude.step(700; @subtext1);
+		#claude.step(750; mix(@text, @subtext1, 50%));
+		#claude.step(800; @text);
+		#claude.step(810; @text);
+		#claude.step(820; @text);
+		#claude.step(830; @text);
+		#claude.step(840; @text);
+		#claude.step(850; @text);
+		#claude.step(860; @text);
+		#claude.step(870; @text);
+		#claude.step(880; @text);
+		#claude.step(890; @text);
+		#claude.step(900; @text);
+	}
+
+	/* Accent, status and tint scales. They are tints of the page color at
+	   both ends, so they read the same way in both modes. */
+	.roles() {
+		/* Accent: Claude's blue becomes your accent */
+		--cds-role-accent-50: mix(@accent, @base, 10%);
+		--cds-role-accent-100: mix(@accent, @base, 20%);
+		--cds-role-accent-250: mix(@accent, @base, 60%);
+		--cds-role-accent-300: @accent;
+		--cds-role-accent-400: @accent-hover;
+		--cds-role-accent-450: @accent;
+		--cds-role-accent-600: @accent;
+		--cds-role-accent-700: mix(@accent, @base, 45%);
+		--cds-role-accent-800: mix(@accent, @base, 25%);
+		--cds-role-accent-850: mix(@accent, @base, 15%);
+		--cds-role-accent-on: @on-accent;
+		#claude.hsl(--cds-hsl-blue-100; mix(@accent, @base, 20%));
+		#claude.hsl(--cds-hsl-blue-200; @accent-hover);
+		#claude.hsl(--cds-hsl-blue-350; @accent);
+		#claude.hsl(--cds-hsl-blue-500; @accent);
+		#claude.hsl(--cds-hsl-blue-600; @accent);
+		#claude.hsl(--cds-hsl-blue-750; mix(@accent, @base, 25%));
+		#claude.hsl(--cds-hsl-clay; @accent);
+		#claude.hsl(--cds-hsl-clay-emphasized; @accent);
+
+		/* Status colors */
+		--cds-role-danger-300: @red;
+		--cds-role-danger-400: @red-hover;
+		--cds-role-danger-450: @red;
+		--cds-role-danger-700: mix(@red, @base, 45%);
+		--cds-role-danger-800: mix(@red, @base, 20%);
+		--cds-role-danger-on: @on-accent;
+		--cds-role-success-400: @green;
+		--cds-role-success-450: @green;
+		--cds-role-success-700: mix(@green, @base, 45%);
+		--cds-role-success-800: mix(@green, @base, 20%);
+		--cds-role-success-on: @on-accent;
+		--cds-role-warning-200: @yellow;
+		--cds-role-warning-250: @yellow-hover;
+		--cds-role-warning-300: @yellow;
+		--cds-role-warning-700: mix(@yellow, @base, 45%);
+		--cds-role-warning-800: mix(@yellow, @base, 20%);
+		--cds-role-warning-on: @on-accent;
+		#claude.hsl(--cds-hsl-red-200; @red);
+		#claude.hsl(--cds-hsl-red-350; @red);
+		#claude.hsl(--cds-hsl-red-400; @red);
+		#claude.hsl(--cds-hsl-red-750; mix(@red, @base, 20%));
+		#claude.hsl(--cds-hsl-green-200; @green);
+		#claude.hsl(--cds-hsl-green-400; @green);
+		#claude.hsl(--cds-hsl-green-750; mix(@green, @base, 20%));
+		#claude.hsl(--cds-hsl-yellow-200; @yellow);
+		#claude.hsl(--cds-hsl-yellow-350; @yellow);
+		#claude.hsl(--cds-hsl-yellow-400; @yellow);
+		#claude.hsl(--cds-hsl-yellow-750; mix(@yellow, @base, 20%));
+
+		/* Tinted text and chips (tags, badges, highlights) */
+		--cds-red-300: @red;
+		--cds-red-800: mix(@red, @base, 20%);
+		--cds-orange-300: @peach;
+		--cds-orange-800: mix(@peach, @base, 20%);
+		--cds-yellow-300: @yellow;
+		--cds-yellow-800: mix(@yellow, @base, 20%);
+		--cds-green-300: @green;
+		--cds-green-800: mix(@green, @base, 20%);
+		--cds-aqua-300: @teal;
+		--cds-aqua-800: mix(@teal, @base, 20%);
+		--cds-blue-300: @blue;
+		--cds-blue-800: mix(@blue, @base, 20%);
+		--cds-violet-300: @mauve;
+		--cds-violet-800: mix(@mauve, @base, 20%);
+		--cds-magenta-300: @pink;
+		--cds-magenta-800: mix(@pink, @base, 20%);
+	}
+
+	/* Fizzy-lake color tokens. Surfaces follow catppuccin/userstyles: page on
+	   base, sidebar on mantle, raised elements on surface0. Borders and
+	   translucent fills are text at Claude's own alpha. */
+	.fizzy() {
+		--cds-surface-1: @base;
+		--cds-surface-2: @mantle;
+		--cds-surface-3: @surface0;
+		--cds-surface-popover: @surface0;
+		--cds-fizzy-lake-color-sidebar: @mantle;
+		--cds-fizzy-lake-color-card-hover: @surface0;
+
+		--cds-text-primary: @text;
+		--cds-text-secondary: @subtext0;
+		--cds-text-muted: @overlay1;
+		--cds-text-stays-secondary: @subtext0;
+		--cds-text-button-disabled: @overlay0;
+		--cds-fizzy-lake-color-secondary: @subtext0;
+		--cds-fizzy-lake-color-plain-secondary: @subtext0;
+		--cds-fizzy-lake-color-plain-muted: @subtext0;
+		--cds-fizzy-lake-color-tertiary: @overlay1;
+		--cds-fizzy-lake-color-icon-only-disabled: @overlay0;
+
+		--cds-border: fade(@text, 4%);
+		--cds-border-line: fade(@text, 12%);
+		--cds-fizzy-lake-color-seam: fade(@text, 10%);
+		--cds-fizzy-lake-color-composer-ring: fade(@text, 8%);
+		--cds-fizzy-lake-color-banner-line: fade(@text, 20%);
+		--cds-fizzy-lake-color-message-line: fade(@text, 10%);
+		--cds-fizzy-lake-color-selected-hover: fade(@text, 22%);
+		--cds-fizzy-lake-color-card-link: fade(@text, 3%);
+		--cds-fizzy-lake-color-card-link-hover: fade(@text, 5%);
+		--cds-fizzy-lake-color-card-link-pressed: fade(@text, 7.5%);
+		--cds-fill-secondary: fade(@text, 15%);
+		--cds-fill-secondary-hover: fade(@text, 22%);
+		--cds-fill-secondary-layer: fade(@text, 7.5%);
+		--cds-fill-ghost-hover: fade(@text, 7.5%);
+		--cds-fill-ghost-selected: fade(@text, 15%);
+		--cds-fill-button-ghost-hover: fade(@text, 7.5%);
+		--cds-fill-button-layer: fade(@text, 7.5%);
+		--cds-fill-disabled: fade(@text, 5%);
+		--cds-bg-neutral-hover: fade(@text, 7.5%);
+
+		/* Solid fills. Pastel fills need dark ink, Latte fills light ink. */
+		--cds-fill-primary: @text;
+		--cds-fill-primary-hover: @subtext1;
+		--cds-on-primary: @base;
+		--cds-fill-accent-hover: @accent-hover;
+		--cds-fill-danger: @red;
+		--cds-fill-danger-hover: @red-hover;
+		--cds-fill-success: @green;
+		--cds-fill-success-hover: @green-hover;
+		--cds-fill-warning: @yellow;
+		--cds-fill-warning-hover: @yellow-hover;
+		--cds-fill-pro: @lavender;
+		--cds-fill-pro-hover: @lavender-hover;
+		--cds-fill-tint-red: @red;
+		--cds-fill-tint-green: @green;
+		--cds-fill-tint-blue: @blue;
+		--cds-on-accent: @on-accent;
+		--cds-on-danger: @on-accent;
+		--cds-on-success: @on-accent;
+		--cds-on-warning: @on-accent;
+		--cds-on-pro: @on-accent;
+
+		/* Status text, borders and backgrounds */
+		--cds-text-danger: @red;
+		--cds-text-success: @green;
+		--cds-text-warning: @yellow;
+		--cds-text-pro: @lavender;
+		--cds-border-danger: fade(@red, 22%);
+		--cds-border-success: fade(@green, 22%);
+		--cds-border-warning: fade(@yellow, 15%);
+		--cds-border-pro: fade(@lavender, 22%);
+		--cds-bg-danger: fade(@red, 12%);
+		--cds-bg-danger-layer: fade(@red, 6%);
+		--cds-bg-success: fade(@green, 12%);
+		--cds-bg-warning: fade(@yellow, 8%);
+		--cds-bg-pro: fade(@lavender, 12%);
+
+		/* Tints (tags, badges, highlights) */
+		--cds-text-tint-red: @red;
+		--cds-text-tint-orange: @peach;
+		--cds-text-tint-yellow: @yellow;
+		--cds-text-tint-green: @green;
+		--cds-text-tint-aqua: @teal;
+		--cds-text-tint-blue: @blue;
+		--cds-text-tint-violet: @mauve;
+		--cds-text-tint-magenta: @pink;
+		--cds-bg-tint-red: fade(@red, 12%);
+		--cds-bg-tint-orange: fade(@peach, 12%);
+		--cds-bg-tint-yellow: fade(@yellow, 8%);
+		--cds-bg-tint-green: fade(@green, 12%);
+		--cds-bg-tint-aqua: fade(@teal, 12%);
+		--cds-bg-tint-blue: fade(@blue, 12%);
+		--cds-bg-tint-violet: fade(@mauve, 12%);
+		--cds-bg-tint-magenta: fade(@pink, 12%);
+		--cds-bg-tint-red-opaque: color-mix(in srgb, @red 12%, var(--cds-surface-1));
+		--cds-bg-tint-orange-opaque: color-mix(in srgb, @peach 12%, var(--cds-surface-1));
+		--cds-bg-tint-yellow-opaque: color-mix(in srgb, @yellow 8%, var(--cds-surface-1));
+		--cds-bg-tint-green-opaque: color-mix(in srgb, @green 12%, var(--cds-surface-1));
+		--cds-bg-tint-aqua-opaque: color-mix(in srgb, @teal 12%, var(--cds-surface-1));
+		--cds-bg-tint-blue-opaque: color-mix(in srgb, @blue 12%, var(--cds-surface-1));
+		--cds-bg-tint-violet-opaque: color-mix(in srgb, @mauve 12%, var(--cds-surface-1));
+		--cds-bg-tint-magenta-opaque: color-mix(in srgb, @pink 12%, var(--cds-surface-1));
+	}
+
+	/* Everything for one value of html[data-mode]. @m is the mode, @o1 and
+	   @o2 the other two (nested roots can carry their own data-mode), @dir
+	   the way Claude reads the scale in this mode. */
+	.mode(@m; @o1; @o2; @flavor; @dir) {
+		#claude.colors();
+
+		/* Base scales. html.cds-root[data-mode] is specificity (0,2,1), which
+		   beats Claude's own declarations on :where(:root) (0,0,0) and :root
+		   (0,1,0). The second selector covers nested roots, which Claude
+		   redeclares the stock scales on: (0,4,1) against (0,4,0). */
+		html.cds-root[data-mode="@{m}"],
+		html[data-mode="@{m}"] .cds-root:not([data-mode="@{o1}"]):not([data-mode="@{o2}"]) {
+			#lib.defaults();
+			scrollbar-color: @surface2 transparent;
+			#claude.scale(@dir);
+			#claude.roles();
+		}
+
+		/* Tokens that Claude redeclares on every .cds-root element */
+		html[data-mode="@{m}"] .cds-root,
+		html.cds-root[data-mode="@{m}"] {
+			--cds-clay: @accent;
+			--cds-clay-emphasized: @accent;
+			--cds-on-brand: @on-accent;
+		}
+
+		/* Fizzy-lake tokens. Claude declares them as literals on every
+		   .cds-root: (0,3,0) on html and (0,5,0) on nested roots. These
+		   selectors are (0,4,1) and (0,7,1). */
+		html.cds-root[data-mode="@{m}"][data-cds-fizzy-lake~="color"]:not([data-cds-theme]),
+		html[data-mode="@{m}"][data-cds-fizzy-lake~="color"]:not([data-cds-theme]) .cds-root:not([data-cds-theme], [data-cds-theme] *):not([data-mode="@{o1}"]):not([data-mode="@{o2}"]) {
+			#claude.fizzy();
+		}
+
+		/* The static composer and sidebar skeleton from the page shell stay in
+		   the DOM after hydration and redeclare their tokens by ID, (1,3,1).
+		   These are (1,4,1). */
+		html.cds-root[data-mode="@{m}"][data-cds-fizzy-lake~="color"]:not([data-cds-theme]) #static-composer {
+			--cds-surface-1: @base;
+			--cds-text-primary: @text;
+			--cds-text-secondary: @subtext0;
+			--cds-text-muted: @overlay1;
+			--muted-as-secondary: @subtext0;
+			color: @text;
+		}
+		html.cds-root[data-mode="@{m}"][data-cds-fizzy-lake~="color"]:not([data-cds-theme]) #static-composer-box {
+			--cds-surface-3: @surface0;
+			--cds-ring-color: fade(@text, 8%);
+			--cds-fizzy-lake-color-composer-ring: fade(@text, 8%);
+		}
+		html.cds-root[data-mode="@{m}"][data-cds-fizzy-lake~="color"][data-sidebar-chrome="rail"] #static-sidebar-skeleton {
+			background-color: @mantle;
+			border-inline-end-color: fade(@text, 10%);
+		}
+
+		/* Inline code color. Claude's rule is (0,4,0), this one is (0,4,1). */
+		html[data-mode="@{m}"] .cds-root:not([data-mode="@{o1}"]):not([data-mode="@{o2}"]),
+		html.cds-root[data-mode="@{m}"]:not([data-mode="@{o1}"]):not([data-mode="@{o2}"]) {
+			--cds-editor-code-ink: @accent;
+		}
+
+		/* App frame (page, sidebar, cards). Claude's rule is (0,2,0) and only
+		   exists for dark mode; light mode keeps the same frame. */
+		html[data-mode="@{m}"] .dframe-root when (@dir = dark) {
+			#claude.hsl(--df-z0; @crust);
+			#claude.hsl(--df-z1; @mantle);
+			#claude.hsl(--df-z2; @base);
+			#claude.hsl(--df-z3; @surface0);
+			#claude.hsl(--df-z4; @surface1);
+			#claude.hsl(--df-z5; @surface2);
+			#claude.hsl(--df-z6; @subtext0);
+		}
+
+		html[data-mode="@{m}"] ::selection {
+			background-color: fade(@accent, 30%);
+		}
+
+		/* Logo, if it still uses the hard-coded clay class */
+		html[data-mode="@{m}"] div.text-\[\#D97757\] { // ctp-allow: Claude's class name
+			color: @accent !important;
+		}
+
+		#claude.code(~'[data-mode="@{m}"]');
+	}
+
+	/* Claude Design: html[data-theme] instead of data-mode */
+	.design(@t; @other; @flavor; @dir) {
+		#claude.colors();
+
+		html[data-theme="@{t}"] .cds-root:not([data-mode="@{other}"]) {
+			#lib.defaults();
+			scrollbar-color: @surface2 transparent;
+			#claude.scale(@dir);
+			#claude.roles();
+		}
+		html[data-theme="@{t}"] .cds-root {
+			--cds-clay: @accent;
+			--cds-clay-emphasized: @accent;
+			--cds-on-brand: @on-accent;
+		}
+		html[data-theme="@{t}"] ::selection {
+			background-color: fade(@accent, 30%);
+		}
+
+		/* App chrome. Claude declares these on [data-theme] (0,1,0);
+		   html[data-theme] is (0,1,1). */
+		html[data-theme="@{t}"] {
+			color-scheme: if(@flavor = latte, light, dark);
+			--om-bg-app: @base;
+			--om-bg-panel: mix(@surface0, @base, 37%);
+			--om-bg-surface: @surface0;
+			--om-bg-elevated: @surface0;
+			--om-bg-hover: fade(@text, 13%);
+			--om-bg-hover-opaque: color-mix(in srgb, @text 13%, var(--om-bg-surface));
+			--om-bg-active: mix(@surface0, @surface1, 50%);
+			--om-bg-selected: mix(@accent, @surface0, 20%);
+			--om-bg-muted: mix(@surface0, @base, 50%);
+			--om-bg-stripe: fade(@text, 2%);
+			--om-bg-tint-design-system: mix(@red, @base, 15%);
+			--om-bg-tint-template: mix(@lavender, @base, 15%);
+			--om-bg-primary-tab-bar: @surface0;
+			--om-bg-secondary-tab-bar: fade(@mantle, 69%);
+			--om-bg-error-tint: fade(@red, 12%);
+			--om-bg-intro-splash: @mantle;
+			--om-bg-thumb: @surface1;
+			--om-bg-scrim: fade(@crust, 60%);
+			--om-border-subtle: fade(@text, 10%);
+			--om-border-card: fade(@text, 14%);
+			--om-border-default: fade(@text, 12%);
+			--om-border-strong: fade(@text, 24%);
+			--om-border-focus: fade(@accent, 50%);
+			--om-border-modal: fade(@text, 12%);
+			--om-text-primary: @text;
+			--om-text-prose: @subtext1;
+			--om-text-secondary: @subtext0;
+			--om-text-tertiary: @overlay2;
+			--om-text-disabled: @overlay0;
+			--om-text-design-system-badge: @maroon;
+			--om-text-inverse: @base;
+			--om-text-link: @blue;
+			--om-accent-primary: @accent;
+			--om-accent-primary-bg: fade(@accent, 16%);
+			--om-accent-primary-tint: fade(@accent, 6%);
+			--om-accent-primary-hover: @accent-hover;
+			--om-accent-primary-active: @accent-active;
+			--om-accent-secondary: @blue;
+			--om-accent-secondary-hover: @blue-hover;
+			--om-accent-secondary-active: @blue-active;
+			--om-accent-success: @green;
+			--om-accent-success-active: @green-hover;
+			--om-accent-sage: @teal;
+			--om-accent-warning: @yellow;
+			--om-accent-error: @red;
+			--om-accent-error-hover: @red-hover;
+			--om-accent-error-active: @red-active;
+			--om-accent-pro: @lavender;
+			--om-accent-pro-bg: mix(@lavender, @base, 20%);
+			--om-accent-blue: @blue;
+			--om-accent-blue-bg: fade(@blue, 14%);
+			--om-accent-blue-ring-bg: fade(@blue, 14%);
+			--om-accent-blue-hover: @blue-hover;
+			--om-accent-tray-bg: fade(@sapphire, 9%);
+			--om-accent-tray-border: fade(@sapphire, 35%);
+			--om-accent-tray-label: fade(@sapphire, 78%);
+			--om-accent-review: @sapphire;
+			--om-accent-verifier: @pink;
+			--om-accent-verifier-soft: mix(@pink, @base, 60%);
+			--om-accent-black: @text;
+		}
+
+		#claude.code(~'[data-theme="@{t}"]');
+	}
+
+	/* Code blocks. Claude keeps them dark in both modes and writes the same
+	   highlighter colors inline in light mode too, so the mapping applies in
+	   both, each with its own flavor. The colors are matched literally. Since
+	   2026-10 the spans carry no .token class and the palette is new; its
+	   source is not in Claude's bundles, so the first group was read off
+	   rendered bash, and any color not listed falls back to text.
+	   html:root lifts the token rules to (0,4,3), above the (0,4,2) span rule
+	   of the catppuccin/userstyles Claude style when both are installed. */
+	.code(@attr) {
+		html@{attr} .code-block__code {
+			background: @crust !important;
+		}
+		html@{attr} .code-block__code {
+			code,
+			code span {
+				color: @text !important;
+			}
+		}
+		html:root@{attr} .code-block__code code {
+			span[style*="rgb(112, 184, 255)"] { // ctp-allow: highlighter color
+				color: @blue !important;
+			}
+			span[style*="rgb(155, 233, 99)"] { // ctp-allow: highlighter color
+				color: @green !important;
+			}
+			span:is([style*="rgb(129, 136, 152)"], [style*="rgb(211, 215, 222)"]) { // ctp-allow: highlighter colors
+				color: @overlay2 !important;
+			}
+
+			/* The pre-2026-10 palette (One Dark), kept in case it returns */
+			span[style*="rgb(152, 195, 121)"] { // ctp-allow: highlighter color
+				color: @green !important;
+			}
+			span[style*="rgb(209, 154, 102)"] { // ctp-allow: highlighter color
+				color: @yellow !important;
+			}
+			span[style*="rgb(97, 175, 239)"] { // ctp-allow: highlighter color
+				color: @blue !important;
+			}
+			span[style*="rgb(224, 108, 117)"] { // ctp-allow: highlighter color
+				color: @red !important;
+			}
+			span[style*="rgb(198, 120, 221)"] { // ctp-allow: highlighter color
+				color: @mauve !important;
+			}
+			span[style*="rgb(171, 178, 191)"] { // ctp-allow: highlighter color
+				color: @overlay2 !important;
+			}
+		}
+	}
+}
