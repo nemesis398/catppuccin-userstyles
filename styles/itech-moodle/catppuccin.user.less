@@ -1,0 +1,1659 @@
+/* ==UserStyle==
+@name ITECH Moodle Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/itech-moodle
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/itech-moodle
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/itech-moodle/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for the ITECH Moodle (moodle.itech-bs14.de). Follows the site's dark mode toggle.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select darkFlavor "Flavor when the site is in dark mode" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var checkbox themeLight "Also theme the site's light mode" 0
+@var select lightFlavor "Flavor when the site is in light mode (needs the checkbox above)" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+@-moz-document domain("moodle.itech-bs14.de") {
+	/* The site's dark mode toggle (top right, "kraus-layout-dark") sets
+		 data-bs-theme on <html>: "dark", "light", or "auto" (follows the OS). */
+	:root[data-bs-theme="dark"] {
+		#catppuccin(@darkFlavor);
+	}
+	@media (prefers-color-scheme: dark) {
+		:root[data-bs-theme="auto"] {
+			#catppuccin(@darkFlavor);
+		}
+	}
+
+	/* Light mode stays the site's own unless the checkbox is ticked. */
+	:root[data-bs-theme="light"] when (@themeLight = 1) {
+		#catppuccin(@lightFlavor);
+	}
+	@media (prefers-color-scheme: light) {
+		:root[data-bs-theme="auto"] when (@themeLight = 1) {
+			#catppuccin(@lightFlavor);
+		}
+	}
+
+	/* "r, g, b" triplet for Bootstrap's *-rgb variables */
+	#rgb(@c) {
+		@result: e(%("%d, %d, %d", red(@c), green(@c), blue(@c)));
+	}
+
+	#catppuccin(@flavor) {
+		#lib.palette();
+		#lib.defaults();
+		#lib.css-variables();
+
+		@on-accent: if(@flavor = latte, @base, @crust);
+		@arrow: escape(~"@{subtext0}");
+		@select-arrow: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='@{arrow}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+
+		/* ---------- Bootstrap 5.3 variables (Moodle 5.x) ---------- */
+		--bs-body-bg: @base;
+		--bs-body-bg-rgb: #rgb(@base)[@result];
+		--bs-body-color: @text;
+		--bs-body-color-rgb: #rgb(@text)[@result];
+		--bs-emphasis-color: @text;
+		--bs-emphasis-color-rgb: #rgb(@text)[@result];
+		--bs-heading-color: @text;
+		--bs-secondary-color: @subtext0;
+		--bs-secondary-bg: @surface0;
+		--bs-tertiary-color: @overlay1;
+		--bs-tertiary-bg: @mantle;
+		--bs-border-color: @surface1;
+		--bs-border-color-translucent: fade(@overlay0, 30%);
+		--bs-link-color: @accent;
+		--bs-link-color-rgb: #rgb(@accent)[@result];
+		--bs-link-hover-color: @accent;
+		--bs-link-hover-color-rgb: #rgb(@accent)[@result];
+		--bs-code-color: @pink;
+		--bs-highlight-bg: fade(@yellow, 30%);
+		--bs-highlight-color: @text;
+		--bs-focus-ring-color: fade(@accent, 40%);
+		--bs-form-valid-color: @green;
+		--bs-form-valid-border-color: @green;
+		--bs-form-invalid-color: @red;
+		--bs-form-invalid-border-color: @red;
+		--bs-primary: @accent;
+		--bs-primary-rgb: #rgb(@accent)[@result];
+		--bs-secondary: @surface1;
+		--bs-secondary-rgb: #rgb(@surface1)[@result];
+		--bs-success: @green;
+		--bs-success-rgb: #rgb(@green)[@result];
+		--bs-info: @sapphire;
+		--bs-info-rgb: #rgb(@sapphire)[@result];
+		--bs-warning: @yellow;
+		--bs-warning-rgb: #rgb(@yellow)[@result];
+		--bs-danger: @red;
+		--bs-danger-rgb: #rgb(@red)[@result];
+		--bs-light: @surface0;
+		--bs-light-rgb: #rgb(@surface0)[@result];
+		--bs-dark: @crust;
+		--bs-dark-rgb: #rgb(@crust)[@result];
+		--bs-primary-text-emphasis: @accent;
+		--bs-success-text-emphasis: @green;
+		--bs-info-text-emphasis: @sapphire;
+		--bs-warning-text-emphasis: @yellow;
+		--bs-danger-text-emphasis: @red;
+		--bs-secondary-text-emphasis: @subtext1;
+		--bs-light-text-emphasis: @text;
+		--bs-dark-text-emphasis: @text;
+		--bs-primary-bg-subtle: fade(@accent, 15%);
+		--bs-success-bg-subtle: fade(@green, 15%);
+		--bs-info-bg-subtle: fade(@sapphire, 15%);
+		--bs-warning-bg-subtle: fade(@yellow, 15%);
+		--bs-danger-bg-subtle: fade(@red, 15%);
+		--bs-secondary-bg-subtle: @surface0;
+		--bs-light-bg-subtle: @mantle;
+		--bs-dark-bg-subtle: @crust;
+		--bs-primary-border-subtle: fade(@accent, 40%);
+		--bs-success-border-subtle: fade(@green, 40%);
+		--bs-info-border-subtle: fade(@sapphire, 40%);
+		--bs-warning-border-subtle: fade(@yellow, 40%);
+		--bs-danger-border-subtle: fade(@red, 40%);
+		--bs-secondary-border-subtle: @surface1;
+		--bs-light-border-subtle: @surface0;
+		--bs-dark-border-subtle: @surface1;
+
+		/* ---------- Bootstrap 4 variables (Moodle 4.x) ---------- */
+		--primary: @accent;
+		--secondary: @surface1;
+		--success: @green;
+		--info: @sapphire;
+		--warning: @yellow;
+		--danger: @red;
+		--light: @surface0;
+		--dark: @crust;
+
+		/* ---------- This site's dark mode palette ----------
+			 The dark mode plugin paints almost everything through these variables,
+			 so remapping them turns most of its dark mode into Catppuccin. */
+		--bs-gray-100: @text;
+		--bs-gray-100-rgb: #rgb(@text)[@result];
+		--bs-gray-200: @text;
+		--bs-gray-200-rgb: #rgb(@text)[@result];
+		--bs-gray-300: @text;
+		--bs-gray-300-rgb: #rgb(@text)[@result];
+		--bs-gray-400: @subtext1;
+		--bs-gray-400-rgb: #rgb(@subtext1)[@result];
+		--bs-gray-500: @subtext0;
+		--bs-gray-500-rgb: #rgb(@subtext0)[@result];
+		--bs-gray-600: @overlay0;
+		--bs-gray-600-rgb: #rgb(@overlay0)[@result];
+		--bs-gray-700: @surface1;
+		--bs-gray-700-rgb: #rgb(@surface1)[@result];
+		--bs-gray-800: @mantle;
+		--bs-gray-800-rgb: #rgb(@mantle)[@result];
+		--bs-gray-900: @surface0;
+		--bs-gray-900-rgb: #rgb(@surface0)[@result];
+		--bs-gray-1000: @mantle;
+		--bs-gray-1000-rgb: #rgb(@mantle)[@result];
+		--bs-gray-1100: @base;
+		--bs-gray-1100-rgb: #rgb(@base)[@result];
+		--bs-gray: @overlay1;
+		--bs-gray-dark: @surface0;
+		--bs-text-color: @text;
+		--bs-text-color-rgb: #rgb(@text)[@result];
+		--bs-nav-drawer: @text;
+		--bs-nav-drawer-rgb: #rgb(@text)[@result];
+		--bs-write: @text;
+		--bs-write-rgb: #rgb(@text)[@result];
+		--bs-black: @crust;
+		--bs-black-rgb: #rgb(@crust)[@result];
+		--bs-main-navbar-background: @mantle;
+		--bs-link-focus-color: @lavender;
+		--bs-link-focus-color-rgb: #rgb(@lavender)[@result];
+		--bs-secondary-bg-rgb: #rgb(@surface0)[@result];
+		--bs-tertiary-bg-rgb: #rgb(@mantle)[@result];
+		--bs-light-text-emphasis: @text;
+		--color_primary: @accent;
+
+		/* Activity purpose colors */
+		--activityadministration: @lavender;
+		--activityassessment: @pink;
+		--activitycollaboration: @green;
+		--activitycommunication: @peach;
+		--activitycontent: @blue;
+		--activityinteractivecontent: @teal;
+
+		/* Tiles course format */
+		--format-tiles-colour: @accent;
+		--format-tiles-colour-elems: #rgb(@accent)[@result];
+		--format-tiles-colour-05: fade(@accent, 5%);
+		--format-tiles-colour-1: fade(@accent, 10%);
+		--format-tiles-colour-5: fade(@accent, 50%);
+		--format-tiles-colour-7: fade(@accent, 70%);
+		--format-tiles-high-contrast-black: @crust;
+
+		/* "Components for Learning" (tiny_c4l) content boxes */
+		--c4l-accent-blue: @blue;
+		--c4l-accent-blue-deep: @blue;
+		--c4l-accent-blue-mid: @blue;
+		--c4l-accent-blue-mid-shade: mix(@blue, @base, 55%);
+		--c4l-accent-blue-shade: mix(@blue, @base, 55%);
+		--c4l-accent-cyan: @sky;
+		--c4l-accent-cyan-shade: mix(@sky, @base, 55%);
+		--c4l-accent-green: @green;
+		--c4l-accent-magenta: @pink;
+		--c4l-accent-magenta-shade: mix(@pink, @base, 55%);
+		--c4l-accent-orange: @peach;
+		--c4l-accent-orange-shade: mix(@peach, @base, 55%);
+		--c4l-accent-red: @red;
+		--c4l-aiuseallowed-bg: @mantle;
+		--c4l-aiuseallowed-ink: @green;
+		--c4l-aiusenotallowed-bg: @mantle;
+		--c4l-aiusenotallowed-ink: @red;
+		--c4l-aiusereported-bg: @mantle;
+		--c4l-aiusereported-ink: @peach;
+		--c4l-allpurposecard-bg: @mantle;
+		--c4l-attention-accent: @peach;
+		--c4l-attention-bg: @mantle;
+		--c4l-attention-fold: mix(@peach, @base, 55%);
+		--c4l-border: @surface1;
+		--c4l-conceptreview-bg: @mantle;
+		--c4l-conceptreview-fold: mix(@pink, @base, 55%);
+		--c4l-conceptreview-icon: @pink;
+		--c4l-conceptreview-title: @pink;
+		--c4l-do-bg: @mantle;
+		--c4l-do-icon: @green;
+		--c4l-dont-bg: @mantle;
+		--c4l-dont-icon: @red;
+		--c4l-duedate-bg: @mantle;
+		--c4l-duedate-ink: @blue;
+		--c4l-estimatedtime-bg: @mantle;
+		--c4l-estimatedtime-ink: @blue;
+		--c4l-example-bg: @mantle;
+		--c4l-example-rule: @blue;
+		--c4l-expectedfeedback-bg: @mantle;
+		--c4l-expectedfeedback-fold: mix(@blue, @base, 55%);
+		--c4l-expectedfeedback-icon: @blue;
+		--c4l-figure-caption: @subtext0;
+		--c4l-furtherreading-bg: @mantle;
+		--c4l-furtherreading-fold: mix(@sky, @base, 55%);
+		--c4l-furtherreading-icon: @sky;
+		--c4l-furtherreading-marker: @sky;
+		--c4l-furtherreading-title: @sky;
+		--c4l-gradingvalue-bg: @mantle;
+		--c4l-gradingvalue-ink: @blue;
+		--c4l-ink-amber: @peach;
+		--c4l-ink-blue: @blue;
+		--c4l-ink-cyan: @sky;
+		--c4l-ink-green: @green;
+		--c4l-ink-indigo: @blue;
+		--c4l-ink-magenta: @pink;
+		--c4l-ink-red: @red;
+		--c4l-inlinetag-bg: @blue;
+		--c4l-inlinetag-ink: @crust;
+		--c4l-keyconcept-accent: @blue;
+		--c4l-keyconcept-bg: @mantle;
+		--c4l-learningoutcomes-bg: @mantle;
+		--c4l-learningoutcomes-marker: @blue;
+		--c4l-learningoutcomes-title-bg: @blue;
+		--c4l-learningoutcomes-title-ink: @crust;
+		--c4l-learningoutcomes-title-shade: mix(@blue, @base, 55%);
+		--c4l-on-accent: @crust;
+		--c4l-proceduralcontext-ink: @blue;
+		--c4l-quote-line: @blue;
+		--c4l-readingcontext-bg: @mantle;
+		--c4l-reminder-accent: @sky;
+		--c4l-reminder-bg: @mantle;
+		--c4l-reminder-fold: mix(@sky, @base, 55%);
+		--c4l-solid-blue: @blue;
+		--c4l-solid-blue-deep: @blue;
+		--c4l-surface: @mantle;
+		--c4l-tag-bg: @mantle;
+		--c4l-tag-ink: @blue;
+		--c4l-text: @text;
+		--c4l-text-muted: @subtext0;
+		--c4l-tint-amber: @mantle;
+		--c4l-tint-blue: @mantle;
+		--c4l-tint-blue-alt: @mantle;
+		--c4l-tint-cyan: @mantle;
+		--c4l-tint-green: @mantle;
+		--c4l-tint-green-alt: @mantle;
+		--c4l-tint-magenta: @mantle;
+		--c4l-tint-orange: @mantle;
+		--c4l-tint-red: @mantle;
+		--c4l-tint-red-alt: @mantle;
+		--c4l-tip-accent: @pink;
+		--c4l-tip-bg: @mantle;
+		--c4l-tip-fold: mix(@pink, @base, 55%);
+		--c4l-ui-accent: @accent;
+		--c4l-ui-border: @surface1;
+		--c4l-ui-button-border: @surface1;
+		--c4l-ui-divider: @surface1;
+		--c4l-ui-focus: fade(@accent, 30%);
+		--c4l-ui-icon-contextual: @blue;
+		--c4l-ui-icon-evaluative: @peach;
+		--c4l-ui-icon-helper: @green;
+		--c4l-ui-icon-procedural: @red;
+		--c4l-ui-link: @accent;
+		--c4l-ui-page: @base;
+		--c4l-ui-page-border: @surface1;
+		--c4l-ui-panel-border: @surface1;
+		--c4l-ui-raised: @surface0;
+		--c4l-ui-surface: @mantle;
+		--c4l-ui-tab-active-bg: @accent;
+		--c4l-ui-tab-active-ink: @on-accent;
+		--c4l-ui-tab-border: @surface1;
+		--c4l-ui-text: @subtext1;
+		--c4l-ui-text-muted: @subtext0;
+		--c4l-ui-text-strong: @text;
+		--c4l-ui-variant-bg: @surface0;
+		--c4l-ui-variant-hover-bg: @accent;
+		--c4l-ui-variant-ink: @text;
+		--c4l-ui-variant-on-bg: @accent;
+		--c4l-ui-variant-sep: @surface1;
+
+		scrollbar-color: @surface2 @mantle;
+		accent-color: @accent;
+
+		/* ---------- Base ---------- */
+		body,
+		#page-wrapper,
+		#page,
+		#topofscroll,
+		.main-inner,
+		#region-main,
+		#region-main-box,
+		[role="main"] {
+			background-color: @base;
+			color: @text;
+		}
+
+		h1, h2, h3, h4, h5, h6,
+		.h1, .h2, .h3, .h4, .h5, .h6,
+		.page-header-headings,
+		.sectionname,
+		.coursename {
+			color: @text;
+		}
+
+		a {
+			color: @accent;
+			&:hover,
+			&:focus {
+				color: @accent;
+			}
+		}
+
+		hr {
+			border-color: @surface1;
+			opacity: 1;
+		}
+
+		.text-muted,
+		.dimmed_text,
+		.dimmed,
+		.text-secondary,
+		small.text-muted,
+		.form-text {
+			color: @subtext0 !important;
+		}
+
+		.text-dark,
+		.text-body,
+		.text-reset {
+			color: @text !important;
+		}
+
+		.text-primary { color: @accent !important; }
+		.text-success { color: @green !important; }
+		.text-info { color: @sapphire !important; }
+		.text-warning { color: @yellow !important; }
+		.text-danger { color: @red !important; }
+
+		.bg-white,
+		.bg-body {
+			background-color: @base !important;
+		}
+		.bg-light,
+		.bg-gray,
+		.bg-body-tertiary {
+			background-color: @mantle !important;
+		}
+		.bg-body-secondary {
+			background-color: @surface0 !important;
+		}
+		.bg-dark {
+			background-color: @crust !important;
+		}
+		.bg-primary { background-color: @accent !important; color: @on-accent; }
+		.bg-secondary { background-color: @surface1 !important; color: @text; }
+		.bg-success { background-color: @green !important; color: @on-accent; }
+		.bg-info { background-color: @sapphire !important; color: @on-accent; }
+		.bg-warning { background-color: @yellow !important; color: @on-accent; }
+		.bg-danger { background-color: @red !important; color: @on-accent; }
+
+		.border,
+		.border-top,
+		.border-bottom,
+		.border-left,
+		.border-right,
+		.border-start,
+		.border-end {
+			border-color: @surface1 !important;
+		}
+
+		code, kbd, pre {
+			color: @pink;
+		}
+		pre,
+		kbd {
+			background-color: @mantle;
+			border-color: @surface0;
+		}
+		mark,
+		.mark,
+		.highlight {
+			background-color: fade(@yellow, 30%);
+			color: @text;
+		}
+		blockquote {
+			border-color: @surface1;
+		}
+
+		/* ---------- Top navbar + primary navigation ---------- */
+		.navbar,
+		.navbar.bg-white,
+		nav.navbar.fixed-top {
+			background-color: @mantle !important;
+			border-color: @crust !important;
+			box-shadow: none;
+		}
+		.navbar .nav-link,
+		.navbar .navbar-brand,
+		.navbar-light .navbar-nav .nav-link,
+		.primary-navigation .navigation .nav-link {
+			color: @subtext1;
+			&:hover,
+			&:focus {
+				color: @text;
+			}
+		}
+		.primary-navigation .navigation .nav-link.active,
+		.navbar-light .navbar-nav .nav-link.active {
+			color: @text;
+			border-bottom-color: @accent;
+		}
+		/* Vertical dividers between the navbar icons */
+		.navbar.fixed-top .divider {
+			background-color: @surface1;
+		}
+		.usermenu .login,
+		.navbar .popover-region-toggle .icon,
+		.navbar .usermenu .userbutton {
+			color: @subtext1;
+		}
+		.userinitials,
+		.avatar.current .userinitials {
+			background-color: @surface1;
+			color: @text;
+		}
+		.count-container {
+			background-color: @red;
+			color: @on-accent;
+		}
+
+		/* Secondary navigation (Kurs, Einstellungen, Teilnehmer/innen, ...) */
+		.secondary-navigation,
+		.secondary-navigation .navigation {
+			background-color: transparent;
+			border-color: @surface0;
+		}
+		.secondary-navigation .nav-tabs .nav-link,
+		.moremenu .nav-link {
+			color: @subtext1;
+			background-color: transparent;
+			&:hover {
+				color: @text;
+				border-color: transparent transparent @surface2;
+			}
+			&.active,
+			&.active:hover {
+				color: @text !important;
+				background-color: transparent !important;
+				border-color: transparent transparent @accent;
+				box-shadow: inset 0 -2px 0 @accent;
+			}
+		}
+
+		/* Edit mode switch */
+		.editmode-switch-form .custom-control-input:checked ~ .custom-control-label::before,
+		.custom-switch .custom-control-input:checked ~ .custom-control-label::before,
+		.custom-control-input:checked ~ .custom-control-label::before,
+		.form-check-input:checked {
+			background-color: @accent;
+			border-color: @accent;
+		}
+		.custom-control-label::before,
+		.form-check-input {
+			background-color: @surface0;
+			border-color: @overlay0;
+		}
+		.custom-switch .custom-control-label::after {
+			background-color: @overlay1;
+		}
+		.custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+			background-color: @on-accent;
+		}
+
+		/* ---------- Drawers (course index, block drawer) ---------- */
+		.drawer,
+		.drawer .drawerheader,
+		.drawer.drawer-left,
+		.drawer.drawer-right,
+		#theme_boost-drawers-courseindex,
+		#theme_boost-drawers-blocks,
+		.block-region,
+		#nav-drawer {
+			background-color: @mantle;
+			color: @text;
+			border-color: @crust;
+		}
+		.drawer-toggler .btn,
+		.drawer-toggles .drawer-toggler .btn {
+			background-color: @surface0 !important;
+			color: @text;
+		}
+
+		.courseindex .courseindex-item,
+		.courseindex .courseindex-link,
+		.courseindex .courseindex-item .courseindex-link,
+		.courseindex .courseindex-item .courseindex-chevron,
+		.courseindex .courseindex-section-title,
+		.courseindex .courseindex-chevron {
+			color: @text;
+		}
+		.courseindex .courseindex-item:hover,
+		.courseindex .courseindex-item.hovering,
+		.courseindex .courseindex-item:focus {
+			background-color: @surface0;
+			color: @text;
+		}
+		.courseindex .courseindex-item.pageitem,
+		.courseindex .courseindex-item.pageitem .courseindex-link,
+		.courseindex .courseindex-item.pageitem .courseindex-chevron {
+			background-color: @accent;
+			color: @on-accent;
+		}
+		.courseindex .courseindex-item.dimmed .courseindex-link,
+		.courseindex .courseindex-item .courseindex-locked {
+			color: @overlay1;
+		}
+		.courseindex .current-badge {
+			background-color: @accent;
+			color: @on-accent;
+		}
+
+		/* ---------- Cards, blocks, dashboard ---------- */
+		.card,
+		.block,
+		.block.card,
+		.dashboard-card,
+		.course-card,
+		.list-group-item,
+		.course-info-container,
+		.block_myoverview .course-listitem,
+		.block_recentlyaccesseditems .card,
+		.activity-header,
+		.course-section-header,
+		.moremenu .dropdown-menu {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface0;
+		}
+		.card-header,
+		.card-footer,
+		.dashboard-card-footer {
+			background-color: @crust;
+			color: @text;
+			border-color: @surface0;
+		}
+		.card-title,
+		.card-body,
+		.card-text {
+			color: @text;
+		}
+		.list-group-item-action:hover,
+		.list-group-item-action:focus {
+			background-color: @surface0;
+			color: @text;
+		}
+		.list-group-item.active {
+			background-color: @accent;
+			border-color: @accent;
+			color: @on-accent;
+		}
+		.course-summaryitem,
+		.coursebox {
+			background-color: @mantle;
+			border-color: @surface0;
+		}
+
+		/* Course page */
+		.course-content .section,
+		.course-section,
+		.course-content ul.topics li.section,
+		.course-content ul.weeks li.section {
+			border-color: @surface0;
+		}
+		.activity-item {
+			background-color: transparent;
+			border-color: @surface0;
+			&:hover,
+			&.focus-control,
+			&.highlighted {
+				background-color: @surface0;
+			}
+		}
+		.activity-item .activitytitle .activityname a,
+		.activityname .instancename {
+			color: @text;
+		}
+		.activity-altcontent,
+		.activity-description,
+		.contentafterlink {
+			color: @subtext1;
+		}
+		.section .summary,
+		.summarytext {
+			color: @subtext1;
+		}
+
+		/* Activity icons: tinted icon on a surface tile (works for 4.0-4.3 and 4.4+) */
+		.activityiconcontainer:not(.isbranded) {
+			background-color: @surface0 !important;
+			img.activityicon:not(.nofilter),
+			img.icon:not(.nofilter) {
+				filter: @text-filter !important;
+			}
+			&.administration img:not(.nofilter) { filter: @lavender-filter !important; }
+			&.assessment img:not(.nofilter) { filter: @pink-filter !important; }
+			&.collaboration img:not(.nofilter) { filter: @green-filter !important; }
+			&.communication img:not(.nofilter) { filter: @peach-filter !important; }
+			&.content img:not(.nofilter) { filter: @blue-filter !important; }
+			&.interactivecontent img:not(.nofilter) { filter: @teal-filter !important; }
+			&.interface img:not(.nofilter) { filter: @yellow-filter !important; }
+			&.other img:not(.nofilter) { filter: @overlay2-filter !important; }
+		}
+
+		/* Activity completion / dates */
+		.activity-information .badge,
+		.activity-dates,
+		.completion-info .badge,
+		.automatic-completion-conditions .badge {
+			background-color: @surface0 !important;
+			color: @text !important;
+		}
+		.automatic-completion-conditions .badge.alert-success,
+		.activity-information .badge.alert-success,
+		.completion-info .badge.bg-success,
+		.automatic-completion-conditions .badge.text-bg-success {
+			background-color: fade(@green, 20%) !important;
+			color: @green !important;
+		}
+
+		/* Category name on the dashboard's course cards. The site sets a literal
+		   dark color here and only overrides it in its own dark mode. */
+		.block .block-cards span.categoryname {
+			color: @subtext0;
+		}
+
+		/* ---------- Course page ---------- */
+		/* The site colors links in the main region with ID selectors and literal
+		   colors, which beat the general link rule above. */
+		#region-main p a,
+		#region-main .label a,
+		#region-main li a {
+			color: @accent;
+		}
+		#region-main .sectionname a,
+		#region-main a .instancename,
+		#region-main .section-title a {
+			color: @text;
+		}
+		/* Section boxes and the collapse/expand toggle next to each section.
+		   The site writes literal colors for both, per mode. */
+		.course-section .section-item {
+			border-color: @surface1;
+		}
+		.btn.btn-icon.icons-collapse-expand {
+			background-color: @surface0;
+			border-color: @surface1;
+		}
+
+		/* ---------- Buttons ---------- */
+		.btn {
+			--bs-btn-color: @text;
+		}
+		.btn-primary,
+		.btn-primary:not(:disabled):not(.disabled) {
+			--bs-btn-bg: @accent;
+			--bs-btn-border-color: @accent;
+			--bs-btn-color: @on-accent;
+			--bs-btn-hover-bg: fade(@accent, 85%);
+			--bs-btn-hover-border-color: fade(@accent, 85%);
+			--bs-btn-hover-color: @on-accent;
+			--bs-btn-active-bg: fade(@accent, 75%);
+			--bs-btn-active-color: @on-accent;
+			background-color: @accent !important;
+			border-color: @accent !important;
+			color: @on-accent !important;
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: fade(@accent, 85%) !important;
+				border-color: fade(@accent, 85%) !important;
+				color: @on-accent !important;
+			}
+		}
+		.btn-secondary,
+		.btn-light,
+		.btn-secondary:not(:disabled):not(.disabled) {
+			--bs-btn-bg: @surface0;
+			--bs-btn-border-color: @surface1;
+			--bs-btn-color: @text;
+			--bs-btn-hover-bg: @surface1;
+			--bs-btn-hover-color: @text;
+			background-color: @surface0 !important;
+			border-color: @surface1 !important;
+			color: @text !important;
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: @surface1 !important;
+				border-color: @surface2 !important;
+				color: @text !important;
+			}
+		}
+		.btn-outline-primary {
+			color: @accent;
+			border-color: @accent;
+			background-color: transparent;
+			&:hover {
+				background-color: @accent;
+				color: @on-accent;
+			}
+		}
+		.btn-outline-secondary {
+			color: @subtext1;
+			border-color: @surface2;
+			background-color: transparent;
+			&:hover {
+				background-color: @surface1;
+				color: @text;
+			}
+		}
+		.btn-success { background-color: @green; border-color: @green; color: @on-accent; }
+		.btn-danger { background-color: @red; border-color: @red; color: @on-accent; }
+		.btn-warning { background-color: @yellow; border-color: @yellow; color: @on-accent; }
+		.btn-info { background-color: @sapphire; border-color: @sapphire; color: @on-accent; }
+		.btn-link {
+			color: @accent;
+		}
+		.btn-icon,
+		.btn-icon .icon,
+		.btn.btn-icon:hover {
+			color: @subtext1;
+		}
+		.btn-icon:hover,
+		.btn-icon:focus {
+			background-color: @surface0;
+		}
+		.btn-footer-popover {
+			background-color: @surface0 !important;
+			border-color: @surface1 !important;
+			color: @text !important;
+		}
+
+		/* ---------- Forms ---------- */
+		.form-control,
+		.custom-select,
+		.form-select,
+		input[type="text"],
+		input[type="email"],
+		input[type="password"],
+		input[type="search"],
+		input[type="number"],
+		input[type="url"],
+		input[type="date"],
+		input[type="datetime-local"],
+		select,
+		textarea {
+			background-color: @surface0;
+			color: @text !important;
+			border-color: @surface2;
+			&:focus {
+				background-color: @surface0;
+				color: @text !important;
+				border-color: @accent;
+				box-shadow: 0 0 0 0.2rem fade(@accent, 30%);
+			}
+			&:disabled,
+			&[readonly] {
+				background-color: @mantle;
+				color: @overlay1;
+			}
+		}
+		.custom-select,
+		.form-select {
+			background-image: @select-arrow;
+			background-repeat: no-repeat;
+			background-position: right 0.75rem center;
+			background-size: 12px 10px;
+		}
+		.input-group-text {
+			background-color: @surface1;
+			color: @text;
+			border-color: @surface2;
+		}
+		.form-autocomplete-suggestions {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface1;
+			li[aria-selected="true"],
+			li:hover {
+				background-color: @accent;
+				color: @on-accent;
+			}
+		}
+		.form-autocomplete-selection .badge {
+			background-color: @surface1 !important;
+			color: @text !important;
+		}
+		.invalid-feedback,
+		.form-control-feedback {
+			color: @red;
+		}
+		.is-invalid {
+			border-color: @red !important;
+		}
+		fieldset.collapsible legend a,
+		.collapsible-actions a,
+		.ftoggler a {
+			color: @text;
+		}
+		.mform .fitem .felement,
+		.col-form-label,
+		label {
+			color: @text;
+		}
+		.text-danger .icon,
+		.fdescription.required .icon {
+			color: @red;
+		}
+
+		/* ---------- Dropdowns, popovers, modals, toasts ---------- */
+		.dropdown-menu {
+			--bs-dropdown-bg: @mantle;
+			--bs-dropdown-color: @text;
+			--bs-dropdown-link-color: @text;
+			--bs-dropdown-link-hover-bg: @accent;
+			--bs-dropdown-link-hover-color: @on-accent;
+			--bs-dropdown-border-color: @surface0;
+			--bs-dropdown-divider-bg: @surface0;
+			background-color: @mantle !important;
+			color: @text !important;
+			border: 1px solid @surface0 !important;
+		}
+		.dropdown-menu a,
+		.dropdown-menu li,
+		.dropdown-item {
+			color: @text !important;
+			background-color: transparent !important;
+		}
+		.dropdown-menu a:hover,
+		.dropdown-menu a:focus,
+		.dropdown-menu a.active,
+		.dropdown-menu a:active,
+		.dropdown-menu li[aria-selected="true"],
+		.dropdown-menu .dropdown-item[aria-current="true"],
+		.dropdown-item:hover,
+		.dropdown-item:focus,
+		.dropdown-item.active,
+		.dropdown-item:active {
+			background-color: @accent !important;
+			color: @on-accent !important;
+			* {
+				color: @on-accent !important;
+			}
+		}
+		.dropdown-divider {
+			border-color: @surface0;
+		}
+		.dropdown-header {
+			color: @subtext0;
+		}
+
+		.popover,
+		.popover-body,
+		.popover-header {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface0;
+		}
+		.bs-popover-top > .arrow::after,
+		.bs-popover-auto[x-placement^="top"] > .arrow::after,
+		.bs-popover-top > .popover-arrow::after {
+			border-top-color: @mantle;
+		}
+		.bs-popover-bottom > .arrow::after,
+		.bs-popover-auto[x-placement^="bottom"] > .arrow::after,
+		.bs-popover-bottom > .popover-arrow::after {
+			border-bottom-color: @mantle;
+		}
+		.tooltip-inner {
+			background-color: @crust;
+			color: @text;
+		}
+
+		.modal-content,
+		.moodle-dialogue-base .moodle-dialogue-wrap,
+		.moodle-dialogue-base .moodle-dialogue-content,
+		.yui3-panel .yui3-widget-bd {
+			background-color: @base;
+			color: @text;
+			border-color: @surface0;
+		}
+		.modal-header,
+		.modal-footer,
+		.moodle-dialogue-base .moodle-dialogue-hd,
+		.moodle-dialogue-base .moodle-dialogue-ft {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface0;
+		}
+		.close,
+		.btn-close {
+			color: @text;
+			text-shadow: none;
+		}
+		.btn-close {
+			filter: invert(1) grayscale(100%) brightness(200%);
+		}
+		.modal-backdrop {
+			background-color: @crust;
+		}
+
+		.toast,
+		.toast-header {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface0;
+		}
+
+		/* Notification + messaging popovers */
+		.popover-region-container,
+		.popover-region-header-container,
+		.popover-region-footer-container,
+		.popover-region-content-container {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface0;
+		}
+		.popover-region-notifications .content-item-container {
+			border-color: @surface0;
+			&.unread {
+				background-color: @surface0;
+			}
+			&:hover,
+			&.selected {
+				background-color: @accent;
+				color: @on-accent;
+			}
+		}
+		.message-app,
+		.message-app .panel-header-container,
+		.message-app .panel-body-container,
+		.message-app .footer-container,
+		.message-app .bg-light,
+		.message-app .bg-white {
+			background-color: @mantle !important;
+			color: @text;
+			border-color: @surface0;
+		}
+		.message-app .message.received,
+		.message-app .message.clickable.received {
+			background-color: @surface0 !important;
+			color: @text;
+		}
+		.message-app .message.send,
+		.message-app .message.clickable.send {
+			background-color: fade(@accent, 25%) !important;
+			color: @text;
+		}
+		.message-app .list-group-item.unread,
+		.message-app .view-overview-body .section .list-group-item:hover {
+			background-color: @surface0;
+		}
+
+		/* ---------- Alerts and badges ---------- */
+		.alert {
+			color: @text;
+			border-color: @surface1;
+			background-color: @surface0;
+		}
+		.alert-info,
+		.alert-primary {
+			background-color: fade(@sapphire, 15%);
+			border-color: fade(@sapphire, 40%);
+			color: @text;
+		}
+		.alert-success {
+			background-color: fade(@green, 15%);
+			border-color: fade(@green, 40%);
+			color: @text;
+		}
+		.alert-warning {
+			background-color: fade(@yellow, 15%);
+			border-color: fade(@yellow, 40%);
+			color: @text;
+		}
+		.alert-danger,
+		.alert-error {
+			background-color: fade(@red, 15%);
+			border-color: fade(@red, 40%);
+			color: @text;
+		}
+		.alert .alert-link,
+		.alert a {
+			color: @accent;
+		}
+
+		.badge-primary,
+		.text-bg-primary { background-color: @accent !important; color: @on-accent !important; }
+		.badge-secondary,
+		.text-bg-secondary,
+		.badge-light,
+		.text-bg-light { background-color: @surface1 !important; color: @text !important; }
+		.badge-success,
+		.text-bg-success { background-color: @green !important; color: @on-accent !important; }
+		.badge-info,
+		.text-bg-info { background-color: @sapphire !important; color: @on-accent !important; }
+		.badge-warning,
+		.text-bg-warning { background-color: @yellow !important; color: @on-accent !important; }
+		.badge-danger,
+		.text-bg-danger { background-color: @red !important; color: @on-accent !important; }
+		.badge-dark,
+		.text-bg-dark { background-color: @crust !important; color: @text !important; }
+
+		/* ---------- Tables ---------- */
+		.table,
+		table.generaltable,
+		table.flexible,
+		.user-grade {
+			--bs-table-bg: transparent;
+			--bs-table-color: @text;
+			--bs-table-border-color: @surface0;
+			--bs-table-striped-bg: fade(@surface0, 50%);
+			--bs-table-striped-color: @text;
+			--bs-table-hover-bg: @surface0;
+			--bs-table-hover-color: @text;
+			--bs-table-active-bg: @surface1;
+			color: @text;
+			background-color: transparent;
+			border-color: @surface0;
+		}
+		.table th,
+		.table td,
+		.generaltable th,
+		.generaltable td,
+		.user-grade th,
+		.user-grade td {
+			border-color: @surface0;
+			color: @text;
+		}
+		.table thead th,
+		.generaltable thead th,
+		.generaltable th.header {
+			background-color: @mantle;
+			border-color: @surface1;
+		}
+		.table-striped tbody tr:nth-of-type(odd),
+		.generaltable tbody tr:nth-of-type(odd) {
+			background-color: fade(@surface0, 50%);
+		}
+		.table-hover tbody tr:hover,
+		.generaltable tbody tr:hover {
+			background-color: @surface0;
+			color: @text;
+		}
+		.table-light,
+		.table-light > th,
+		.table-light > td {
+			background-color: @mantle;
+			color: @text;
+		}
+
+		/* Gradebook (sticky cells have hard-coded white backgrounds) */
+		.gradereport-grader-table td,
+		.gradereport-grader-table th,
+		.path-grade-report-grader .gradeparent .cell,
+		.path-grade-report-user .user-grade .cell,
+		.gradeparent tr .cell,
+		.gradeparent .heading .cell,
+		.gradeparent .floater .cell {
+			background-color: @base;
+			color: @text;
+			border-color: @surface0;
+		}
+		.path-grade-report-user .user-grade .level1,
+		.path-grade-report-user .user-grade .level2,
+		.path-grade-report-user .user-grade .level3 {
+			background-color: @mantle;
+		}
+
+		/* ---------- Tabs, pagination, breadcrumbs, progress ---------- */
+		.nav-tabs {
+			border-color: @surface0;
+			.nav-link {
+				color: @subtext1;
+				&:hover {
+					border-color: @surface0 @surface0 transparent;
+					color: @text;
+				}
+				&.active {
+					background-color: @base;
+					border-color: @surface0 @surface0 @base;
+					color: @text;
+				}
+			}
+		}
+		.nav-pills .nav-link.active,
+		.nav-pills .show > .nav-link {
+			background-color: @accent;
+			color: @on-accent;
+		}
+		.page-link {
+			background-color: @mantle !important;
+			color: @accent !important;
+			border: 1px solid @surface0 !important;
+			&:hover {
+				background-color: @surface0 !important;
+				border-color: @surface1 !important;
+			}
+		}
+		.page-item.active .page-link {
+			background-color: @accent !important;
+			border-color: @accent !important;
+			color: @on-accent !important;
+		}
+		.page-item.disabled .page-link {
+			background-color: @mantle;
+			color: @overlay0;
+			border-color: @surface0;
+		}
+		.breadcrumb {
+			background-color: transparent;
+			.breadcrumb-item,
+			.breadcrumb-item::before {
+				color: @subtext0;
+			}
+		}
+		.progress {
+			background-color: @surface0;
+		}
+		.progress-bar {
+			background-color: @accent;
+			color: @on-accent;
+		}
+
+		/* ---------- Calendar ---------- */
+		.maincalendar .calendarmonth td,
+		.maincalendar .calendarmonth th,
+		.block_calendar_month .calendarmonth td,
+		.calendartable td,
+		.calendartable th {
+			border-color: @surface0;
+			color: @text;
+		}
+		.maincalendar .calendarmonth td:hover,
+		.maincalendar .calendarmonth td.duration_global {
+			background-color: @surface0;
+		}
+		.calendarmonth .today .day-number-circle,
+		.calendartable .today .day-number-circle,
+		.calendar_event_today {
+			background-color: @accent !important;
+			color: @on-accent !important;
+		}
+		.maincalendar .calendarmonth td.weekend,
+		.calendarmonth td.weekend {
+			background-color: @mantle;
+		}
+		.calendar_event_course { border-color: @red !important; }
+		.calendar_event_site { border-color: @sapphire !important; }
+		.calendar_event_group { border-color: @yellow !important; }
+		.calendar_event_user { border-color: @blue !important; }
+		.calendar_event_category { border-color: @green !important; }
+		.calendar_event_other { border-color: @lavender !important; }
+		.event .card-header,
+		.eventlist .event {
+			background-color: @mantle;
+			color: @text;
+		}
+
+		/* ---------- Quiz ---------- */
+		.que .info {
+			background-color: @mantle;
+			border-color: @surface0;
+			color: @text;
+		}
+		.que .formulation {
+			background-color: fade(@sapphire, 12%);
+			border-color: fade(@sapphire, 35%);
+			color: @text;
+		}
+		.que .outcome,
+		.que .comment {
+			background-color: fade(@yellow, 12%);
+			border-color: fade(@yellow, 35%);
+			color: @text;
+		}
+		.que .history {
+			background-color: @mantle;
+			border-color: @surface0;
+		}
+		.que .correct,
+		.que .correct label { color: @green; }
+		.que .incorrect,
+		.que .incorrect label { color: @red; }
+		.que .partiallycorrect { color: @yellow; }
+		.qnbutton {
+			background-color: @surface0;
+			border-color: @surface1;
+			color: @text;
+			.thispageholder {
+				border-color: @surface2;
+			}
+			&.thispage .thispageholder {
+				border-color: @accent;
+			}
+			.trafficlight {
+				background-color: @surface1;
+			}
+			&.answersaved .trafficlight,
+			&.complete .trafficlight,
+			&.requiresgrading .trafficlight { background-color: @overlay1; }
+			&.correct .trafficlight { background-color: @green; }
+			&.partiallycorrect .trafficlight { background-color: @yellow; }
+			&.incorrect .trafficlight,
+			&.notanswered .trafficlight { background-color: @red; }
+			&.flagged .trafficlight,
+			.questionflag .icon { color: @red; }
+		}
+
+		/* ---------- Assignment ---------- */
+		.path-mod-assign .submissionstatussubmitted,
+		.path-mod-assign .submissiongraded,
+		.path-mod-assign .earlysubmission,
+		.path-mod-assign .submissionstatustable .submissionstatussubmitted {
+			background-color: fade(@green, 15%) !important;
+			color: @text !important;
+		}
+		.path-mod-assign .submissionnotgraded,
+		.path-mod-assign .submissionstatusdraft,
+		.path-mod-assign .submissionlocked {
+			background-color: fade(@yellow, 15%) !important;
+			color: @text !important;
+		}
+		.path-mod-assign .latesubmission,
+		.path-mod-assign .overdue {
+			background-color: fade(@red, 15%) !important;
+			color: @text !important;
+		}
+		.path-mod-assign .submissionstatustable,
+		.path-mod-assign .feedback,
+		.path-mod-assign .gradingsummary {
+			color: @text;
+		}
+
+		/* ---------- Forum ---------- */
+		.forumpost,
+		.forum-post-container .forumpost,
+		.discussion-list,
+		.forumpost .header,
+		.forum-post-core {
+			background-color: @mantle;
+			border-color: @surface0;
+			color: @text;
+		}
+		.forumpost.unread,
+		.forumpost .row.unread {
+			border-color: @accent;
+		}
+
+		/* ---------- File picker / file manager ---------- */
+		.filemanager-container,
+		.filemanager .fp-content,
+		.filepicker-filelist,
+		.file-picker .fp-repo-area,
+		.file-picker .fp-content,
+		.file-picker .fp-navbar,
+		.fp-pathbar,
+		.filemanager-toolbar,
+		.dndupload-message {
+			background-color: @mantle !important;
+			color: @text;
+			border-color: @surface1 !important;
+		}
+		.file-picker .fp-repo-area .fp-repo.active,
+		.fp-iconview .fp-file:hover,
+		.fp-iconview .fp-file:focus {
+			background-color: @surface0;
+		}
+		.fp-iconview .fp-thumbnail {
+			background-color: @surface0;
+			border-color: @surface1;
+		}
+		.dndupload-arrow {
+			filter: invert(1);
+		}
+
+		/* ---------- Editors ---------- */
+		/* TinyMCE (Moodle 4.3+) chrome */
+		.tox-tinymce,
+		.tox .tox-editor-header,
+		.tox .tox-menubar,
+		.tox .tox-toolbar,
+		.tox .tox-toolbar__primary,
+		.tox .tox-toolbar__overflow,
+		.tox .tox-toolbar-overlord,
+		.tox .tox-statusbar,
+		.tox .tox-menu,
+		.tox .tox-collection--list,
+		.tox .tox-dialog,
+		.tox .tox-dialog__header,
+		.tox .tox-dialog__footer {
+			background-color: @mantle !important;
+			background-image: none !important;
+			color: @text !important;
+			border-color: @surface1 !important;
+		}
+		.tox .tox-tbtn,
+		.tox .tox-mbtn,
+		.tox .tox-statusbar a,
+		.tox .tox-statusbar__path-item,
+		.tox .tox-statusbar__wordcount,
+		.tox .tox-collection__item {
+			color: @text !important;
+			svg {
+				fill: @text !important;
+				filter: none !important;
+			}
+		}
+		.tox .tox-tbtn:hover,
+		.tox .tox-mbtn:hover,
+		.tox .tox-tbtn--enabled,
+		.tox .tox-collection__item--active {
+			background-color: @surface0 !important;
+		}
+		.tox .tox-edit-area__iframe {
+			background-color: @base !important;
+		}
+		/* Content inside the TinyMCE iframe (only if Stylus injects into it) */
+		body#tinymce.mce-content-body {
+			background-color: @base;
+			color: @text;
+		}
+
+		/* Atto (legacy editor) */
+		.editor_atto_toolbar,
+		.editor_atto_toolbar .atto_group,
+		.editor_atto_content_wrap,
+		.editor_atto_content,
+		.editor_atto_notification .atto_info {
+			background-color: @mantle;
+			color: @text;
+			border-color: @surface1;
+		}
+		.editor_atto_toolbar button {
+			background-color: @surface0;
+			color: @text;
+			&:hover {
+				background-color: @surface1;
+			}
+		}
+
+		/* ---------- Login page ---------- */
+		#page-login-index,
+		#page-login-index #page,
+		#page-login-index .login-wrapper {
+			background-color: @crust !important;
+		}
+		.login-container,
+		#page-login-index .card,
+		#page-login-index .login-form {
+			background-color: @base !important;
+			color: @text;
+			border-color: @surface0;
+		}
+		.login-divider {
+			border-color: @surface0;
+		}
+		.login-identityproviders .btn,
+		.login-identityprovider-btn {
+			background-color: @surface0;
+			border-color: @surface1;
+			color: @text;
+		}
+
+		/* ---------- Footer ---------- */
+		#page-footer,
+		footer#page-footer,
+		.footer-popover,
+		.footer-content-popover,
+		.footer-section {
+			background-color: @crust !important;
+			color: @subtext1 !important;
+			border-color: @surface0;
+			a {
+				color: @accent !important;
+			}
+		}
+
+		/* ---------- Misc ---------- */
+		.sticky-footer,
+		#sticky-footer,
+		.stickyfooter {
+			background-color: @mantle !important;
+			border-color: @surface0 !important;
+		}
+		.header-maxwidth .page-header-image img,
+		.page-context-header .page-header-image img {
+			background-color: @surface0;
+		}
+		.block_myoverview .course-listitem .course-summaryitem,
+		.block_timeline .event-name-container,
+		.block_timeline .list-group-item {
+			background-color: transparent;
+			color: @text;
+		}
+		.block .block-controls .icon,
+		.block .card-title {
+			color: @text;
+		}
+		.loading-icon .icon,
+		.spinner-border,
+		.spinner-grow {
+			color: @accent;
+		}
+		.search-input-group .form-control,
+		.simplesearchform .form-control {
+			background-color: @surface0;
+		}
+		.search-input-wrapper > div .icon {
+			color: @subtext0;
+		}
+
+		/* ==========================================================
+			 moodle.itech-bs14.de specifics (from the inspector run)
+			 ========================================================== */
+
+		/* Dark mode toggle pill (inline styles, hence !important) */
+		.kraus-layout-dark .light-mode,
+		.kraus-layout-dark .dark-mode {
+			background: @surface0 !important;
+			border-color: @surface1 !important;
+			color: @text !important;
+			> span {
+				background: @accent !important;
+				color: @on-accent !important;
+			}
+			svg {
+				color: @on-accent;
+				fill: currentColor;
+			}
+		}
+
+		/* Page shell: the plugin forces these with !important */
+		body:not(.loginbackgroundimage),
+		body:not(.loginbackgroundimage) #page-wrapper,
+		#page {
+			background-color: @base !important;
+			color: @text !important;
+		}
+		#page-wrapper .block-region .block,
+		#page .block-region .block {
+			background-color: @mantle !important;
+			border-color: @surface0 !important;
+		}
+		.drawer,
+		.drawercontent {
+			background: @mantle !important;
+		}
+		.drawercontent .list-group-item {
+			background-color: transparent !important;
+			color: @text !important;
+			&:hover {
+				background-color: @surface0 !important;
+			}
+		}
+		.drawer-toggles .drawer-toggler .btn {
+			background-color: @surface0 !important;
+			color: @text !important;
+		}
+		.btn-submit,
+		.simplesearchform .btn-submit {
+			background-color: @surface0 !important;
+			border-color: @surface1 !important;
+			color: @text !important;
+		}
+		.btn:hover {
+			color: @text;
+		}
+		.nav-pills .nav-link.active {
+			background-color: @accent !important;
+			color: @on-accent !important;
+		}
+		.modchoosercontainer .bg-white {
+			background-color: @mantle !important;
+		}
+		.header-maxwidth .navigation .nav-tabs,
+		.secondary-navigation .navigation .nav-tabs {
+			background-color: @mantle !important;
+		}
+		.header-maxwidth .navigation .nav-tabs .nav-item .nav-link:hover,
+		.secondary-navigation .navigation .nav-tabs .nav-item .nav-link:hover {
+			background-color: @surface0 !important;
+			color: @text !important;
+		}
+		#page-header .crumbs li a,
+		#page-header .crumbs li span {
+			background: @surface0;
+			color: @text;
+		}
+
+		/* Text the plugin colors with mid grays that read badly on Catppuccin */
+		.alert.alert-info *,
+		.alert.alert-warning *,
+		.alert.alert-success *,
+		.alert.alert-danger * {
+			color: inherit;
+		}
+		ol.checklist .itemblack,
+		ol.checklist .studentcomment {
+			color: @text;
+		}
+		.icon-no-margin .icon i {
+			color: inherit;
+		}
+		pre {
+			color: @text;
+		}
+
+		/* Tables: the plugin hard-codes grays on every cell */
+		table th,
+		table td {
+			color: @text !important;
+			border-color: @surface0 !important;
+		}
+		table tr th,
+		table tr td {
+			background: @mantle !important;
+		}
+		table th,
+		table tr th {
+			background: @crust !important;
+			color: @subtext1 !important;
+		}
+		table tr:hover td {
+			background: @surface0 !important;
+		}
+
+		/* Tiles course format */
+		.format-tiles .course-content ul.tiles .tile {
+			background-color: @mantle !important;
+			border: 1px solid @surface0;
+			box-shadow: none !important;
+			&:hover {
+				border-color: @accent;
+			}
+		}
+		.format-tiles .course-content ul.tiles .tile h3 {
+			color: @text !important;
+		}
+		.format-tiles .course-content ul.tiles .tile [id^="tileTextin"] > h3 {
+			background-color: @accent !important;
+			color: @on-accent !important;
+		}
+		.format-tiles .course-content ul li.section.main:not(.delegated-section) {
+			background-color: @mantle !important;
+		}
+		.format-tiles .course-content li.activity.subtile {
+			background-color: @surface0 !important;
+			box-shadow: none !important;
+		}
+		.format-tiles .sectionbutton {
+			background-color: @surface0 !important;
+			color: @text !important;
+		}
+		.format-tiles a.cm-link:focus,
+		.format-tiles a.tile-link:focus {
+			box-shadow: 0 0 0 2px @accent !important;
+		}
+
+		/* Activities */
+		.activity-item .activity-completion button.btn,
+		.activity-item .activity-completion a[role="button"].btn {
+			background-color: @surface0 !important;
+			border-color: @surface1 !important;
+			color: @text !important;
+			&:hover {
+				background-color: @surface1 !important;
+			}
+		}
+		.activity-item .activity-availability {
+			background-color: @surface0;
+		}
+		.path-mod .activity-header:not(:empty) {
+			background-color: @mantle;
+		}
+
+		/* Notifications */
+		.popover-region-container,
+		.popover-region-footer-container {
+			background-color: @mantle !important;
+			border-color: @surface0 !important;
+		}
+		.content-item-container.unread {
+			background-color: @surface0 !important;
+		}
+
+		/* TinyMCE: the plugin inverts icons and forces grays */
+		.tox.tox-tinymce {
+			border: 1px solid @surface1 !important;
+		}
+		.tox .tox-editor-header {
+			background-color: @mantle !important;
+			border-bottom: 1px solid @surface0 !important;
+		}
+		.tox .tox-tbtn {
+			background-color: transparent !important;
+			&:hover {
+				background-color: @surface0 !important;
+			}
+		}
+		.tox .tox-tbtn--disabled svg,
+		.tox .tox-menu svg {
+			fill: @overlay1 !important;
+			filter: none !important;
+		}
+		.tox .tox-statusbar,
+		.tox .tox-statusbar * {
+			color: @subtext0 !important;
+		}
+		.tox .tox-menu .tox-collection__item--active,
+		.tox .tox-menu .tox-collection__item--enabled {
+			background-color: @surface0 !important;
+		}
+	}
+}
+
