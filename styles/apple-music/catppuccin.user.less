@@ -1,0 +1,337 @@
+/* ==UserStyle==
+@name Apple Music Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/apple-music
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/apple-music
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/apple-music/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for Apple Music on the web (music.apple.com and beta)
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * Built against beta.music.apple.com as of 2026-09-17 (Liquid Glass redesign).
+ *
+ * How it works: Apple Music keeps every color in variables on :root and swaps
+ * in other values inside @media (prefers-color-scheme: dark). The variable
+ * names are the same in both modes, so this style maps each one to its role
+ * (page, surface, text, divider, accent) and redefines it with html:root,
+ * specificity (0,1,1), which beats Apple's :root (0,1,0). The player
+ * components live in shadow DOM but read the same inherited variables, so
+ * they follow.
+ *
+ * The *-onDark variables color text and glass that sit on artwork or other
+ * dark backdrops. A dark flavor sets them like the rest; Latte leaves them to
+ * Apple, so text on artwork stays light, except on album and playlist pages,
+ * which Apple switches to a theme picked from the artwork as a whole.
+ *
+ * Not themed: the music video player, which ships its own copy of the colors
+ * inside its shadow root, and header areas that Apple tints from the album
+ * artwork.
+ */
+
+@-moz-document domain("music.apple.com") {
+	@media (prefers-color-scheme: light) {
+		#catppuccin(@lightFlavor);
+	}
+	@media (prefers-color-scheme: dark) {
+		#catppuccin(@darkFlavor);
+	}
+
+	#catppuccin(@flavor) {
+		#lib.palette();
+
+		@on-accent: if(@flavor = latte, @base, @crust);
+		@accent-hover: if(@flavor = latte, darken(@accent, 8%), lighten(@accent, 5%));
+		@accent-row: mix(@accent, @base, 35%);
+		@gray4: mix(@surface0, @surface1, 50%);
+		@rgb-accent: e(%("%d, %d, %d", red(@accent), green(@accent), blue(@accent)));
+
+		html:root {
+			#lib.defaults();
+			scrollbar-color: @surface2 transparent;
+
+			--pageBG: @base;
+			--pageBG-dark: @base;
+			--fallbackMaterialBG: fade(@base, 97%);
+			--footerBg: @mantle;
+			--opaqueShelfBG: @mantle;
+			--shelfBG: fade(@text, 5%);
+			--genericJoeColor: @surface0;
+			--mobileNavigationBG: @mantle;
+			--lyricsBg: @mantle;
+			--systemGroupedBackgroundSecondary: @surface0;
+			--slidingModalContentBgColor: @base;
+			--glassMaterialBackground: fade(@mantle, 70%);
+			--glassMaterialInnerStrokeCombined: fade(@text, 12%);
+			--glassMaterialInnerStroke: @text;
+			--navSidebarBG: fade(@text, 3%);
+			--navSidebarBG-default_IC: @mantle;
+			--navSidebarSelectedState: fade(@accent, 15%);
+			--playerBackground: fade(@surface0, 88%);
+			--playerBackgroundFallback: fade(@surface0, 97%);
+			--miniPlayerBackground: fade(@surface0, 90%);
+			--playerMissingArtworkIcon: @surface1;
+			--playerMissingArtworkBg: @surface0;
+			--playerPlatterButtonBGFill: @text;
+			--systemStandardUltrathinMaterialSover: fade(@base, 40%);
+			--systemStandardThinMaterialSover: fade(@base, 50%);
+			--systemStandardMediumMaterialSover: fade(@base, 60%);
+			--systemStandardThickMaterialSover: fade(@base, 70%);
+			--systemStandardUltrathickMaterialSover: fade(@base, 80%);
+			--systemStandardUltrathinMaterialSover-inactive: @base;
+			--systemStandardThinMaterialSover-inactive: @base;
+			--systemStandardMediumMaterialSover-inactive: @base;
+			--systemStandardThickMaterialSover-inactive: @base;
+			--systemStandardUltrathickMaterialSover-inactive: @base;
+			--systemHeaderMaterialSover: fade(@base, 80%);
+			--systemToolbarTitlebarMaterialSover: fade(@surface0, 80%);
+			--systemToolbarTitlebarMaterialSover-inactive: @base;
+			--systemPrimary: @text;
+			--systemPrimary-vibrant: @text;
+			--systemSecondary: @subtext0;
+			--systemSecondary-vibrant: @subtext0;
+			--systemTertiary: @overlay1;
+			--systemTertiary-vibrant: @overlay1;
+			--systemQuaternary: fade(@text, 10%);
+			--systemQuaternary-vibrant: @surface0;
+			--systemQuinary: fade(@text, 5%);
+			--systemQuinary-vibrant: @mantle;
+			--contextMenuTextColor: @text;
+			--contextMenuOverrideTextColor: @red;
+			--titleBadgeColor: @text;
+			--searchBoxIconFill: fade(@text, 90%);
+			--segmentedControlSelectedText: @text;
+			--addToLibraryFillLayoutOverride: @text;
+			--icon: fade(@text, 16%);
+			--labelDivider: fade(@text, 10%);
+			--labelDivider-vibrant: fade(@text, 13%);
+			--vibrantDivider: fade(@text, 19%);
+			--contextMenuBorderColor: fade(@text, 10%);
+			--searchBarBorderColor: fade(@text, 15%);
+			--stickyHeaderInnerShadow: fade(@text, 10%);
+			--cardHoverColor: fade(@overlay0, 41%);
+			--shelfLockupPlayHover: @subtext0;
+			--segmentedControlBG: fade(@overlay0, 24%);
+			--segmentedControlSelectedBG: @surface2;
+			--segmentedControlActiveBG: @overlay0;
+			--titleBadgeBG: fade(@overlay0, 24%);
+			--modalCloseButtonBGColor: @surface0;
+			--modalCloseButtonBGColor-rollover: @surface1;
+			--modalCloseButtonBGColor-pressed: @mantle;
+			--tracklistAltRowColor: fade(@text, 1.5%);
+			--tracklistHoverColor: fade(@text, 6%);
+			--tracklistWorksTrackHoverColor: fade(@text, 10%);
+			--trackBackgroundEven: fade(@text, 5%);
+			--tracklistBadgeBorderColor: @base;
+			--tracklistBadgeBackgroundColor: @surface1;
+			--librarySongsTrackInactiveBG: fade(@text, 12%);
+			--button-circle-background-color: fade(@text, 4%);
+			--button-circle-border-color: fade(@text, 8%);
+			--add-to-library-bg-color: fade(@text, 4%);
+			--add-to-library-border-color: fade(@text, 8%);
+			--button-pill-color: @on-accent;
+			--button-pill-background-color: @accent;
+			--systemGray: @overlay2;
+			--systemGray-vibrant: @overlay2;
+			--systemGray2: @surface2;
+			--systemGray3: @surface1;
+			--systemGray4: @gray4;
+			--systemGray5: @surface0;
+			--systemGray6: @mantle;
+			--keyColor-rgb: @rgb-accent;
+			--musicKeyColor-rgb: @rgb-accent;
+			--keyColorBG: @accent; // Apple: white with black text in dark mode, a high-contrast surface
+			--selectionColor: @accent-row;
+			--liveBadgePlatterBG: @red;
+			--keyColor: @accent;
+			--keyColor-rollover: @accent-hover;
+			--keyColor-pressed: @accent-hover;
+			--keyColor-deepPressed: @accent-hover;
+			--keyColor-disabled: fade(@accent, 35%);
+			--musicKeyColor: @accent;
+			--musicKeyColor-rollover: @accent-hover;
+			--musicKeyColor-pressed: @accent-hover;
+			--musicKeyColor-deepPressed: @accent-hover;
+			--musicKeyColor-disabled: fade(@accent, 35%);
+			--systemRed: @red;
+			--systemRed-vibrant: @red;
+			--systemOrange: @peach;
+			--systemOrange-vibrant: @peach;
+			--systemYellow: @yellow;
+			--systemYellow-vibrant: @yellow;
+			--systemGreen: @green;
+			--systemGreen-vibrant: @green;
+			--systemMint: @teal;
+			--systemMint-vibrant: @teal;
+			--systemTeal: @sapphire;
+			--systemTeal-vibrant: @sapphire;
+			--systemCyan: @sky;
+			--systemCyan-vibrant: @sky;
+			--systemBlue: @blue;
+			--systemBlue-vibrant: @blue;
+			--systemIndigo: @lavender;
+			--systemIndigo-vibrant: @lavender;
+			--systemPurple: @mauve;
+			--systemPurple-vibrant: @mauve;
+			--systemPink: @pink;
+			--systemPink-vibrant: @pink;
+			--systemBrown: @flamingo;
+			--systemBrown-vibrant: @flamingo;
+			--systemLink: @blue;
+			--systemLink-vibrant: @blue;
+		}
+
+		@on-dark: {
+			--glassMaterialBackground-onDark: fade(@mantle, 70%);
+			--glassMaterialInnerStrokeCombined-onDark: fade(@text, 12%);
+			--glassMaterialInnerStroke-onDark: @text;
+			--systemPrimary-onDark: @text;
+			--systemPrimary-vibrantOnDark: @text;
+			--systemSecondary-onDark: @subtext0;
+			--systemSecondary-vibrantOnDark: @subtext0;
+			--systemTertiary-onDark: @overlay1;
+			--systemTertiary-vibrantOnDark: @overlay1;
+			--systemQuaternary-onDark: fade(@text, 10%);
+			--systemQuaternary-vibrantOnDark: @surface0;
+			--systemQuinary-onDark: fade(@text, 5%);
+			--systemQuinary-vibrantOnDark: @mantle;
+			--labelDivider-onDark: fade(@text, 10%);
+			--labelDivider-vibrantOnDark: fade(@text, 13%);
+			--navigation-border-color-onDark: fade(@text, 10%);
+			--systemGray2-onDark: @surface2;
+			--systemGray3-onDark: @surface1;
+			--systemGray4-onDark: @gray4;
+			--systemGray5-onDark: @surface0;
+			--systemGray6-onDark: @mantle;
+		};
+		html:root when not (@flavor = latte) {
+			@on-dark();
+		}
+
+		@on-light: {
+			--glassMaterialBackground-onLight: fade(@mantle, 70%);
+			--glassMaterialInnerStrokeCombined-onLight: fade(@text, 12%);
+			--glassMaterialInnerStroke-onLight: @text;
+			--systemPrimary-onLight: @text;
+			--systemPrimary-vibrantOnLight: @text;
+			--systemSecondary-onLight: @subtext0;
+			--systemSecondary-vibrantOnLight: @subtext0;
+			--systemTertiary-onLight: @overlay1;
+			--systemTertiary-vibrantOnLight: @overlay1;
+			--systemQuaternary-onLight: fade(@text, 10%);
+			--systemQuaternary-vibrantOnLight: @surface0;
+			--systemQuinary-onLight: fade(@text, 5%);
+			--systemQuinary-vibrantOnLight: @mantle;
+			--labelDivider-onLight: fade(@text, 10%);
+			--labelDivider-vibrantOnLight: fade(@text, 13%);
+			--navigation-border-color-onLight: fade(@text, 10%);
+			--systemGray2-onLight: @surface2;
+			--systemGray3-onLight: @surface1;
+			--systemGray4-onLight: @gray4;
+			--systemGray5-onLight: @surface0;
+			--systemGray6-onLight: @mantle;
+		};
+
+		/* Album and playlist pages switch the whole page to a dark or light
+		   theme picked from the artwork (.is-dark-theme reads the *-onDark
+		   tokens, .is-light-theme the *-onLight ones). The page background
+		   stays on the flavor (see --joe-color below), so both token sets get
+		   the flavor's colors there, and the header loses the blend mode that
+		   lightens it for the artwork. */
+		html .app-container:is(.is-dark-theme, .is-light-theme) {
+			@on-dark();
+			@on-light();
+
+			.headings,
+			.headings__badges,
+			.truncate-wrapper,
+			.primary-actions__button {
+				mix-blend-mode: normal !important;
+			}
+
+			/* Volume popover and shelf arrows, literal grays in Apple's CSS */
+			.chrome-volume__slider,
+			.shelf-grid-nav__arrow {
+				background-color: @surface0 !important;
+			}
+		}
+
+		/* Album and playlist pages. Apple picks a color from the artwork
+		   (--joe-color) and blends a few tokens with it, written inline on
+		   .app-container, so they beat the variables above. !important on a
+		   custom property wins over an inline declaration without it; the page
+		   then stays on the flavor instead of the artwork's color. */
+		html .app-container {
+			--joe-color: @base !important;
+			--systemSecondary-vibrantOnDark-blended-plusL: @subtext0 !important;
+			--systemTertiary-vibrantOnDark-blended-plusL: @overlay1 !important;
+			--labelDivider-vibrantOnDark-blended-plusL: @surface1 !important;
+			--opaqueShelfBG-blended-plusD: @mantle !important;
+		}
+
+		/* "Try it free" button in the upsell banner, which sits on the accent.
+		   Apple sets these at (0,3,0); this rule is (0,3,1). */
+		html .banner .banner__cta-button.banner__cta-button {
+			--buttonBackgroundColor: @base;
+			--buttonTextColor: @text;
+		}
+
+		/* The banner's text. Apple picks black or white by the system scheme,
+		   not by the background, so set the on-accent color here. (0,3,1)
+		   beats Apple's (0,3,0). */
+		html .banner .banner__text-container .text__title {
+			color: if(@flavor = latte, @base, @crust);
+		}
+		html .banner .banner__text-container .text__description {
+			color: fade(if(@flavor = latte, @base, @crust), 80%);
+		}
+
+		/* Divider above the "Open in Music" bar, black at 10% in Apple's CSS
+		   at (0,3,0) */
+		html .native-cta.native-cta.native-cta {
+			border-top-color: @surface1;
+		}
+
+		/* Selected sidebar entry. Apple redeclares the token at (0,4,0); the
+			 repeated class lifts this rule to (0,4,1) without depending on the
+			 generated svelte-* class names. */
+		html .app-container .navigation-item--selected.navigation-item--selected.navigation-item--selected {
+			--navSidebarSelectedState: fade(@accent, 15%);
+		}
+
+		/* Focused "Up Next" entry, same pattern */
+		html .app-container .up-next-item.up-next-item.up-next-item:focus {
+			--selectionColor: fade(@accent, 15%);
+		}
+
+		/* Selected rows in song lists (Apple: (0,6,0), this rule: (0,6,1)) */
+		html .app-container.app-container.app-container.app-container :is(.section--disc, .section:has(.songs-list), .section:has(.tracklist-footer)) {
+			--selectionColor: @accent-row;
+			--tracklistHoverColor: fade(@text, 6%);
+			--tracklistBadgeBorderColor: @base;
+			--tracklistBadgeBackgroundColor: @surface1;
+		}
+
+		/* Play and main action buttons in dark album headers (Apple: (0,2,0)) */
+		html .container-detail-header--dark-layout :is(.headings, .primary-actions__button--cta-button, .primary-actions__button--play, .truncate-wrapper) {
+			--button-pill-color: @on-accent;
+			--button-pill-background-color: @accent;
+			--button-action-background-color: @accent;
+			--button-action-color: @on-accent;
+		}
+
+		/* Sheet background while it slides in (Apple: (0,4,0) with a literal gray) */
+		html .sliding-modal-content.sliding-modal-content.sliding-modal-content.sliding-modal-content {
+			--slidingModalContentBgColor: @base;
+		}
+	}
+}
