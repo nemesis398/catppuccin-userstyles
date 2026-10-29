@@ -1,0 +1,300 @@
+/* ==UserStyle==
+@name LanguageTool Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/languagetool
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/languagetool
+@version 2026.10.29
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/languagetool/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for languagetool.org. Follows LanguageTool's own appearance setting.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+/*
+ * How it works
+ *
+ * LanguageTool has one gray scale (--color-gray-000 to 900) on :root, light
+ * at 000 and dark at 900, and semantic tokens on top of it
+ * (--color-background-light, --color-text-default, ...). In light mode the
+ * tokens use the scale as it is. Dark mode does not change the scale: on an
+ * element marked data-force-appearance it points every token at the mirrored
+ * step instead, so --color-background-very-light becomes gray-900 instead of
+ * gray-000. The in-page widgets (lt-* elements) do the same with a second
+ * family, --lt-color-*, and data-lt-force-appearance.
+ *
+ * So this style remaps the scale twice: on :root light to dark, for light
+ * mode, and on the dark-mode elements the other way round. The tokens are
+ * resolved on the element that declares them, so each picks up its own
+ * flavor. Which flavor shows follows LanguageTool's appearance setting
+ * (Light, Dark, or Default, which follows the OS).
+ *
+ * Mapping, as LanguageTool's dark mode uses each step (light mode mirrors it,
+ * 000 is base and 900 is text):
+ *   gray-900  main background              base
+ *   gray-800  sidebar, light borders       mantle
+ *   gray-700  panels, popovers, borders    surface0
+ *   gray-600  hover, strong borders        surface1
+ *   gray-500  very dark background         surface2
+ *   gray-400  faint text (dates)           overlay2
+ *   gray-300  secondary text               subtext0
+ *   gray-200  body text                    text
+ *   gray-100  emphasized text              text
+ *   gray-000  strongest text               text
+ *
+ * Built from a DevTools dump of languagetool.org/editor, 2026-09-17, and
+ * extended to light mode on 2026-10-29. The LanguageTool browser extension on
+ * other sites is not covered.
+ */
+
+@-moz-document domain("languagetool.org") {
+
+	/* ---- Website tokens ------------------------------------------------ */
+
+	/* Light mode: the plain scale on :root. html:root (0,1,1) beats
+		 LanguageTool's :root (0,1,0). */
+	html:root {
+		#light(@lightFlavor);
+	}
+
+	/* Dark mode. The doubled attribute raises specificity above LanguageTool's
+		 own dark rules. */
+	[data-force-appearance="dark"][data-force-appearance] {
+		#dark(@darkFlavor);
+	}
+	@media (prefers-color-scheme: dark) {
+		:is([data-adjust-appearance="1"], [data-adjust-appearance="true"])
+			[data-force-appearance="default"][data-force-appearance] {
+			#dark(@darkFlavor);
+		}
+	}
+
+	/* ---- Widget tokens (lt-* elements: dialogs, cards, toolbars) -------- */
+
+	html:root {
+		#lt-light(@lightFlavor);
+	}
+	[data-lt-force-appearance="dark"][data-lt-force-appearance] {
+		#lt-dark(@darkFlavor);
+	}
+	@media (prefers-color-scheme: dark) {
+		[data-lt-adjust-appearance="true"][data-lt-force-appearance="default"][data-lt-force-appearance] {
+			#lt-dark(@darkFlavor);
+		}
+	}
+
+	#light(@flavor) {
+		#common();
+		--color-gray-000: @base;
+		--color-gray-100: @mantle;
+		--color-gray-200: @surface0;
+		--color-gray-300: @surface1;
+		--color-gray-400: @surface2;
+		--color-gray-500: @overlay2;
+		--color-gray-600: @subtext0;
+		--color-gray-700: @text;
+		--color-gray-800: @text;
+		--color-gray-900: @text;
+
+		/* Cards and popovers. Light mode sets these as literal white instead of
+			 a scale step; dark mode points them at the scale on its own. */
+		--color-overlay-default: @base;
+		--color-overlay-dark: @base;
+	}
+
+	#dark(@flavor) {
+		#common();
+		--color-gray-000: @text;
+		--color-gray-100: @text;
+		--color-gray-200: @text;
+		--color-gray-300: @subtext0;
+		--color-gray-400: @overlay2;
+		--color-gray-500: @surface2;
+		--color-gray-600: @surface1;
+		--color-gray-700: @surface0;
+		--color-gray-800: @mantle;
+		--color-gray-900: @base;
+	}
+
+	/* Everything that does not depend on the direction of the scale. */
+	#common() {
+		#lib.palette();
+		#lib.css-variables();
+		color-scheme: if(@flavor = latte, light, dark);
+		--ctp-accent: @accent;
+		--ctp-accent-hover: if(@flavor = latte, darken(@accent, 8%), lighten(@accent, 8%));
+		--ctp-on-accent: if(@flavor = latte, @base, @crust);
+		--ctp-selection: fade(@accent, 30%);
+		--ctp-accent-filter: @accent-filter;
+
+		--color-white: @base;
+		--color-white-transparent: fade(@base, 60%);
+		--color-black: @text;
+		--color-black-transparent: fade(@crust, 90%);
+		--color-transparent: fade(@base, 0%);
+		--color-overlay-transparent: fade(@crust, 60%);
+
+		/* Error categories: spelling, grammar, punctuation, style */
+		--color-spelling: @red;
+		--color-grammar: @peach;
+		--color-punctuation: @green;
+		--color-style: @blue;
+
+		--writing-consistency-low: @surface1;
+		--writing-consistency-high: @accent;
+
+		scrollbar-color: @surface2 transparent;
+	}
+
+	#lt-light(@flavor) {
+		#lib.palette();
+		--lt-color-gray-100: @mantle;
+		--lt-color-gray-200: @surface0;
+		--lt-color-gray-300: @surface1;
+		--lt-color-gray-400: @surface2;
+		--lt-color-gray-500: @overlay2;
+		--lt-color-gray-600: @subtext0;
+		--lt-color-gray-700: @text;
+		--lt-color-gray-800: @text;
+		--lt-color-gray-900: @text;
+		--lt-color-overlay-default: @base;
+		--lt-color-overlay-dark: @base;
+		#lt-common();
+	}
+
+	#lt-dark(@flavor) {
+		#lib.palette();
+		--lt-color-gray-100: @text;
+		--lt-color-gray-200: @text;
+		--lt-color-gray-300: @subtext0;
+		--lt-color-gray-400: @overlay2;
+		--lt-color-gray-500: @surface2;
+		--lt-color-gray-600: @surface1;
+		--lt-color-gray-700: @surface0;
+		--lt-color-gray-800: @mantle;
+		--lt-color-gray-900: @base;
+		#lt-common();
+	}
+
+	#lt-common() {
+		--lt-color-white: @base;
+		--lt-color-black: @text;
+		--lt-color-transparent: fade(@base, 0%);
+		--lt-color-overlay-transparent: fade(@crust, 60%);
+	}
+
+	/* ---- Hard-coded colors -----------------------------------------------
+		 LanguageTool writes these as literals, so they are set per element.
+		 The --ctp-* variables come from whichever block above applies, so the
+		 same rules serve both modes. */
+
+	::selection {
+		background-color: var(--ctp-selection);
+	}
+
+	/* Primary buttons and the suggested fix in an error card (LanguageTool blue) */
+	.btn--primary,
+	.error-list-item__fix {
+		background-color: var(--ctp-accent) !important;
+		border-color: var(--ctp-accent) !important;
+		color: var(--ctp-on-accent) !important;
+	}
+	.btn--primary:hover,
+	.btn--primary:focus-visible,
+	.error-list-item__fix:hover,
+	.error-list-item__fix:focus-visible {
+		background-color: var(--ctp-accent-hover) !important;
+		border-color: var(--ctp-accent-hover) !important;
+	}
+
+	/* Dock: "new document" button and the active item */
+	.dock__item__icon.icon--add-white,
+	.dock__item__icon[class*="-active"] {
+		background-color: var(--ctp-accent) !important;
+		border-color: var(--ctp-accent) !important;
+	}
+
+	/* Accent text: goal link, empty sidebar status */
+	.goal__change,
+	.sidebar__status--empty {
+		color: var(--ctp-accent) !important;
+	}
+
+	/* Sidebar tabs (Correct, Paraphrase). The active tab's fill is the
+		 navigation's ::before, sliding under the active link. */
+	.tab-navigation {
+		border-color: var(--ctp-accent) !important;
+	}
+	.tab-navigation::before {
+		background-color: var(--ctp-accent) !important;
+	}
+	.tab-navigation__link {
+		color: var(--ctp-accent) !important;
+	}
+	.tab-navigation__link--active {
+		color: var(--ctp-on-accent) !important;
+	}
+
+	/* Dock labels of the selected item and of "New text" */
+	.dock__item--selected .dock__item__label,
+	.dock__item--new-text .dock__item__label {
+		color: var(--ctp-accent) !important;
+	}
+
+	/* Blue icons are SVG background images, so they are recolored with a
+		 filter. The lib's filters start from black, so any source color works. */
+	.icon[class*="-blue"] {
+		filter: var(--ctp-accent-filter);
+	}
+
+	/* Error count next to the sidebar in distraction-free mode */
+	.sidebar__distraction-free-indicator .sidebar__distraction-free-indicator__displayedErrors {
+		background-color: var(--ctp-red) !important;
+	}
+
+	/* Selected entry in the document list. Its small clock icon stays blue: it
+		 is a background image on the same element as the title, so a filter
+		 would recolor the title too. */
+	.editor__document-list__item--selected .editor__document-list__item__title {
+		color: var(--ctp-accent) !important;
+	}
+
+	/* Toggle switches */
+	.switch--checked {
+		background-color: var(--ctp-accent) !important;
+	}
+
+	/* Delete entry in menus (LanguageTool red) */
+	.drop-menu__item--delete {
+		color: var(--ctp-red) !important;
+	}
+
+	/* Tooltips. LanguageTool draws them as inverted, text-colored boxes. */
+	.clickable-icon__tooltip,
+	.icon__info {
+		background-color: var(--ctp-crust) !important;
+		color: var(--ctp-text) !important;
+	}
+	.icon__info__shortcut {
+		background-color: var(--ctp-surface0) !important;
+		color: var(--ctp-text) !important;
+	}
+
+	/* Native selects (gray border) */
+	select {
+		background-color: var(--ctp-surface0) !important;
+		border-color: var(--ctp-surface1) !important;
+		color: var(--ctp-text) !important;
+	}
+
+	/* New-issue highlight badge */
+	.new-highlight {
+		border-color: var(--ctp-base) !important;
+	}
+}
