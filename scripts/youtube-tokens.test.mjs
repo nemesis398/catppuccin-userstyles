@@ -113,7 +113,7 @@ test("the CLI fails on a file without the markers", () => {
 });
 
 const player = {
-	site: "player", theme: "dark", background: "#0f0f0f",
+	site: "player", background: "#0f0f0f",
 	rules: [
 		{ selector: ".ytp-panel", media: null, prop: "background-color", value: "rgba(28, 28, 28, 0.9)", important: false },
 		{ selector: ".ytp-panel", media: null, prop: "color", value: "rgb(238, 238, 238)", important: false },
@@ -154,28 +154,15 @@ test("the CLI writes rule dumps after the token tables", () => {
 	}
 });
 
-const desktop = {
-	site: "desktop", theme: "both", background: { dark: "#0f0f0f", light: "#fff" },
-	rules: [
-		{ selector: ".masthead-skeleton-icon", media: null, prop: "background-color", value: "rgb(227, 227, 227)", important: false },
-		{ selector: "html .foo, :root .bar:is(.a, .b)", media: null, prop: "color", value: "rgb(255, 255, 255)", important: false },
-	],
-};
-
-test("renderRules maps a rule of both themes once per theme, without adding specificity", () => {
-	const out = renderRules(desktop);
-	assert.match(out, /:where\(html\[dark\]\) \.masthead-skeleton-icon \{\n\t*background-color: var\(--ctp-text\);/);
-	assert.match(out, /:where\(html:not\(\[dark\]\)\) \.masthead-skeleton-icon \{\n\t*background-color: var\(--ctp-crust\);/);
-});
-
-test("renderRules scopes selectors that start at the root on the root itself", () => {
-	const out = renderRules(desktop);
-	assert.match(out, /html:where\(\[dark\]\) \.foo, :root:where\(\[dark\]\) \.bar:is\(\.a, \.b\) \{/);
-	assert.match(out, /html:where\(:not\(\[dark\]\)\) \.foo, :root:where\(:not\(\[dark\]\)\) \.bar:is\(\.a, \.b\) \{/);
+test("renderRules maps a rule of the main stylesheet as in the dark theme", () => {
+	const out = renderRules({ site: "desktop", background: "#0f0f0f", rules: [
+		{ selector: "ytd-thumbnail-overlay-now-playing-renderer", media: null, prop: "background-color", value: "rgba(0, 0, 0, 0.6)", important: false },
+	] });
+	assert.match(out, /^#yt-desktop \{\n\t\.rules\(\) \{\n\t\tytd-thumbnail-overlay-now-playing-renderer \{\n\t\t\tbackground-color: color-mix\(in srgb, var\(--ctp-mantle\) 60%, transparent\);/);
 });
 
 test("reds that mean live, error or destructive stay red", () => {
-	const rules = renderRules({ site: "x", theme: "dark", background: "#0f0f0f", rules: [
+	const rules = renderRules({ site: "x", background: "#0f0f0f", rules: [
 		{ selector: ".ytBadgeShapeLive", media: null, prop: "background-color", value: "rgb(204, 0, 0)", important: false },
 		{ selector: ".ytp-swatch-background-color", media: null, prop: "background-color", value: "rgb(255, 0, 51)", important: false },
 	] });
@@ -190,4 +177,24 @@ test("a hashed token with the value of a named error token stays red too", () =>
 	const block = renderBlock([{ site: "studio", background: { dark: "#0f0f0f", light: "#fff" }, dark: { "--ytcp-error-red": "#f57", "--t0123456789abcdef": "#f57", "--tfedcba9876543210": "#ff0033" }, light: {} }], {});
 	assert.match(block, /--t0123456789abcdef: var\(--ctp-red\);/);
 	assert.match(block, /--tfedcba9876543210: var\(--ctp-accent\);/);
+});
+
+test("a gray readable on YouTube stays readable in the palette", () => {
+	// #909090 on white is 3.2:1; Latte's overlay0 on base would be 2.3:1.
+	assert.match(mapColor("#909090", "light", "#fff"), /^var\(--ctp-(overlay2|subtext0|subtext1|text)\)$/);
+	// #717171 on #0f0f0f is 3.9:1; Frappé's overlay0 on base would be 2.9:1.
+	assert.match(mapColor("#717171", "dark", "#0f0f0f"), /^var\(--ctp-(overlay[12]|subtext[01]|text)\)$/);
+});
+
+test("a token with the same value in both themes maps as it does in the dark theme", () => {
+	const block = renderBlock([{ site: "www", background: { dark: "#0f0f0f", light: "#fff" }, dark: { "--tstatic": "#fff", "--tscrim": "rgba(0,0,0,0.6)", "--tbg": "#0f0f0f" }, light: { "--tstatic": "#fff", "--tscrim": "rgba(0,0,0,0.6)", "--tbg": "#fff" } }], {});
+	const light = section(block, "light");
+	assert.match(light, /--tstatic: var\(--ctp-text\);/);
+	assert.match(light, /--tscrim: color-mix\(in srgb, var\(--ctp-mantle\) 60%, transparent\);/);
+	assert.match(light, /--tbg: var\(--ctp-base\);/);
+});
+
+test("a token that barely moves between themes counts as the same", () => {
+	const block = renderBlock([{ site: "www", background: { dark: "#0f0f0f", light: "#fff" }, dark: { "--tlabel": "#030303", "--tbg": "#0f0f0f" }, light: { "--tlabel": "#0f0f0f", "--tbg": "#fff" } }], {});
+	assert.match(section(block, "light"), /--tlabel: var\(--ctp-(mantle|crust)\);/);
 });
