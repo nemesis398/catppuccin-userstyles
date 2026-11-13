@@ -18,6 +18,7 @@ The dashboard is styled with Tailwind, which writes its colors as literals. Ever
 
 - In Latte, the yellow initials on user avatars, the "Ctrl+K" hint in the search field and the "You" badge stay below 3:1 contrast. That is Latte's own yellow and sky.
 - The small logo on narrow screens keeps NetBird's orange.
+- The login pages of a self-hosted instance's built-in identity provider (`/oauth2/…`) are not styled and keep NetBird's own look.
 
 ## Verified
 

@@ -24,6 +24,7 @@ The style is large, about 900 KB, because it carries one rule for each of those 
 - User avatars keep their colors.
 - In Latte, the labels on the filled bars of the dashboard (WiFi Connectivity, AP Radio TX Retries) stay at about 2.5:1 contrast. That is Latte's own green.
 - Disabled controls stay faint on purpose.
+- The login page has no theme setting and is light, so it shows the Light Flavor (Latte by default) even with the system in dark mode.
 
 ## Verified
 
