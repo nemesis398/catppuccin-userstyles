@@ -4,7 +4,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "test": "node --test \"scripts/*.test.mjs\""
   },
   "devDependencies": {
     "less": "4.9.1"
