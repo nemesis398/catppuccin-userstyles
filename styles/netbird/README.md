@@ -4,7 +4,7 @@ Catppuccin for the [NetBird](https://netbird.io) dashboard, on app.netbird.io an
 
 ## Setup
 
-app.netbird.io works without setup. For a self-hosted dashboard, open the style's settings in Stylus and enter it under **URLs of your self-hosted NetBird dashboards**, without `https://`, for example `netbird.example.com`. Separate several dashboards with commas, and add the port if it is not the default one (`localhost:8080`).
+app.netbird.io works without setup. For a self-hosted dashboard, open the style's settings in Stylus and enter it under **URLs of your self-hosted NetBird dashboards**, without `https://`, for example `netbird\.example\.com`. Put a backslash before every dot and colon. Stylus hands the value to Less as it is, so a bare dot or colon breaks the style, which Stylus then reports as empty, and in an IP address it changes the address without an error. Separate several dashboards with commas, and add the port if it is not the default one (`localhost\:8080`).
 
 ## How the flavor is chosen
 

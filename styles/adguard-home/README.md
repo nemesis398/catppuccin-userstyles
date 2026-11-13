@@ -4,7 +4,7 @@ Catppuccin for the [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome) we
 
 ## Setup
 
-Open the style's settings in Stylus and enter your instances under **URLs of your AdGuard Home instances**, without `http://` but with the port if it is not 80, for example `dns.example.com` or `192.0.2.53:3000`. Separate several instances with commas.
+Open the style's settings in Stylus and enter your instances under **URLs of your AdGuard Home instances**, without `http://` but with the port if it is not 80, for example `dns\.example\.com` or `192\.0\.2\.53\:3000`. Put a backslash before every dot and colon. Stylus hands the value to Less as it is, so a bare dot or colon breaks the style, which Stylus then reports as empty, and in an IP address it changes the address without an error. Separate several instances with commas.
 
 ## How the flavor is chosen
 

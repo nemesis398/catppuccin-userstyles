@@ -4,7 +4,7 @@ Catppuccin for self-hosted [Forgejo](https://forgejo.org) instances, without ins
 
 ## Setup
 
-Open the style's settings in Stylus and enter your instance under **URLs of your Forgejo instances**, without `https://`, for example `git.example.com`. Separate several instances with commas, and add the port if it is not the default one (`localhost:3000`).
+Open the style's settings in Stylus and enter your instance under **URLs of your Forgejo instances**, without `https://`, for example `git\.example\.com`. Put a backslash before every dot and colon. Stylus hands the value to Less as it is, so a bare dot or colon breaks the style, which Stylus then reports as empty, and in an IP address it changes the address without an error. Separate several instances with commas, and add the port if it is not the default one (`localhost\:3000`).
 
 codeberg.org is not matched. Use Catppuccin's [Codeberg style](https://github.com/catppuccin/userstyles/tree/main/styles/codeberg) there.
 

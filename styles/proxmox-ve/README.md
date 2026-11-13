@@ -4,7 +4,7 @@ Catppuccin for the [Proxmox VE](https://www.proxmox.com/en/products/proxmox-virt
 
 ## Setup
 
-Open the style's settings in Stylus and enter your hosts under **URLs of your Proxmox VE hosts**, without `https://` but with the port, for example `pve.example.com:8006`. Separate several hosts with commas.
+Open the style's settings in Stylus and enter your hosts under **URLs of your Proxmox VE hosts**, without `https://` but with the port, for example `pve\.example\.com\:8006`. Put a backslash before every dot and colon. Stylus hands the value to Less as it is, so a bare dot or colon breaks the style, which Stylus then reports as empty, and in an IP address it changes the address without an error. Separate several hosts with commas.
 
 ## How the flavor is chosen
 

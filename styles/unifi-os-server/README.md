@@ -4,7 +4,7 @@ Catppuccin for [UniFi OS Server](https://ui.com) and its Network application: th
 
 ## Setup
 
-Open the style's settings in Stylus and enter your servers under **URLs of your UniFi OS Servers**, without `https://` but with the port if it is not 443, for example `unifi.example.com` or `192.0.2.10:11443`. Separate several servers with commas.
+Open the style's settings in Stylus and enter your servers under **URLs of your UniFi OS Servers**, without `https://` but with the port if it is not 443, for example `unifi\.example\.com` or `192\.0\.2\.10\:11443`. Put a backslash before every dot and colon. Stylus hands the value to Less as it is, so a bare dot or colon breaks the style, which Stylus then reports as empty, and in an IP address it changes the address without an error. Separate several servers with commas.
 
 ## How the flavor is chosen
 

@@ -32,7 +32,7 @@ Open a style's settings in Stylus (the gear next to its name) to pick:
 - **Light Flavor** and **Dark Flavor**: which flavor is used when your system, or the site's own theme switch, is light or dark. The defaults are Latte and Mocha.
 - **Accent**: the color for links, buttons and highlights. The default is Mauve.
 
-Styles for self-hosted apps (AdGuard Home, Forgejo, NetBird, Proxmox VE, UniFi OS Server) also have a **URLs** setting. Enter the address of your instance there, without `https://`, and separate several with commas.
+Styles for self-hosted apps (AdGuard Home, Forgejo, NetBird, Proxmox VE, UniFi OS Server) also have a **URLs** setting. Enter the address of your instance there without `https://`, with a backslash before every dot and colon, for example `git\.example\.com` or `192\.0\.2\.10\:8006`. Separate several with commas. Stylus hands the value to Less as it is, so a bare dot or colon breaks the style or changes the address.
 
 ## Reporting a broken style
 
