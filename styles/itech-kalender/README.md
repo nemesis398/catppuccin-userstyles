@@ -19,3 +19,4 @@ The calendar has no dark mode of its own, so the style follows your system: Dark
 | Date | Pages | Result |
 |---|---|---|
 | 2026-10-29 | A class calendar: year, month, week (a holiday week and a full week) and day view, expanded event cards, the menu | No color outside the active flavor's palette on any visible element, in Mocha, Frappé, Macchiato and Latte. |
+| 2026-11-13 | A class calendar, week view with empty days | The "Keine Termine" placeholder of an empty day kept the site's gray from its inline style; it now takes Subtext0. Otherwise no color outside the palette and no text under 3:1 contrast, in Mocha. |

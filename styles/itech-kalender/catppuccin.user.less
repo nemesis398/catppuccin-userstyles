@@ -2,7 +2,7 @@
 @name ITECH-Kalender Catppuccin
 @namespace github.com/nemesis398/catppuccin-userstyles/styles/itech-kalender
 @homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/itech-kalender
-@version 2026.10.29
+@version 2026.11.13
 @updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/itech-kalender/catppuccin.user.less
 @supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
 @description Soothing pastel theme for the ITECH-Kalender (itech-bs14.codeberg.page)
@@ -234,6 +234,10 @@
 		}
 		.week-col.is-today .week-col__date {
 			color: fade(@on-accent, 85%);
+		}
+		/* "Keine Termine" in an empty day, gray in its inline style */
+		.week-col__events > p[style*="color"] {
+			color: @subtext0 !important;
 		}
 
 		/* ---------- Event cards ---------- */
