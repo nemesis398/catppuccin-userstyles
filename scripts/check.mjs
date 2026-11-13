@@ -109,7 +109,7 @@ function checkColors(body, bodyLine, errors) {
 	const raw = body.split("\n");
 	codeLines(body).forEach((line, i) => {
 		if (raw[i].includes(ALLOW)) return;
-		const hex = line.match(/#[0-9a-fA-F]{3,8}\b/g)?.filter((h) => [4, 5, 7, 9].includes(h.length));
+		const hex = line.match(/#[0-9a-fA-F]{3,8}(?![\w-])/g)?.filter((h) => [4, 5, 7, 9].includes(h.length));
 		const fn = line.match(/\b(rgba?|hsla?)\(\s*\d/g);
 		for (const c of [...(hex ?? []), ...(fn ?? [])]) {
 			errors.push(`line ${bodyLine + i}: literal color ${c}; use the palette or mark the line ${ALLOW}`);
