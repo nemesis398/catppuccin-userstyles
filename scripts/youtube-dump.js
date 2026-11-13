@@ -23,6 +23,17 @@ const ctpCopy = (dump) => {
 const ctpBackground = () =>
 	[document.body, document.documentElement].map((e) => getComputedStyle(e).backgroundColor).find((c) => c && c !== "rgba(0, 0, 0, 0)");
 
+// Only YouTube's own stylesheets: user styles (Stylus marks its <style>
+// elements with the class "stylus") and extension sheets would otherwise end
+// up in the public style. Other extensions inject unmarked <style> elements
+// too, so dump in a browser profile without extensions on YouTube.
+const ctpPageSheet = (sheet) => {
+	if (sheet.ownerNode?.classList?.contains("stylus")) return false;
+	if (!sheet.href) return true;
+	const url = new URL(sheet.href, location.href);
+	return /^https?:$/.test(url.protocol) && /(^|\.)(youtube(-nocookie)?\.com|ytimg\.com|gstatic\.com|googleapis\.com)$/.test(url.hostname);
+};
+
 const ctpSheetRules = (keep) => {
 	const rules = [];
 	const walk = (list, media) => {
@@ -35,7 +46,7 @@ const ctpSheetRules = (keep) => {
 		}
 	};
 	for (const sheet of document.styleSheets) {
-		if (!keep(sheet)) continue;
+		if (!ctpPageSheet(sheet) || !keep(sheet)) continue;
 		try {
 			walk(sheet.cssRules, null);
 		} catch {
