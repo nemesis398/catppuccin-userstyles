@@ -25,5 +25,6 @@ hPanel draws its colors from design tokens that point at a set of primitive colo
 | Date | Pages | Result |
 |---|---|---|
 | 2026-10-29 | home, websites, domains, DNS, e-mail, VPS, API, marketplace, billing, account settings | No color outside the active flavor's palette on any visible element, apart from promotional artwork. No text below 3:1 contrast in Mocha, Frappé and Macchiato with the dark mode, and only the gaps above in Latte with the light mode. |
+| 2026-11-13 | home | The referral pill's "2×" multiplier, new since the first check, was light on light in dark mode (1.4:1); its circle now takes the accent and the text the on-accent color (9.2:1 in Mocha). No other text below 3:1, in Mocha. |
 
 No screenshots, because the account shows private domains and servers.

@@ -2,7 +2,7 @@
 @name Hostinger Catppuccin
 @namespace github.com/nemesis398/catppuccin-userstyles/styles/hostinger
 @homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/hostinger
-@version 2026.10.29
+@version 2026.11.13
 @updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/hostinger/catppuccin.user.less
 @supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
 @description Soothing pastel theme for Hostinger's hPanel
@@ -753,6 +753,14 @@
 
 	::selection {
 		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+
+	/* The referral pill with a multiplier ("2×") draws a white circle with
+	   dark purple text. Mapped, both are light in dark mode, so the circle
+	   takes the accent and the text the on-accent color in both modes. */
+	.referrals-link.referrals-link--multiplier:not(#ctp) {
+		--header-pill-icon-bg: var(--ctp-accent);
+		--header-pill-icon-color: var(--ctp-on-accent);
 	}
 
 	/* Generated from hPanel's stylesheets. */
