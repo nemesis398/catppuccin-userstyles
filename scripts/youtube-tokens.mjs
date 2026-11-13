@@ -16,9 +16,14 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-// Tokens whose meaning the mapping can't see: semantic reds (live, errors,
-// destructive actions) that must stay red instead of taking the accent.
+// Tokens whose meaning the mapping can't see from their name.
 export const OVERRIDES = {};
+
+// Red that means live, recording, an error or a destructive action stays
+// red; every other red is the brand's and takes the accent. Token names and
+// selectors that say so are recognized here.
+const SEMANTIC_RED = /live|error|recording|destructive|danger|alert/i;
+const semantic = (mapped, name) => (mapped && SEMANTIC_RED.test(name) ? mapped.replaceAll("--ctp-accent", "--ctp-red") : mapped);
 
 const PALETTES = {
 	dark: { rosewater: "f5e0dc", flamingo: "f2cdcd", pink: "f5c2e7", mauve: "cba6f7", red: "f38ba8", maroon: "eba0ac", peach: "fab387", yellow: "f9e2af", green: "a6e3a1", teal: "94e2d5", sky: "89dceb", sapphire: "74c7ec", blue: "89b4fa", lavender: "b4befe", text: "cdd6f4", subtext1: "bac2de", subtext0: "a6adc8", overlay2: "9399b2", overlay1: "7f849c", overlay0: "6c7086", surface2: "585b70", surface1: "45475a", surface0: "313244", base: "1e1e2e", mantle: "181825", crust: "11111b" },
@@ -114,11 +119,19 @@ export function renderBlock(dumps, overrides) {
 	const ordered = [...dumps].sort((a, b) => (b.site === "www") - (a.site === "www"));
 	const lines = ["#yt-tokens {"];
 	for (const theme of ["dark", "light"]) {
+		// Values that named semantic tokens give red; a hashed token with one
+		// of them means the same.
+		const semanticValues = new Set();
+		for (const dump of ordered) {
+			for (const [name, value] of Object.entries(dump[theme] ?? {})) {
+				if (SEMANTIC_RED.test(name) && mapColor(value, theme, dump.background[theme])?.includes("--ctp-accent")) semanticValues.add(value);
+			}
+		}
 		const tokens = new Map();
 		for (const dump of ordered) {
 			for (const [name, value] of Object.entries(dump[theme] ?? {})) {
 				if (tokens.has(name)) continue;
-				const mapped = overrides[name] ?? mapColor(value, theme, dump.background[theme]);
+				const mapped = overrides[name] ?? semantic(mapColor(value, theme, dump.background[theme]), semanticValues.has(value) ? "error" : name);
 				if (mapped) tokens.set(name, mapped);
 			}
 		}
@@ -128,6 +141,81 @@ export function renderBlock(dumps, overrides) {
 	}
 	lines.push("}");
 	return lines.join("\n");
+}
+
+// Captions take their colors from the viewer's caption settings.
+const RULES_EXCLUDE = /caption-(window|segment|visual)|captions-text/;
+const COLOR_IN_VALUE = /#[0-9a-f]{3,8}\b|(?:rgba?|hsla?)\([^()]*\)|\b(?:white|black)\b/gi;
+const KEYWORDS = { white: "#fff", black: "#000" };
+
+function mapValue(value, theme, background) {
+	return value.replace(COLOR_IN_VALUE, (c) => mapColor(KEYWORDS[c.toLowerCase()] ?? c, theme, background) ?? c);
+}
+
+// Splits a selector list on its top-level commas.
+function selectorParts(selector) {
+	const parts = [];
+	let depth = 0, from = 0;
+	for (let i = 0; i < selector.length; i++) {
+		const c = selector[i];
+		if (c === "(" || c === "[") depth++;
+		else if (c === ")" || c === "]") depth--;
+		else if (c === "," && depth === 0) {
+			parts.push(selector.slice(from, i).trim());
+			from = i + 1;
+		}
+	}
+	parts.push(selector.slice(from).trim());
+	return parts;
+}
+
+// Limits a selector to one theme without changing its specificity.
+function scoped(selector, condition) {
+	return selectorParts(selector)
+		.map((p) => {
+			const root = p.match(/^(html|:root)(?![\w-])/);
+			return root ? `${root[1]}:where(${condition})${p.slice(root[1].length)}` : `:where(html${condition}) ${p}`;
+		})
+		.join(", ");
+}
+
+const SCOPES = { dark: "[dark]", light: ":not([dark])" };
+
+// A rule dump is { site, theme, background, rules: [{ selector, media, prop,
+// value, important }] }: the declarations of one stylesheet that hold a
+// literal color, in the stylesheet's order. The output repeats them with
+// palette colors, as the mixin #yt-<site>.rules(). A dump of theme "dark"
+// (the player, which YouTube keeps dark) maps them once; a dump of theme
+// "both" (background { dark, light }) maps them once per theme, each copy
+// limited to that theme.
+export function renderRules(dump) {
+	const out = [`#yt-${dump.site} {`, "\t.rules() {"];
+	const themes = dump.theme === "both" ? ["dark", "light"] : [dump.theme];
+	for (const theme of themes) {
+		const background = typeof dump.background === "string" ? dump.background : dump.background[theme];
+		let open = null;
+		const close = () => {
+			if (!open) return;
+			out.push(open.media ? "\t\t\t}\n\t\t}" : "\t\t}");
+			open = null;
+		};
+		for (const r of dump.rules) {
+			if (RULES_EXCLUDE.test(r.selector)) continue;
+			const value = semantic(mapValue(r.value, theme, background), r.selector);
+			if (value === r.value) continue;
+			if (!open || open.selector !== r.selector || open.media !== r.media) {
+				close();
+				open = r;
+				const sel = themes.length > 1 ? scoped(r.selector, SCOPES[theme]) : r.selector;
+				if (r.media) out.push(`\t\t@media ${r.media} {`, `\t\t\t${sel} {`);
+				else out.push(`\t\t${sel} {`);
+			}
+			out.push(`${r.media ? "\t\t\t\t" : "\t\t\t"}${r.prop}: ${value}${r.important ? " !important" : ""};`);
+		}
+		close();
+	}
+	out.push("\t}", "}");
+	return out.join("\n");
 }
 
 const START = "/* ctp-tokens:start */", END = "/* ctp-tokens:end */";
@@ -146,7 +234,7 @@ function main(argv) {
 		return 1;
 	}
 	const dumps = files.map((f) => JSON.parse(readFileSync(f, "utf8")));
-	const block = renderBlock(dumps, OVERRIDES);
+	const block = [renderBlock(dumps.filter((d) => !d.rules), OVERRIDES), ...dumps.filter((d) => d.rules).map(renderRules)].join("\n\n");
 	writeFileSync(style, [...lines.slice(0, start + 1), block, ...lines.slice(end)].join("\n"));
 	console.log(`${style}: ${block.split("\n").length} lines between the markers`);
 	return 0;

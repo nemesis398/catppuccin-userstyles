@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { mapColor, renderBlock } from "./youtube-tokens.mjs";
+import { mapColor, renderBlock, renderRules } from "./youtube-tokens.mjs";
 
 const CLI = new URL("./youtube-tokens.mjs", import.meta.url).pathname;
 
@@ -110,4 +110,84 @@ test("the CLI fails on a file without the markers", () => {
 	} finally {
 		rmSync(dir, { recursive: true });
 	}
+});
+
+const player = {
+	site: "player", theme: "dark", background: "#0f0f0f",
+	rules: [
+		{ selector: ".ytp-panel", media: null, prop: "background-color", value: "rgba(28, 28, 28, 0.9)", important: false },
+		{ selector: ".ytp-panel", media: null, prop: "color", value: "rgb(238, 238, 238)", important: false },
+		{ selector: ".ytp-title", media: null, prop: "text-shadow", value: "rgb(0, 0, 0) 0px 0px 2px", important: true },
+		{ selector: ".ytp-gradient", media: null, prop: "background-image", value: "linear-gradient(white, rgba(0, 0, 0, 0.5))", important: false },
+		{ selector: ".ytp-panel", media: "print", prop: "color", value: "black", important: false },
+		{ selector: ".ytp-caption-segment", media: null, prop: "color", value: "rgb(255, 255, 255)", important: false },
+	],
+};
+
+test("renderRules maps every color inside a value and keeps the rest", () => {
+	const out = renderRules(player);
+	assert.match(out, /\.ytp-panel \{\n\t*background-color: color-mix\(in srgb, var\(--ctp-base\) 90%, transparent\);\n\t*color: var\(--ctp-text\);/);
+	assert.match(out, /text-shadow: var\(--ctp-mantle\) 0px 0px 2px !important;/);
+	assert.match(out, /background-image: linear-gradient\(var\(--ctp-text\), color-mix\(in srgb, var\(--ctp-mantle\) 50%, transparent\)\);/);
+	assert.doesNotMatch(out, /#[0-9a-f]{3,8}\b|rgba?\(|\bwhite\b|\bblack\b/i);
+});
+
+test("renderRules keeps media queries and leaves captions alone", () => {
+	const out = renderRules(player);
+	assert.match(out, /@media print \{\n\t*\.ytp-panel \{\n\t*color: var\(--ctp-mantle\);/);
+	assert.doesNotMatch(out, /caption/);
+});
+
+test("the CLI writes rule dumps after the token tables", () => {
+	const dir = mkdtempSync(join(tmpdir(), "yt-tokens-"));
+	try {
+		const style = join(dir, "style.less"), dump = join(dir, "www.json"), rules = join(dir, "player.json");
+		writeFileSync(dump, JSON.stringify(dumps[0]));
+		writeFileSync(rules, JSON.stringify(player));
+		writeFileSync(style, "/* ctp-tokens:start */\n/* ctp-tokens:end */\n");
+		const r = spawnSync("node", [CLI, "--write", style, dump, rules]);
+		assert.equal(r.status, 0, r.stderr.toString());
+		const text = readFileSync(style, "utf8");
+		assert.ok(text.indexOf("#yt-tokens {") < text.indexOf("#yt-player {"));
+	} finally {
+		rmSync(dir, { recursive: true });
+	}
+});
+
+const desktop = {
+	site: "desktop", theme: "both", background: { dark: "#0f0f0f", light: "#fff" },
+	rules: [
+		{ selector: ".masthead-skeleton-icon", media: null, prop: "background-color", value: "rgb(227, 227, 227)", important: false },
+		{ selector: "html .foo, :root .bar:is(.a, .b)", media: null, prop: "color", value: "rgb(255, 255, 255)", important: false },
+	],
+};
+
+test("renderRules maps a rule of both themes once per theme, without adding specificity", () => {
+	const out = renderRules(desktop);
+	assert.match(out, /:where\(html\[dark\]\) \.masthead-skeleton-icon \{\n\t*background-color: var\(--ctp-text\);/);
+	assert.match(out, /:where\(html:not\(\[dark\]\)\) \.masthead-skeleton-icon \{\n\t*background-color: var\(--ctp-crust\);/);
+});
+
+test("renderRules scopes selectors that start at the root on the root itself", () => {
+	const out = renderRules(desktop);
+	assert.match(out, /html:where\(\[dark\]\) \.foo, :root:where\(\[dark\]\) \.bar:is\(\.a, \.b\) \{/);
+	assert.match(out, /html:where\(:not\(\[dark\]\)\) \.foo, :root:where\(:not\(\[dark\]\)\) \.bar:is\(\.a, \.b\) \{/);
+});
+
+test("reds that mean live, error or destructive stay red", () => {
+	const rules = renderRules({ site: "x", theme: "dark", background: "#0f0f0f", rules: [
+		{ selector: ".ytBadgeShapeLive", media: null, prop: "background-color", value: "rgb(204, 0, 0)", important: false },
+		{ selector: ".ytp-swatch-background-color", media: null, prop: "background-color", value: "rgb(255, 0, 51)", important: false },
+	] });
+	assert.match(rules, /\.ytBadgeShapeLive \{\n\t*background-color: (var\(--ctp-red\)|color-mix\(in srgb, var\(--ctp-red\) \d+%, var\(--ctp-base\)\));/);
+	assert.match(rules, /\.ytp-swatch-background-color \{\n\t*background-color: var\(--ctp-accent\);/);
+	const block = renderBlock([{ site: "www", background: { dark: "#0f0f0f", light: "#fff" }, dark: { "--yt-sys-color-baseline--error-text": "#ff4e45", "--yt-sys-color-baseline--brand": "#ff0033" }, light: {} }], {});
+	assert.match(block, /--yt-sys-color-baseline--error-text: var\(--ctp-red\);/);
+	assert.match(block, /--yt-sys-color-baseline--brand: var\(--ctp-accent\);/);
+});
+
+test("a hashed token with the value of a named error token stays red too", () => {
+	const block = renderBlock([{ site: "studio", background: { dark: "#0f0f0f", light: "#fff" }, dark: { "--ytcp-error-red": "#f57", "--t0123456789abcdef": "#f57", "--tfedcba9876543210": "#ff0033" }, light: {} }], {});
+	assert.match(block, /--t0123456789abcdef: var\(--ctp-red\);/);
+	assert.match(block, /--tfedcba9876543210: var\(--ctp-accent\);/);
 });
