@@ -117,6 +117,21 @@ function checkColors(body, bodyLine, errors) {
 	});
 }
 
+// Stylus 2 hands a `//` line right above @-moz-document to that section
+// instead of to Less, where it is no comment: it swallows the first rule
+// (a style's whole flavor block, once). Comments go inside the block.
+function checkSectionComments(body, bodyLine, errors) {
+	const lines = body.split("\n");
+	lines.forEach((line, i) => {
+		if (!line.startsWith("@-moz-document")) return;
+		let j = i - 1;
+		while (j >= 0 && lines[j].trim() === "") j--;
+		if (j >= 0 && /^\s*\/\//.test(lines[j])) {
+			errors.push(`line ${bodyLine + j}: // comment right above @-moz-document; Stylus puts it into the section, so move it inside the block`);
+		}
+	});
+}
+
 function checkPrivate(src, errors) {
 	src.split("\n").forEach((line, i) => {
 		for (const re of PRIVATE) if (re.test(line)) errors.push(`line ${i + 1}: private string ${re}`);
@@ -153,6 +168,7 @@ async function checkStyle(slug, lib) {
 	const bodyLine = src.slice(0, header.end).split("\n").length;
 	if (!body.includes(`@import "${LIB_URL}";`)) errors.push(`does not import ${LIB_URL}`);
 	checkColors(body, bodyLine, errors);
+	checkSectionComments(body, bodyLine, errors);
 
 	const runs = [
 		...FLAVORS.map((f) => ({ lightFlavor: f, darkFlavor: f })),
