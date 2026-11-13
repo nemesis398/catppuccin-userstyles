@@ -178,7 +178,9 @@
 	.rules() {
 		// The logo and the brand icons (Premium, Music, Kids): YouTube's red
 		// takes the accent, the white drawn on it the color on the accent.
-		svg:has(@{yt-brand-red}) {
+		// The player's big play button is red only on hover; its own rules
+		// (generated, and the arrow below) cover it.
+		svg:has(@{yt-brand-red}):not(.ytp-large-play-button svg) {
 			@{yt-brand-red} {
 				fill: var(--ctp-accent);
 			}
@@ -262,6 +264,12 @@
 		.html5-video-player svg :is([fill="white" i], [fill="#fff" i], [fill="#ffffff" i]) { // ctp-allow
 			fill: var(--ctp-text);
 		}
+		// While the big play button is red (on hover, or YouTube's red
+		// variant), its arrow takes the color on the accent.
+		.ytp-large-play-button:is(.ytp-large-play-button-red-bg, .ytp-touch-device) path:not(.ytp-large-play-button-bg),
+		.ytp-cued-thumbnail-overlay:hover .ytp-large-play-button path:not(.ytp-large-play-button-bg) {
+			fill: var(--ctp-on-accent);
+		}
 
 		// The area around the player in theater mode.
 		ytd-watch-flexy[full-bleed-player] #full-bleed-container.ytd-watch-flexy {
@@ -299,12 +307,7 @@
 
 		// Buttons over video (Shorts) repeat their scrim inline.
 		.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextTonal[style*="background"] {
-			:where(html[dark]) & {
-				background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent) !important;
-			}
-			:where(html:not([dark])) & {
-				background-color: color-mix(in srgb, var(--ctp-text) 30%, transparent) !important;
-			}
+			background-color: var(--ctp-yt-overlay-scrim) !important;
 		}
 
 		// Rank chips in live chat carry their colors inline.
@@ -381,6 +384,9 @@
 		color-scheme: if(@flavor = latte, light, dark);
 		--ctp-accent: @accent;
 		--ctp-on-accent: if(@flavor = latte, @base, @crust);
+		// The scrim behind buttons over video: dark under light icons, light
+		// under dark ones, by the flavor and not by YouTube's theme.
+		--ctp-yt-overlay-scrim: if(@flavor = latte, ~"color-mix(in srgb, var(--ctp-text) 30%, transparent)", ~"color-mix(in srgb, var(--ctp-mantle) 30%, transparent)");
 	}
 }
 
