@@ -111,6 +111,20 @@
 }
 
 // YouTube Music has no light theme: always the Dark Flavor.
+// Embedded players sit on other people's pages, light or dark, with
+// nothing to say which; they always take the dark flavor.
+@-moz-document regexp("https://www\\.youtube(-nocookie)?\\.com/embed/.*") {
+	html:not(#ctp),
+	html :is([dark], [light]):not(#ctp) {
+		#yt.vars(@darkFlavor);
+		#yt-tokens.dark();
+	}
+
+	#yt-embed.rules();
+	#yt-player.rules();
+	#yt.rules();
+}
+
 @-moz-document domain("music.youtube.com") {
 	html:not(#ctp),
 	html :is([dark], [light]):not(#ctp) {
@@ -172,8 +186,9 @@
 				fill: var(--ctp-on-accent);
 			}
 		}
-		// The mobile logo's red is set in CSS; its arrow is drawn white.
-		.mobile-topbar-logo .logo-arrow {
+		// The mobile logo and the embed's play button set their red in CSS;
+		// the arrow on it is drawn white.
+		.logo-arrow {
 			fill: var(--ctp-on-accent);
 		}
 
@@ -208,6 +223,14 @@
 			background-color: var(--ctp-surface0);
 		}
 		.ytp-load-progress {
+			background-color: var(--ctp-surface1);
+		}
+		// The chaptered bar of the embeds and the mobile player sets its
+		// track inline.
+		.ytChapteredProgressBarChapteredPlayerBarChapter[style*="background-color"] {
+			background-color: var(--ctp-surface0) !important;
+		}
+		.ytChapteredProgressBarChapteredPlayerBarLoaded {
 			background-color: var(--ctp-surface1);
 		}
 
@@ -17623,6 +17646,757 @@
 		}
 		.videoThumbnailCenterOverlayHost {
 			background-color: color-mix(in srgb, var(--ctp-mantle) 40%, transparent);
+		}
+	}
+}
+
+#yt-embed {
+	.rules() {
+		body {
+			color: var(--ctp-text);
+			background-color: var(--ctp-mantle);
+		}
+		h1 {
+			color: var(--ctp-text);
+		}
+		.player-unavailable .message {
+			border-bottom-color: var(--ctp-overlay2);
+		}
+		.player-unavailable a {
+			color: color-mix(in srgb, var(--ctp-blue) 65%, var(--ctp-base));
+		}
+		.dialog.modern-dialog {
+			box-shadow: color-mix(in srgb, var(--ctp-mantle) 25%, transparent) 0px 0px 24px 12px;
+		}
+		.spinner {
+			border-top-color: var(--ctp-overlay1);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.spinner:not([hidden]) {
+			color: var(--ctp-surface0);
+		}
+		.player-container #player.player-size, ytm-watch .player-size {
+			background-color: var(--ctp-mantle);
+		}
+		.player-cinematics {
+			background-color: var(--ctp-mantle);
+		}
+		input {
+			border-bottom-color: var(--ctp-overlay1);
+		}
+		.image-overlay-text {
+			text-shadow: color-mix(in srgb, var(--ctp-base) 20%, transparent) 1px 1px, color-mix(in srgb, var(--ctp-base) 20%, transparent) -1px 1px, color-mix(in srgb, var(--ctp-base) 20%, transparent) -1px -1px, color-mix(in srgb, var(--ctp-base) 20%, transparent) 1px -1px;
+		}
+		ytm-reel-player-overlay-renderer .ytSpecButtonShapeWithLabelLabel {
+			text-shadow: color-mix(in srgb, var(--ctp-mantle) 80%, transparent) 0px 1px 2px;
+		}
+		.logo-in-player, .mobile-topbar-logo {
+			color: var(--ctp-accent);
+		}
+		.ytSpinnerShapeSpinner {
+			border-top-color: var(--ctp-overlay1);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytSpinnerShapeSpinner:not([hidden]) {
+			color: var(--ctp-surface0);
+		}
+		c3-overlay.bottom-sheet-overlay {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytWebScrimHost {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 80%, transparent);
+		}
+		.ytWebScrimHostModernOverlay {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytWebScrimHostBottomSheet {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytWebScrimHostDrawerLayout {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytTooltipContainerPlayerTooltipContent, .ytTooltipContainerPlayerTooltipContentBlurred {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 2px 8px;
+		}
+		.ytTooltipContainerPlayerTooltipContentBlurred {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytTooltipContainerHotkey {
+			border-top-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-right-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-bottom-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-left-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		}
+		.ytBadgeShapeDefault.ytBadgeShapeOverlay {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytBadgeShapeTimely .ytBadgeShapeIcon {
+			color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.ytBadgeShapeTimely.ytBadgeShapeModern .ytBadgeShapeIcon {
+			color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.ytBadgeShapePremium {
+			background-color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.ytBadgeShapePremium.ytBadgeShapeModern {
+			background-color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.ytBadgeShapeLive {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytBadgeShapeLive.ytBadgeShapeOverlay {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytBadgeShapeLive.ytBadgeShapeModern {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytBadgeShapeLive.ytBadgeShapeModern.ytBadgeShapeOverlay {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytBadgeShapeStatusError {
+			background-color: color-mix(in srgb, var(--ctp-red) 20%, transparent);
+		}
+		.ytBadgeShapeStatusError.ytBadgeShapeModern {
+			background-color: color-mix(in srgb, var(--ctp-red) 20%, transparent);
+		}
+		.ytBadgeShapeThumbnailDefault {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytBadgeShapeThumbnailDefault.ytBadgeShapeModern {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytBadgeShapeThumbnailLive {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytBadgeShapeThumbnailLive.ytBadgeShapeModern {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytBadgeShapeThumbnailSpecial .ytBadgeShapeIcon {
+			color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.ytBadgeShapeThumbnailSpecial.ytBadgeShapeModern .ytBadgeShapeIcon {
+			color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.ytBadgeShapeThumbnailDefaultRedesign {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytBadgeShapeThumbnailDefaultRedesign.ytBadgeShapeModern {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.contribYtLightShapeDynamicWashLight {
+			background-image: radial-gradient(circle, color-mix(in srgb, var(--ctp-text) 20%, transparent) 0px, transparent 100%);
+		}
+		.ytLightTouchFeedbackShapeTouchLight {
+			background-image: radial-gradient(circle, var(--ctp-text) 0px, color-mix(in srgb, var(--ctp-text) 60%, transparent) 35%, color-mix(in srgb, var(--ctp-text) 15%, transparent) 70%, transparent 100%);
+		}
+		.ytLightTouchFeedbackShapeHoverLight {
+			background-image: radial-gradient(circle, var(--ctp-text) 0px, color-mix(in srgb, var(--ctp-text) 50%, transparent) 50%, color-mix(in srgb, var(--ctp-text) 15%, transparent) 80%, transparent 100%);
+		}
+		.ytSpecButtonShapeNextCallToActionOverlay.ytSpecButtonShapeNextFocused {
+			background-color: var(--ctp-mantle);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextCallToActionOverlay.ytSpecButtonShapeNextFocused:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: var(--ctp-mantle);
+			}
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextFilled {
+			color: var(--ctp-mantle);
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextOutline {
+			border-top-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-right-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-bottom-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-left-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextOutline:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextOutline:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				border-top-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+				border-right-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+				border-bottom-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+				border-left-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			}
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextOutline:active:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+			}
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextText:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextText:active:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+			}
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextTonal {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextTonal:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+			}
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextFocused {
+			background-color: var(--ctp-mantle);
+		}
+		.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextFocused:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextFocused:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: var(--ctp-mantle);
+			}
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlay.ytSpecButtonShapeNextFocused:active:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+			}
+		}
+		.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextFilled {
+			color: var(--ctp-mantle);
+		}
+		.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextTonal {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextTonal:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+			background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextTonal:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			}
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextTonal:active:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+			}
+		}
+		.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextFocused {
+			background-color: var(--ctp-mantle);
+			border-top-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			border-right-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			border-bottom-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			border-left-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextFocused:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+			background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextFocused:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: var(--ctp-mantle);
+				border-top-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+				border-right-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+				border-bottom-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+				border-left-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			}
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextOverlayDark.ytSpecButtonShapeNextFocused:active:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+			}
+		}
+		.ytSpecButtonShapeNextBrandGradient.ytSpecButtonShapeNextFilled {
+			background-image: linear-gradient(45deg, color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base)) 30%, var(--ctp-accent) 85%);
+		}
+		.ytSpecButtonShapeNextBrandGradient.ytSpecButtonShapeNextFilled:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+			background-image: linear-gradient(45deg, color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base)) 30%, var(--ctp-accent) 85%);
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextBrandGradient.ytSpecButtonShapeNextFilled:hover:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-image: linear-gradient(45deg, color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base)) 30%, var(--ctp-accent) 85%);
+			}
+		}
+		@media (hover: none) {
+			.ytSpecButtonShapeNextBrandGradient.ytSpecButtonShapeNextFilled:active:not(.ytSpecButtonShapeNextEnableLightTouchResponse) {
+				background-image: linear-gradient(45deg, color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base)) 30%, var(--ctp-accent) 85%);
+			}
+		}
+		.ytSpecButtonShapeNextRaised.ytSpecButtonShapeNextOutline {
+			box-shadow: color-mix(in srgb, var(--ctp-mantle) 10%, transparent) 0px 4px 16px 0px, color-mix(in srgb, var(--ctp-mantle) 10%, transparent) 0px 2px 8px 0px;
+		}
+		.button-renderer[data-style="STYLE_BRAND"] {
+			color: color-mix(in srgb, var(--ctp-accent) 64%, var(--ctp-base));
+		}
+		.button-renderer[data-style="STYLE_DESTRUCTIVE"] {
+			background-color: color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base));
+			border-top-color: color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base));
+			border-right-color: color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base));
+			border-bottom-color: color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base));
+			border-left-color: color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base));
+		}
+		.button-renderer[data-style="STYLE_OVERLAY"] {
+			background-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		}
+		.button-renderer[data-style="STYLE_DARK"] {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.bottom-menu-cancel {
+			border-top-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeNzRatingRedSquare {
+			color: var(--ctp-mantle);
+			background-color: var(--ctp-accent);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeNzRatingYellowCircle {
+			color: var(--ctp-mantle);
+			background-color: var(--ctp-yellow);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeNzRatingGreenCircle {
+			color: var(--ctp-mantle);
+			background-color: var(--ctp-green);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingSmallGreenSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-green);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingSmallBlueSquare {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-sky) 70%, var(--ctp-base));
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingLargeBlueSquare {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-sky) 70%, var(--ctp-base));
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingSmallYellowSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-yellow);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingLargeYellowSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-yellow);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingSmallOrangeSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-peach);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingLargeOrangeSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-peach);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingSmallRedSquare {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-accent) 70%, var(--ctp-base));
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingLargeRedSquare {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-accent) 70%, var(--ctp-base));
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingSmallBlackSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-mantle);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytBrNzBadgeShapeBadgeStyleTypeBrRatingLargeBlackSquare {
+			color: var(--ctp-text);
+			background-color: var(--ctp-mantle);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytwPivotButtonViewModelHost[data-background-color="THEME_ATTRIBUTE_OVERLAY_BACKGROUND_MEDIUM"] .ytwPivotButtonViewModelHostIcon {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytShortsEmbedsHost {
+			background-image: linear-gradient(0deg, color-mix(in srgb, var(--ctp-mantle) 40%, transparent) 0px, transparent 160px), linear-gradient(color-mix(in srgb, var(--ctp-mantle) 40%, transparent) 0px, transparent 96px);
+		}
+		.ytmCuedOverlayPlayButtonIcon {
+			color: var(--ctp-accent);
+		}
+		.ytmCuedOverlayGradient {
+			background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 80%, transparent), color-mix(in srgb, var(--ctp-mantle) 60%, transparent), transparent);
+		}
+		.ytChapteredProgressBarChapteredPlayerBarChapterSeen {
+			background-image: linear-gradient(90deg, var(--ctp-accent) 80%, var(--ctp-accent));
+		}
+		.ytChapteredProgressBarChapteredPlayerBarFill {
+			background-image: linear-gradient(90deg, var(--ctp-accent) 80%, var(--ctp-accent));
+		}
+		.ytChapteredProgressBarChapteredPlayerBarLoaded {
+			background-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		}
+		.ytFocusedChapterProgressBarLineProgressBarBackground {
+			background-color: var(--ctp-text);
+		}
+		.ytFocusedChapterProgressBarLineProgressBarPlayed {
+			background-image: linear-gradient(90deg, var(--ctp-accent) 80%, var(--ctp-accent));
+		}
+		.ytHeatSeekerHost {
+			fill: color-mix(in srgb, var(--ctp-text) 40%, transparent);
+		}
+		.ytHeatSeekerHighContrast {
+			background-image: linear-gradient(transparent, 90%, color-mix(in srgb, var(--ctp-mantle) 60%, transparent));
+			fill: color-mix(in srgb, var(--ctp-text) 50%, transparent);
+		}
+		.ytPlayerProgressBarBackground {
+			background-image: linear-gradient(transparent, color-mix(in srgb, var(--ctp-mantle) 50%, transparent));
+		}
+		.ytProgressBarLineProgressBarBackground {
+			background-color: var(--ctp-text);
+		}
+		.ytProgressBarLineProgressBarLoaded {
+			background-color: var(--ctp-text);
+		}
+		.ytProgressBarLineProgressBarHovered {
+			background-color: var(--ctp-text);
+		}
+		.ytProgressBarLineProgressBarPlayed {
+			background-image: linear-gradient(90deg, var(--ctp-accent) 80%, var(--ctp-accent));
+		}
+		.ytProgressBarPlayheadProgressBarPlayheadDot {
+			background-color: var(--ctp-accent);
+		}
+		.ytPlayerStoryboardStoryboardImageWrapper {
+			background-color: var(--ctp-text);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		.ytPlayerStoryboardBigboardWrapper {
+			background-color: var(--ctp-mantle);
+		}
+		.ytPlayerStoryboardTimestamp {
+			text-shadow: color-mix(in srgb, var(--ctp-mantle) 75%, transparent) 0px 0px 4px;
+		}
+		.ytPlayerStoryboardMetadataBigboard {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytwPlayerUserEduTooltipTooltipWrapper {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytdVolumeControlsSliderContainerVertical {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytdVolumeControlsSliderContainerVerticalExpanded {
+			background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+		}
+		.ytdVolumeControlsNativeSlider::-webkit-slider-thumb {
+			background-color: var(--ctp-text);
+		}
+		.ytdVolumeControlsMuteIcon {
+			color: var(--ctp-text);
+		}
+		.ytdVolumeControlsBackgroundScrim {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytdVolumeControlsBackgroundScrimExpanded {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytdVolumeControlsBackgroundScrimExpandedHoverState::after {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		.ytmFullscreenRelatedVideosEntryPointViewModelButton {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.ytmFullscreenRelatedVideosEntryPointViewModelButton button {
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.ytmFullscreenRelatedVideosEntryPointViewModelThumbnailContainer {
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		ytm-slim-metadata-toggle-button-renderer.circle-buttons .button-renderer {
+			border-top-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-right-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-bottom-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+			border-left-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		}
+		.action-menu-engagement-buttons-wrapper {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.action-menu-engagement-buttons-wrapper button {
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.stacked-video-preview {
+			background-color: var(--ctp-mantle);
+			border-top-color: var(--ctp-text);
+			border-right-color: var(--ctp-text);
+			border-bottom-color: var(--ctp-text);
+			border-left-color: var(--ctp-text);
+		}
+		#player-control-overlay .player-controls-background:not(.fullscreen-recs-expanded) {
+			background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 0px, color-mix(in srgb, var(--ctp-mantle) 54%, transparent) 25%, color-mix(in srgb, var(--ctp-mantle) 36%, transparent) 50%, color-mix(in srgb, var(--ctp-mantle) 18%, transparent) 75%, transparent);
+		}
+		#player-control-overlay .player-controls-background.fullscreen-recs-expanded {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytmMutedAutoplayOverlayBackground {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytm-forced-mute-message .button-with-icon-inner {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		ytm-info-panel-container-renderer[background="INFO_PANEL_CONTAINER_BACKGROUND_OVERLAY_BLACK"] {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.playerInterstitialRendererScrim {
+			background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 40%, transparent) 0px, color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 75%, color-mix(in srgb, var(--ctp-mantle) 60%, transparent));
+		}
+		.ytmCreatorEndscreenScrim {
+			background-color: var(--ctp-mantle);
+		}
+		.ytmExpandingEndscreenElementThumbnail {
+			box-shadow: color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 0px 0px 4px;
+		}
+		.ytmExpandingEndscreenElementOverlay {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 80%, transparent);
+		}
+		.ytmExpandingEndscreenElementScrim {
+			background-color: var(--ctp-mantle);
+		}
+		.ytmThumbnailEndscreenElementHost {
+			box-shadow: color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 0px 0px 4px;
+		}
+		.ytmThumbnailEndscreenElementThumbnailTitle {
+			text-shadow: color-mix(in srgb, var(--ctp-mantle) 30%, transparent) 0px 1px 0px;
+		}
+		.ytmThumbnailEndscreenElementTopGradient {
+			background-image: linear-gradient(var(--ctp-mantle), transparent);
+		}
+		.ytmThumbnailEndscreenElementPlaylistLengthOverlay {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytmThumbnailEndscreenElementScrim {
+			background-color: var(--ctp-mantle);
+		}
+		.ytPfpAutonavVisible {
+			background-color: var(--ctp-mantle);
+		}
+		.ytPfpAutonavScrim {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytPfpAutonavPlayButton {
+			color: var(--ctp-text);
+		}
+		.ytPfpAutonavPlayIcon {
+			fill: var(--ctp-text);
+		}
+		.ytPfpControlsHost :focus-visible {
+			box-shadow: var(--ctp-blue) 0px 0px 0px 2px inset;
+		}
+		.ytPfpControlsGradientTop {
+			background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 80%, transparent), color-mix(in srgb, var(--ctp-mantle) 60%, transparent), transparent);
+		}
+		.ytPfpControlsVideoTitle {
+			color: var(--ctp-text);
+		}
+		.ytPfpControlsBottomBar {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytPfpControlsTimeDisplay.ytPfpControlsTimeDisplay {
+			color: var(--ctp-text);
+		}
+		.ytPfpEndscreenVideoRendererHost {
+			background-color: var(--ctp-mantle);
+		}
+		.ytPfpEndscreenVideoRendererOverlay {
+			color: var(--ctp-text);
+		}
+		.ytPfpEndscreenVideoRendererOverlayTitleByline {
+			background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 80%, transparent), color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 60%, transparent);
+		}
+		.ytPfpEndscreenVideoRendererTitle {
+			color: var(--ctp-text);
+		}
+		.ytPfpEndscreenVideoRendererByline {
+			color: var(--ctp-text);
+		}
+		.ytPfpEndscreenVideoRendererDuration {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-mantle) 80%, transparent);
+		}
+		.ytPfpMoreVideosOverlay {
+			background-color: color-mix(in srgb, var(--ctp-base) 80%, transparent);
+		}
+		.ytPfpMoreVideosTitle {
+			color: var(--ctp-text);
+		}
+		.ytPfpMoreVideosCloseButton:hover {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		.ytPfpMoreVideosCloseIcon {
+			color: var(--ctp-text);
+		}
+		.ytPfpMoreVideosVideoItem {
+			background-color: var(--ctp-mantle);
+		}
+		.ytPfpMoreVideosPaddleLeft, .ytPfpMoreVideosPaddleRight {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-surface0) 80%, transparent);
+			box-shadow: color-mix(in srgb, var(--ctp-mantle) 25%, transparent) 0px 4px 4px;
+		}
+		.ytPfpMoreVideosPaddleLeft:hover, .ytPfpMoreVideosPaddleRight:hover {
+			background-color: var(--ctp-surface0);
+		}
+		.ytPfpMoreVideosMoreVideosButton {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytPfpMoreVideosMoreVideosButton:hover {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		.ytPfpEndscreenPlaylistRendererHost {
+			background-color: var(--ctp-mantle);
+		}
+		.ytPfpEndscreenPlaylistRendererOverlay {
+			color: var(--ctp-text);
+		}
+		.ytPfpEndscreenPlaylistRendererOverlayTitle {
+			background-image: linear-gradient(color-mix(in srgb, var(--ctp-mantle) 80%, transparent), color-mix(in srgb, var(--ctp-mantle) 60%, transparent) 60%, transparent);
+		}
+		.ytPfpEndscreenPlaylistRendererTitle {
+			color: var(--ctp-text);
+		}
+		.ytPfpEndscreenPlaylistRendererBottomOverlay {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-mantle) 80%, transparent);
+		}
+		.ytPfpVideoWallEndscreenVisible {
+			background-color: var(--ctp-base);
+		}
+		.ytPfpVideoWallEndscreenPaddleLeft, .ytPfpVideoWallEndscreenPaddleRight {
+			color: var(--ctp-text);
+			background-color: color-mix(in srgb, var(--ctp-surface0) 90%, transparent);
+			box-shadow: color-mix(in srgb, var(--ctp-mantle) 25%, transparent) 0px 4px 4px;
+		}
+		.ytPfpVideoWallEndscreenPaddleLeft:hover, .ytPfpVideoWallEndscreenPaddleRight:hover {
+			background-color: var(--ctp-surface0);
+		}
+		.ytPlayerControlsPlayerActionIndicatorAction {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytPlayerControlsPlayerActionIndicatorIcon {
+			fill: var(--ctp-text);
+		}
+		.ytwPlayerTimeDisplayLiveDot.ytwPlayerTimeDisplayLiveHead::before {
+			background-color: color-mix(in srgb, color-mix(in srgb, var(--ctp-red) 64%, var(--ctp-base)) 90%, transparent);
+		}
+		.ytwPlayerTimeDisplayPill {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.ytwPlayerTimeDisplayPill button {
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.ytwPlayerSeekOverlayDuration {
+			text-shadow: color-mix(in srgb, var(--ctp-mantle) 80%, transparent) 0px 0px 1px;
+		}
+		.ytwPlayerEndscreenPlayerEndscreen {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		.ytwPlayerEndscreenPlayerEndscreen[data-has-timer-countdown="true"] {
+			background-color: var(--ctp-mantle);
+		}
+		.ytmEmbedsInfoPanelRendererButton {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytAutocropButtonAutoCropButton {
+			background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+		}
+		.ytmPaidContentOverlayLink {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.ytmPaidContentOverlayPppLabelRefresh .ytmPaidContentOverlayLink {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 60%, transparent);
+		}
+		.player-controls-bottom .player-bottom-controls-fullscreen-icon-visible-area {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.player-controls-bottom .player-bottom-controls-fullscreen-icon-visible-area button {
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		ytm-custom-control .player-controls-middle .icon-button {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+		}
+		ytm-custom-control .player-controls-middle .player-middle-controls-prev-next-button .player-middle-controls-prev-next-visible-area {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		ytm-custom-control .player-controls-middle .player-middle-controls-prev-next-button .player-middle-controls-prev-next-visible-area button {
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		ytm-custom-control .player-controls-middle.contrast-audit-fixes .icon-button:not(.player-middle-controls-prev-next-button), ytm-custom-control .player-controls-middle.contrast-audit-fixes .player-middle-controls-prev-next-button .player-middle-controls-prev-next-visible-area {
+			background-color: color-mix(in srgb, var(--ctp-surface0) 60%, transparent);
+		}
+		.ytmVideoInfoOverlay {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 80%, transparent);
+		}
+		.ytPlayerOverlayVideoDetailsRendererHost {
+			text-shadow: var(--ctp-mantle) 0px 0px 3px;
+		}
+		.ytPlayerOverlayVideoDetailsRendererFrostedGlass {
+			background-color: color-mix(in srgb, var(--ctp-mantle) 30%, transparent);
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.ytPlayerOverlayVideoDetailsRendererFrostedGlass button {
+			text-shadow: var(--ctp-mantle) 0px 0px 2px;
+		}
+		.ytPlayerOverlayVideoDetailsRendererHost:hover::after {
+			background-color: color-mix(in srgb, var(--ctp-text) 10%, transparent);
+		}
+		.ytPlayerOverlayVideoDetailsRendererHost:active::after {
+			background-color: color-mix(in srgb, var(--ctp-text) 30%, transparent);
+		}
+		.unified-share-url-input {
+			border-bottom-color: var(--ctp-overlay1);
 		}
 	}
 }
