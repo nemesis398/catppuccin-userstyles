@@ -43,6 +43,9 @@ async function libPath() {
 	return LIB_CACHE;
 }
 
+const URLS_SAMPLE = String.raw`host\.example\.com\:8443, 192\.0\.2\.10`;
+const URLS_REGEXP = String.raw`(host\.example\.com\:8443|192\.0\.2\.10)`;
+
 function parseHeader(src) {
 	const m = src.match(/\/\* ==UserStyle==\n([\s\S]*?)\n==\/UserStyle== \*\//);
 	if (!m) return null;
@@ -155,10 +158,18 @@ async function checkStyle(slug, lib) {
 		...FLAVORS.map((f) => ({ lightFlavor: f, darkFlavor: f })),
 		...ACCENTS.filter((a) => a !== "mauve").map((a) => ({ accentColor: a })),
 	];
+	// Stylus passes a text value to Less unquoted, so a bare dot or colon
+	// breaks the compile or mangles an IP address. Defaults must be escaped,
+	// and a value of two escaped hosts has to land in the regexp unchanged.
+	if (header.vars.urls) {
+		if (/(^|[^\\])[.:]/.test(header.vars.urls.value)) errors.push("@var urls default has a dot or colon without a backslash");
+		runs.push({ urls: URLS_SAMPLE });
+	}
 	for (const overrides of runs) {
 		try {
 			const css = await compile(file, body, header.vars, lib, overrides);
 			if (!css.includes("@-moz-document")) errors.push(`${JSON.stringify(overrides)}: output has no @-moz-document`);
+			if (overrides.urls && !css.includes(URLS_REGEXP)) errors.push(`urls "${URLS_SAMPLE}": output lacks ${URLS_REGEXP}`);
 		} catch (e) {
 			// Less counts lines in prefix + body; map back to the file. For an
 			// error inside a mixin, Less reports the line of the mixin call.
