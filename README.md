@@ -18,6 +18,7 @@
 | [NetBird](styles/netbird) | app.netbird.io and your own dashboards (URLs setting) | [Install](https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/netbird/catppuccin.user.less) |
 | [Proxmox VE](styles/proxmox-ve) | your hosts (URLs setting) | [Install](https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/proxmox-ve/catppuccin.user.less) |
 | [UniFi OS Server](styles/unifi-os-server) | your servers (URLs setting) | [Install](https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/unifi-os-server/catppuccin.user.less) |
+| [YouTube](styles/youtube) | youtube.com, Studio, Music, m.youtube.com, embeds | [Install](https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/youtube/catppuccin.user.less) |
 
 ## Install
 
