@@ -217,3 +217,14 @@ test("YouTube's brand gradient from red into pink takes the accent throughout", 
 	] });
 	assert.match(out, /--paper-slider-active-color: linear-gradient\(to right,var\(--ctp-accent\) 80%,var\(--ctp-accent\) 100%\);/);
 });
+
+test("a token named for one theme maps in that theme, in both tables", () => {
+	const both = { "--light-theme-text-color": "#212121", "--light-theme-background-color": "#fff", "--dark-theme-text-color": "#fff" };
+	const block = renderBlock([{ site: "studio", background: { dark: "#0f0f0f", light: "#fff" }, dark: both, light: both }], {});
+	for (const theme of ["dark", "light"]) {
+		const t = section(block, theme);
+		assert.match(t, /--light-theme-text-color: var\(--ctp-text\);/);
+		assert.match(t, /--light-theme-background-color: var\(--ctp-base\);/);
+		assert.match(t, /--dark-theme-text-color: var\(--ctp-text\);/);
+	}
+});

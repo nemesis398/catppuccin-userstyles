@@ -43,6 +43,8 @@ const SOLID_TINT = 0.7; // a tint with at least this share of the hue's contrast
 // YouTube's own secondary and primary text per theme, the anchors that map
 // onto subtext0 and text.
 const READABLE = [3, 4.5];
+// YouTube's page backgrounds, for a dump that lacks one (Music has no light theme).
+const DEFAULT_BACKGROUND = { dark: "#0f0f0f", light: "#fff" };
 const ANCHORS = { dark: ["aaaaaa", "f1f1f1"], light: ["606060", "0f0f0f"] };
 
 const hex = (h) => [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
@@ -152,10 +154,14 @@ export function renderBlock(dumps, overrides) {
 				// A value YouTube keeps (nearly) the same in both themes sits on video or artwork
 				// (white text on a dark scrim); it maps as in the dark theme, so
 				// it matches the player and follows the flavor.
-				const fixed = theme === "light" && dump.dark?.[name] !== undefined && sameColor(dump.dark[name], value);
-				const mapTheme = fixed ? "dark" : theme;
+				// A token named for one theme (--light-theme-text-color) means
+				// that theme wherever it is used.
+				const named = name.match(/(?:^|-)(light|dark)-theme-/)?.[1];
+				const fixed = !named && theme === "light" && dump.dark?.[name] !== undefined && sameColor(dump.dark[name], value);
+				const mapTheme = named ?? (fixed ? "dark" : theme);
 				const source = fixed ? dump.dark[name] : value;
-				const mapped = overrides[name] ?? semantic(mapToken(source, mapTheme, dump.background[mapTheme]), semanticValues.has(value) ? "error" : name);
+				const background = dump.background[mapTheme] ?? DEFAULT_BACKGROUND[mapTheme];
+				const mapped = overrides[name] ?? semantic(mapToken(source, mapTheme, background), semanticValues.has(value) ? "error" : name);
 				if (mapped) tokens.set(name, mapped);
 			}
 		}
