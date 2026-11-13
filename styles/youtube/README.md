@@ -38,8 +38,9 @@ The rest is in the hand rules of `#yt.rules()`: the logo, the live badge, the pl
 
 When YouTube changes its colors, dump them again and rerun the generator.
 
-1. Paste `scripts/youtube-dump.js` into the DevTools console on the site. Each function copies its dump to the clipboard; save it under the name shown.
-2. Tokens, once with YouTube's Appearance set to Dark and once set to Light (the second run returns both):
+1. Use a browser profile with no user styles and no extensions on YouTube. With this style on, the dump reads Catppuccin's colors instead of YouTube's, and other extensions' styles would end up in the public style. The snippet skips Stylus's styles and sheets from other hosts, but not every extension marks what it injects.
+2. Paste `scripts/youtube-dump.js` into the DevTools console on the site. Each function copies its dump to the clipboard; save it under the name shown.
+3. Tokens, once with YouTube's Appearance set to Dark and once set to Light (the second run returns both):
 
    | Site | Call | File |
    |---|---|---|
@@ -47,7 +48,7 @@ When YouTube changes its colors, dump them again and rerun the generator.
    | studio.youtube.com, dashboard | `ctpDumpTokens("studio")` | `tokens-studio.json` |
    | music.youtube.com, home page (Dark only) | `ctpDumpTokens("music")` | `tokens-music.json` |
 
-3. Literal rules, with the Appearance set to Dark:
+4. Literal rules, with the Appearance set to Dark:
 
    | Site | Call | File |
    |---|---|---|
@@ -60,7 +61,7 @@ When YouTube changes its colors, dump them again and rerun the generator.
 
    The counts change with the modules YouTube loads on a page, so the dumps behind the current block (884 desktop declarations, for one) are not reproducible to the line. The mobile site's tokens are the same as www's and need no dump of their own.
 
-4. Rerun the generator with all dumps, then the checks:
+5. Rerun the generator with all dumps, then the checks:
 
    ```sh
    node scripts/youtube-tokens.mjs --write styles/youtube/catppuccin.user.less \
@@ -79,7 +80,18 @@ When YouTube changes its colors, dump them again and rerun the generator.
 
 ## Known gaps
 
-- In Latte, a few colors are Latte's own and stay under 3:1: the Yellow accent's progress bar against its track (1.7:1), the membership header in live chat (Base on Green, 2.96:1), and the loaded part of the progress bar (2.7 to 3.0:1).
+- Latte's accents are light, so in Latte most of them stay under 3:1 on the progress bar and under text drawn on them. The played part sits on the track (Surface 0) and on the loaded part (Surface 1); text on the accent is Base, as in live chat's rank chips.
+
+  | Accent in Latte | Played part on the track | On the loaded part | Text on the accent |
+  |---|---|---|---|
+  | Mauve (default), Red | 3.5:1 | 3.0:1 | 4.8:1 |
+  | Blue, Gray | 3.2:1 | 2.7:1 | 4.3:1 |
+  | Maroon, Teal | 2.4 to 2.6:1 | 2.1 to 2.2:1 | 3.3 to 3.5:1 |
+  | Green, Lavender, Sapphire | 2.0 to 2.2:1 | 1.7 to 1.8:1 | 2.8 to 3.0:1 |
+  | Rosewater, Flamingo, Pink, Peach, Yellow, Sky | 1.7 to 1.9:1 | 1.4 to 1.6:1 | 2.3 to 2.6:1 |
+
+  In Frappé, Red on the loaded part is 2.7:1; every other dark-flavor pair is at least 3:1.
+- The membership header in live chat is Base on Green in Latte (2.96:1).
 - Captions, YouTube's Ask feature and SponsorBlock's segments are left as they are.
 
 ## Verified
