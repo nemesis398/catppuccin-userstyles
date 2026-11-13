@@ -198,3 +198,22 @@ test("a token that barely moves between themes counts as the same", () => {
 	const block = renderBlock([{ site: "www", background: { dark: "#0f0f0f", light: "#fff" }, dark: { "--tlabel": "#030303", "--tbg": "#0f0f0f" }, light: { "--tlabel": "#0f0f0f", "--tbg": "#fff" } }], {});
 	assert.match(section(block, "light"), /--tlabel: var\(--ctp-(mantle|crust)\);/);
 });
+
+test("renderRules leaves color words inside token names alone", () => {
+	const out = renderRules({ site: "x", background: "#0f0f0f", rules: [
+		{ selector: ".a", media: null, prop: "color", value: "var(--yt-white-color, white)", important: false },
+	] });
+	assert.match(out, /color: var\(--yt-white-color, var\(--ctp-text\)\);/);
+});
+
+test("a token holding a gradient gets its colors mapped", () => {
+	const block = renderBlock([{ site: "music", background: { dark: "#030303" }, dark: { "--ytmusic-player-overlay-gradient": "linear-gradient(rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 25%)" }, light: {} }], {});
+	assert.match(block, /--ytmusic-player-overlay-gradient: linear-gradient\(color-mix\(in srgb, var\(--ctp-(base|mantle|crust)\) 60%, transparent\) 0%, transparent 25%\);/);
+});
+
+test("YouTube's brand gradient from red into pink takes the accent throughout", () => {
+	const out = renderRules({ site: "x", background: "#0f0f0f", rules: [
+		{ selector: ".bar", media: null, prop: "--paper-slider-active-color", value: "linear-gradient(to right,#f03 80%,#ff2791 100%)", important: false },
+	] });
+	assert.match(out, /--paper-slider-active-color: linear-gradient\(to right,var\(--ctp-accent\) 80%,var\(--ctp-accent\) 100%\);/);
+});

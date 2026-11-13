@@ -155,7 +155,7 @@ export function renderBlock(dumps, overrides) {
 				const fixed = theme === "light" && dump.dark?.[name] !== undefined && sameColor(dump.dark[name], value);
 				const mapTheme = fixed ? "dark" : theme;
 				const source = fixed ? dump.dark[name] : value;
-				const mapped = overrides[name] ?? semantic(mapColor(source, mapTheme, dump.background[mapTheme]), semanticValues.has(value) ? "error" : name);
+				const mapped = overrides[name] ?? semantic(mapToken(source, mapTheme, dump.background[mapTheme]), semanticValues.has(value) ? "error" : name);
 				if (mapped) tokens.set(name, mapped);
 			}
 		}
@@ -169,11 +169,23 @@ export function renderBlock(dumps, overrides) {
 
 // Captions take their colors from the viewer's caption settings.
 const RULES_EXCLUDE = /caption-(window|segment|visual)|captions-text/;
-const COLOR_IN_VALUE = /#[0-9a-f]{3,8}\b|(?:rgba?|hsla?)\([^()]*\)|\b(?:white|black)\b/gi;
+const COLOR_IN_VALUE = /#[0-9a-f]{3,8}\b|(?:rgba?|hsla?)\([^()]*\)|(?<![\w-])(?:white|black)(?![\w-])/gi;
 const KEYWORDS = { white: "#fff", black: "#000" };
 
 function mapValue(value, theme, background) {
-	return value.replace(COLOR_IN_VALUE, (c) => mapColor(KEYWORDS[c.toLowerCase()] ?? c, theme, background) ?? c);
+	const mapped = value.replace(COLOR_IN_VALUE, (c) => mapColor(KEYWORDS[c.toLowerCase()] ?? c, theme, background) ?? c);
+	// YouTube's brand gradient runs from its red into pink: all of it is brand.
+	if (/gradient\(/.test(value) && mapped.includes("var(--ctp-accent)")) {
+		return mapped.replace(/color-mix\(in srgb, var\(--ctp-pink\) \d+%, var\(--ctp-base\)\)|var\(--ctp-pink\)/g, "var(--ctp-accent)");
+	}
+	return mapped;
+}
+
+// A token's value: one color, or colors inside something else (a gradient).
+function mapToken(value, theme, background) {
+	if (parse(value)) return mapColor(value, theme, background);
+	const mapped = mapValue(value, theme, background);
+	return mapped === value ? null : mapped;
 }
 
 // A rule dump is { site, background, rules: [{ selector, media, prop, value,
