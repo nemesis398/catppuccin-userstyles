@@ -2,7 +2,7 @@
 @name YouTube Catppuccin
 @namespace github.com/nemesis398/catppuccin-userstyles/styles/youtube
 @homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/youtube
-@version 2026.11.13
+@version 2026.11.13.1
 @updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/youtube/catppuccin.user.less
 @supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
 @description Soothing pastel theme for YouTube, YouTube Studio, YouTube Music and embedded players
@@ -54,11 +54,12 @@
 	#yt.rules();
 }
 
-// The mobile site marks its theme nowhere in the page: the server sends the
-// dark or the light stylesheet. It follows the device's color scheme unless
-// set otherwise, and so does the flavor here. The tables set every token by
-// name, so a theme set against the device still gets one consistent flavor.
 @-moz-document domain("m.youtube.com") {
+	// The mobile site marks its theme nowhere in the page: the server sends
+	// the dark or the light stylesheet. It follows the device's color scheme
+	// unless set otherwise, and so does the flavor here. The tables set every
+	// token by name, so a theme set against the device still gets one
+	// consistent flavor.
 	@media (prefers-color-scheme: dark) {
 		html:not(#ctp) {
 			#yt.vars(@darkFlavor);
@@ -110,10 +111,9 @@
 	}
 }
 
-// YouTube Music has no light theme: always the Dark Flavor.
-// Embedded players sit on other people's pages, light or dark, with
-// nothing to say which; they always take the dark flavor.
 @-moz-document regexp("https://www\\.youtube(-nocookie)?\\.com/embed/.*") {
+	// Embedded players sit on other people's pages, light or dark, with
+	// nothing to say which; they always take the dark flavor.
 	html:not(#ctp),
 	html :is([dark], [light]):not(#ctp) {
 		#yt.vars(@darkFlavor);
@@ -126,6 +126,7 @@
 }
 
 @-moz-document domain("music.youtube.com") {
+	// YouTube Music has no light theme: always the Dark Flavor.
 	html:not(#ctp),
 	html :is([dark], [light]):not(#ctp) {
 		#yt.vars(@darkFlavor);
