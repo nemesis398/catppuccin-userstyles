@@ -1,0 +1,174 @@
+/* ==UserStyle==
+@name Authelia Catppuccin
+@namespace github.com/nemesis398/catppuccin-userstyles/styles/authelia
+@homepageURL https://github.com/nemesis398/catppuccin-userstyles/tree/main/styles/authelia
+@version 2026.11.14
+@updateURL https://github.com/nemesis398/catppuccin-userstyles/raw/main/styles/authelia/catppuccin.user.less
+@supportURL https://github.com/nemesis398/catppuccin-userstyles/issues
+@description Soothing pastel theme for self-hosted Authelia portals. Set your portal's address under URLs.
+@author Mika Böhme
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var text urls "URLs of your Authelia portals" "localhost\:9091"
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+@-moz-document regexp(replace(replace(%("https?://(%s)/.*", @urls), ",", "|", "g"), " ", "", "g")) {
+	/*
+	 * How it works: Authelia 4.39's portal is Tailwind, and its colors are
+	 * variables set per theme on data-theme (html and body). Authelia resolves its
+	 * theme setting (auto included) to light, dark, grey or oled; light gets
+	 * your Light Flavor and the other three your Dark Flavor. Tailwind's own
+	 * colors are variables too and are mapped to the palette; the few rules
+	 * with literal colors are repeated below.
+	 */
+	[data-theme="light"] {
+		#authelia.vars(@lightFlavor);
+	}
+	:is([data-theme="dark"], [data-theme="grey"], [data-theme="oled"]) {
+		#authelia.vars(@darkFlavor);
+	}
+
+	::selection {
+		background-color: color-mix(in srgb, var(--ctp-accent) 30%, transparent);
+	}
+
+	/* Toasts derive their colors with oklch(from ...), which lands outside the
+	   palette; they are mixed from the toast's own palette color instead. In
+	   Latte the ink leans toward text, or green and yellow stay below 3:1. */
+	[class*="--toast-surface"][class*="--toast-surface"] {
+		--toast-surface: color-mix(in srgb, var(--toast-accent) 15%, var(--ctp-base)) !important;
+		--toast-edge: color-mix(in srgb, var(--toast-accent) 35%, var(--ctp-base)) !important;
+		--toast-ink: color-mix(in srgb, var(--toast-accent), var(--ctp-text) var(--ctp-ink-text)) !important;
+	}
+
+	/* The security key hand and the push phone have no fill of their own, so
+	   they draw black, and a strong hand adds a black stroke. Inside the
+	   method picker they take the button's fill-white instead. */
+	:not(.fill-white) > svg:is([viewBox="0 0 500 500"], [viewBox="0 0 60 60"]) {
+		fill: var(--ctp-text);
+	}
+	svg[class*="_hand_"][class*="_strong_"] path {
+		stroke: var(--ctp-text);
+	}
+
+	/* Tailwind classes with literal colors. */
+	.text-\[\#9e9e9e\] { /* ctp-allow: matches the class name */
+		color: var(--ctp-overlay2);
+	}
+	.text-\[\#5858ff\] { /* ctp-allow: matches the class name */
+		color: var(--ctp-blue);
+	}
+	.\[\&_input\]\:border-\[rgba\(255\,2\,2\,0\.95\)\] input { /* ctp-allow: matches the class name */
+		border-color: var(--ctp-red);
+	}
+
+	/* The status icons force a lightness onto their color with
+	   oklch(from ...), which leaves the palette; they take the color as is. */
+	[class*="oklch(from_var(--success)"] {
+		color: var(--ctp-green);
+	}
+	[class*="oklch(from_var(--info)"] {
+		color: var(--ctp-blue);
+	}
+	[class*="oklch(from_var(--destructive)"] {
+		color: var(--ctp-red);
+	}
+
+	/* White text and icons sit on filled buttons (destructive, success, the
+	   method picker). The QR code's bg-white is left alone, so authenticator
+	   apps can still scan it. */
+	.text-white {
+		color: var(--ctp-on-accent);
+	}
+	.fill-white {
+		fill: var(--ctp-on-accent);
+	}
+
+	/* The one-time password dial is an SVG whose colors come in as attributes. */
+	svg[viewBox="0 0 26 26"] {
+		> circle[r="12"] {
+			stroke: var(--ctp-surface1);
+		}
+		> circle[r="9"] {
+			fill: var(--ctp-surface1);
+		}
+		> circle[r="5"] {
+			stroke: var(--ctp-accent);
+		}
+	}
+
+	/* The password strength bar sets its color inline, from weak to strong. */
+	[style*="background-color: rgb(211, 47, 47)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-red) !important;
+	}
+	[style*="background-color: rgb(255, 87, 34)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-peach) !important;
+	}
+	[style*="background-color: rgb(255, 235, 59)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-yellow) !important;
+	}
+	[style*="background-color: rgb(175, 180, 43)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-teal) !important;
+	}
+	[style*="background-color: rgb(98, 211, 47)"] { /* ctp-allow: matches the inline color */
+		background-color: var(--ctp-green) !important;
+	}
+}
+
+/* Mixins live outside @-moz-document and are called by their full path, so
+	 the variables one call returns cannot leak into the next. */
+#authelia {
+	.vars(@flavor) {
+		#lib.palette();
+		#lib.css-variables();
+		@on-color: if(@flavor = latte, @base, @crust);
+		color-scheme: if(@flavor = latte, light, dark) !important;
+		--ctp-accent: @accent;
+		--ctp-on-accent: @on-color;
+		--ctp-ink-text: if(@flavor = latte, 40%, 0%);
+
+		--background: @base !important;
+		--foreground: @text !important;
+		--card: @mantle !important;
+		--card-foreground: @text !important;
+		--popover: @mantle !important;
+		--popover-foreground: @text !important;
+		--primary: @accent !important;
+		--primary-foreground: @on-color !important;
+		--secondary: @maroon !important;
+		--secondary-foreground: @on-color !important;
+		--muted: @surface0 !important;
+		--muted-foreground: @subtext0 !important;
+		--accent: @surface0 !important;
+		--accent-foreground: @text !important;
+		--destructive: @red !important;
+		--destructive-foreground: @on-color !important;
+		--success: @green !important;
+		--success-foreground: @on-color !important;
+		--warning: @yellow !important;
+		--warning-foreground: @on-color !important;
+		--info: @blue !important;
+		--info-foreground: @on-color !important;
+		--border: @surface1 !important;
+		--input: @surface1 !important;
+		--ring: @accent !important;
+		--divider: @surface0 !important;
+		--custom-icon: @text !important;
+		--custom-loading-bar: @accent !important;
+
+		--color-red-400: @red !important;
+		--color-amber-400: @yellow !important;
+		--color-amber-500: @yellow !important;
+		--color-amber-700: if(@flavor = latte, @text, @yellow) !important;
+		--color-green-500: @green !important;
+		--color-green-600: @green !important;
+		--color-green-700: @green !important;
+		--color-black: @crust !important;
+	}
+}
